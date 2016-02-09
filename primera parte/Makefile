@@ -1,7 +1,7 @@
 CC=gcc
 CCF= -Wall -ansi -pedantic
 CCC= -c -o
-CCE= -
+CCE= -o
 FLTRM= src/lector.c
 FLTRX= src/lector.l
 FLTRL= includes/lector.h
@@ -15,7 +15,7 @@ all: mcCulloch-Pits
 
 mcCulloch-Pits:  obj/neurona.o src/mcCulloch-Pits.c
 	@echo "mcCulloch-Pits"
-	@$(CC) $(CCF) $(CCE) mcCulloch-Pits src/mcCulloch-Pits.c obj/neurona.o
+	$(CC) $(CCF) $(CCE) mcCulloch-Pits src/mcCulloch-Pits.c obj/neurona.o
 	@echo "mcCulloch-Pits generado ejecutable"
 
 obj/neurona.o: src/neurona.c includes/neurona.h
