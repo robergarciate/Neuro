@@ -58,6 +58,7 @@ int main(int argc, char** argv){
 	}
 
 	
+	printf("%s\n", yytext);
 	if(tok!=0){
 		switch(tok){
 			case TOK_DOUBLE:
@@ -76,34 +77,40 @@ int main(int argc, char** argv){
 	}
 
 	while(tok!=0){
-    	printf("i+j= %d %% %d \n", i+j, data->nclases + data->natributos);
-    	printf("%d %% %d== %d\n",i+j, data->nclases + data->natributos, (j + i) % (data->nclases + data->natributos) );
-    	if((j + i) % (data->nclases + data->natributos)==0){
-    		i=0;
-    		j=0;
-    		k++;
-    		reservarTupla(data);
-    	}
-    	printDatos(data);
-    	printf("%d %d %d\n", i, j, k);
+    	
         switch(tok){
 			case TOK_DOUBLE:
-				printf("TOK_DOUBLE %s\n", yytext);
+				if((j + i) % (data->nclases + data->natributos)==0){
+		    		i=0;
+		    		j=0;
+		    		k++;
+		    		reservarTupla(data);
+		    	}
+				printf("TOK_DOUBLE %1.1f k=%d i=%d\n", atof(yytext), k, j);
 				data->atributos[k][i++]=atof(yytext);
+				printf("cosa que se guarda:%1.1f\n", data->atributos[k][i-1]);
 			break;
 			case TOK_INTEGER:
-				printf("TOK_INTEGER %s\n", yytext);
-				data->prediccion[k][j++]=atoi(yytext);
+				if((j + i) % (data->nclases + data->natributos)==0){
+		    		i=0;
+		    		j=0;
+		    		k++;
+		    		reservarTupla(data);
+		    	}
+				printf("TOK_INTEGER %d  k=%d j=%d\n", atoi(yytext), k, j);
+				data->clase[k][j++]=atoi(yytext);
+				printf("cosa que se guarda:%d \n", data->clase[k][i-1]);
 			break;
 			case TOK_CARACTER:
-				printf("TOK_CARACTER %s\n", yytext);
+				printf("TOK_CARACTER %s k=%d j=%d i=%d\n", yytext, k, j, i);
 			break;
 		
 		}
-		printf("i=%d j=%d\n", i, j);
 		tok=yylex();
 	}
 	fclose(yyin);
+
+    printDatos(data);
 	
 
 	return 1;

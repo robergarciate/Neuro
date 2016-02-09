@@ -11,17 +11,37 @@ datos* iniDatos(){
 }
 
 int reservarTupla(datos* data){
-	int i=0, j=0, k=0;
+	int i=0, j=0, k=0, l=0;
+	int* clase= NULL;
+	double* atributos=NULL;
+	//printf("reservarTupla\n");
 	if(data==NULL)
 		return 1;
+
+	if(data->ndatos==1){
+		printf("%d\n",data->clase[0][0]);
+		for(l=0; l<data->ndatos; l++){
+			clase= data->clase[l];
+			atributos= data->atributos[l];	
+		}
+	}
 	i=data->ndatos;
 	j=data->natributos;
 	k=data->nclases;
-	data->atributos=realloc(data->atributos, sizeof(double*)*(i));
-	data->atributos[i]=malloc(sizeof(double)*j);
-	data->prediccion=realloc(data->prediccion, sizeof(int*)*(i));
-	data->prediccion[i]=malloc(sizeof(int)*k);
 
+	data->atributos=realloc(data->atributos, sizeof(double*)*(i+1));
+	data->atributos[i]=malloc(sizeof(double)*j);
+
+	data->clase=realloc(data->clase, sizeof(int*)*(i+1));
+	data->clase[i]=malloc(sizeof(int)*k);
+
+	if(data->ndatos==1){
+		for(l=0; l<data->ndatos; l++){
+			clase= data->clase[l];
+			atributos= data->atributos[l];	
+		}
+		printf("%d\n",data->clase[0][0] );	
+	}
 	data->ndatos++;
 	return 0;
 }
@@ -30,15 +50,17 @@ int printDatos(datos* data){
 	printf("natributos:%d\n",data->natributos);
 	printf("nclases:%d\n",data->nclases);
 	printf("ndatos:%d\n",data->ndatos);
+	printf("tuplas\n");
+		for(i=0; i<data->ndatos; i++){
 
-	for(i=0; i<data->ndatos; i++){
-		printf("%d %d\n", i, j);
-		for(j=0; j<-data->natributos; j++){
-			printf("%1.8f ", data->atributos[i][j]);	
+		for(j=0; j<data->natributos; j++){
+			printf(" [%1.1f]", data->atributos[i][j]);
 		}
-		for(j=0; j<-data->nclases; j++){
-			printf("%1.8f ", data->prediccion[i][j]);	
+
+		for(j=0; j<data->natributos; j++){
+			printf(" [%d]", data->clase[i][j]);
 		}
 		printf("\n");
 	}
+
 }
