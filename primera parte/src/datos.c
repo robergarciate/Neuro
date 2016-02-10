@@ -46,7 +46,7 @@ int particionado(datos* data, datos* train, datos* test, double porcentaje){
 		train->atributos[i] = data->atributos[i];
 		train->clase[i] = data->clase[i];
 	}
-
+	train->ndatos=i;
 
 	test->nclases = data->nclases;
 	test->natributos = data->natributos;
@@ -58,6 +58,7 @@ int particionado(datos* data, datos* train, datos* test, double porcentaje){
 		test->clase[i] = data->clase[i];
 	}
 	
+	test->ndatos=i;	
 	return 0;
 }
 
