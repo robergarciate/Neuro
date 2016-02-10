@@ -7,7 +7,7 @@ typedef struct {
 	int nclases;
 	int ndatos;
 	double** atributos;
-	double** prediccion;
+	int** clase;
 	
 }datos;
 
