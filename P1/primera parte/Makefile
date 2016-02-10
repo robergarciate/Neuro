@@ -9,13 +9,13 @@ DTSC= src/datos.c
 DTSL= includes/datos.h
 DTSO= obj/datos.o
 
-all: mcCulloch-Pits
+all: mcCulloch-Pits lector
 	@echo "Se compilo todo el codigo y se gneraron los ejecutables"
 
 
 mcCulloch-Pits:  obj/neurona.o src/mcCulloch-Pits.c
 	@echo "mcCulloch-Pits"
-	$(CC) $(CCF) $(CCE) mcCulloch-Pits src/mcCulloch-Pits.c obj/neurona.o
+	@$(CC) $(CCF) $(CCE) mcCulloch-Pits src/mcCulloch-Pits.c obj/neurona.o
 	@echo "mcCulloch-Pits generado ejecutable"
 
 obj/neurona.o: src/neurona.c includes/neurona.h

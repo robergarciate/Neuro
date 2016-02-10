@@ -22,29 +22,35 @@ datos* iniDatos(){
 ***	
 **/
 int particionado(datos* data, datos* train, datos* test, double porcentaje){
-	if((data==NULL) || (train==NULL) || (test==NULL) || (porcentaje <= 0) || (porcentaje > 1))
+	int i = 0, j=0, k=0, l=0;
+	double r;
+	if((data==NULL) || (train==NULL) ||(test==NULL) || (porcentaje <= 0.0) || (porcentaje > 1.0))
 		return 1;
-	int i = 0;
    
-	srand((time(NULL));
-
+	srand(time(NULL));
+	
 	train->nclases = data->nclases;
 	train->natributos = data->natributos;
 
 	test->nclases = data->nclases;
 	test->natributos = data->natributos;
 
-	for(i=0;i<data->ndatos;++i){
-		if((rand()%2) > porcentaje){
-			if(reservarTupla(test) == 1)
-				return 1;
-			test->atributos[i] = data->atributos[i];
-			test->clase[i] = data->clase[i];
+	for(i=0; i < data->ndatos; ++i){
+		/*for(l=0; l < data->ndatos; l++){
+			printf("[%d]",data->clase[l][0] );
+		}
+		printf("\n");*/
+		r=(double)rand()/(double)RAND_MAX;
+		if( r<porcentaje){
+			reservarTupla(test);
+			test->atributos[k] = data->atributos[i];
+			test->clase[k++] = data->clase[i];
+			printf("test %d %d\n",test->ndatos, i);
 		}else{
-			if(reservarTupla(train) == 1)
-				return 1;
-			train->atributos[i] = data->atributos[i];
-			train->clase[i] = data->clase[i];
+			reservarTupla(train);
+			train->atributos[j] = data->atributos[i];
+			train->clase[j++] = data->clase[i];
+			printf("train %d %d\n",train->ndatos, i);
 		}
 	}
 

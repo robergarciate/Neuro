@@ -1,28 +1,27 @@
 
 #include "../includes/lector.h"
-
 extern int yylex();
 
 int main(int argc, char** argv){
-	datos* data;
+	datos* data,* train=NULL,* test=NULL;
 	int i=0, j=0, k=-1, tok=0;
 	extern FILE* yyin;
     extern FILE* yyout;
     extern char* yytext;
     yyin=NULL;
-    yyout=stdout;
+    yyout=NULL;
 	yyin=fopen(argv[1],"r");
 	if(yyin==NULL){
 		printf("Error al abrir el fichero\n"); 
 		return 0;
 	}
-
+	printf("1\n");
 	/*LEEMOS TODOS LOS CARACTERES INECESARIOS HASTA ENCONTRAR UN NUMERO*/
 	while((tok=yylex())==TOK_CARACTER){
 	}
 
+	printf("1\n");
 	data=iniDatos();
-	printf("%s\n", yytext);
 	
 	/*LEEMOS CUAL ES EL NUMERO DE ATRIBUTOS*/
 	if(tok!=0){
@@ -39,10 +38,13 @@ int main(int argc, char** argv){
 		
 		}
 	}
+
+	printf("1\n");
 	/*LEEMOS TODOS LOS CARACTERES INECESARIOS HASTA ENCONTRAR UN NUMERO*/
 	while((tok=yylex())==TOK_CARACTER){
 	}
 
+	printf("1\n");
 	/*LEEMOS CUAL ES EL NUMERO DE CLASES */
 	if(tok!=0){
 		switch(tok){
@@ -59,10 +61,12 @@ int main(int argc, char** argv){
 		}
 	}
 
+	printf("1\n");
 	/*LEEMOS TODOS LOS CARACTERES INECESARIOS HASTA ENCONTRAR UN NUMERO*/
 	while((tok=yylex())==TOK_CARACTER){
 	}
 
+	printf("1\n");
 	/*LEEMOS LOS DATOS*/
 	while(tok!=0){
     	
@@ -95,9 +99,18 @@ int main(int argc, char** argv){
 		}
 		tok=yylex();
 	}
+
+
 	fclose(yyin);
 
-    printDatos(data);
+	train= iniDatos();
+	test= iniDatos();
+	printDatos(data);
+	particionado(data, train, test, 0.5);
+	printf("\ntrain\n");
+    printDatos(train);
+	printf("\ntest\n");
+    printDatos(test);
 	
 
 	return 1;
