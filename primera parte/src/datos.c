@@ -9,15 +9,6 @@ datos* iniDatos(){
 	return data;
 	
 }
-/*
-typedef struct {
-	int natributos;
-	int nclases;
-	int ndatos;
-	double** atributos;
-	int** clase;
-}datos;
-*/
 
 /**
 ***	Dados unos datos los divide en particion
@@ -33,6 +24,37 @@ typedef struct {
 int particionado(datos* data, datos* train, datos* test, double porcentaje){
 	if((data==NULL) || (train==NULL) || (test==NULL) || (porcentaje <= 0) || (porcentaje > 1))
 		return 1;
+	int i = 0;
+   
+	srand((time(NULL));
+
+	train->nclases = data->nclases;
+	train->natributos = data->natributos;
+
+	test->nclases = data->nclases;
+	test->natributos = data->natributos;
+
+	for(i=0;i<data->ndatos;++i){
+		if((rand()%2) > porcentaje){
+			if(reservarTupla(test) == 1)
+				return 1;
+			test->atributos[i] = data->atributos[i];
+			test->clase[i] = data->clase[i];
+		}else{
+			if(reservarTupla(train) == 1)
+				return 1;
+			train->atributos[i] = data->atributos[i];
+			train->clase[i] = data->clase[i];
+		}
+	}
+
+	return 0;
+}
+
+/*
+int particionadoSeguido(datos* data, datos* train, datos* test, double porcentaje){
+	if((data==NULL) || (train==NULL) || (test==NULL) || (porcentaje <= 0) || (porcentaje > 1))
+		return 1;
 
 	int i = 0;
 	seleccion = floor(data->ndatos * porcentaje);
@@ -46,7 +68,6 @@ int particionado(datos* data, datos* train, datos* test, double porcentaje){
 		train->atributos[i] = data->atributos[i];
 		train->clase[i] = data->clase[i];
 	}
-	train->ndatos=i;
 
 	test->nclases = data->nclases;
 	test->natributos = data->natributos;
@@ -58,10 +79,9 @@ int particionado(datos* data, datos* train, datos* test, double porcentaje){
 		test->clase[i] = data->clase[i];
 	}
 	
-	test->ndatos=i;	
 	return 0;
 }
-
+*/
 int reservarTupla(datos* data){
 	int i=0, j=0, k=0;
 	if(data==NULL)
