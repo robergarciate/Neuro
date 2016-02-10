@@ -26,13 +26,13 @@ obj/neurona.o: src/neurona.c includes/neurona.h
 
 
 lector: $(FLTRM) $(FLTRX) $(FLTRL) datos
-	flex -o obj/lex.yy.c $(FLTRX)
-	gcc -c obj/lex.yy.c -o obj/lex.yy.o
-	gcc -o lector $(FLTRM) obj/lex.yy.o $(DTSO)
-	rm obj/*.c
-	echo lector compilado
+	@flex -o obj/lex.yy.c $(FLTRX)
+	@gcc  -c obj/lex.yy.c -o obj/lex.yy.o
+	@gcc $(CCF) -o lector $(FLTRM) obj/lex.yy.o $(DTSO)
+	@rm obj/*.c
+	@echo lector compilado
 datos: $(DTSC) $(DTSL)
-	@$(CC) $(CCC) $(DTSO) $(DTSC)
+	@$(CC) $(CCF) $(CCC) $(DTSO) $(DTSC)
 	@echo datos compilado
 
 mrProper:

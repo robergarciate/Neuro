@@ -9,7 +9,6 @@ int main(int argc, char** argv){
 	extern FILE* yyin;
     extern FILE* yyout;
     extern char* yytext;
-    extern int yyleng;
     yyin=NULL;
     yyout=stdout;
 	yyin=fopen(argv[1],"r");
@@ -18,64 +17,53 @@ int main(int argc, char** argv){
 		return 0;
 	}
 
-	/*tok=yylex();
-	while(tok!=0){
-		switch(tok){
-			case TOK_DOUBLE:
-				printf("TOK_DOUBLE:%s\n", yytext);
-			break;
-			case TOK_INTEGER:
-				printf("TOK_INTEGER:%s\n", yytext);
-			break;
-			case TOK_CARACTER:
-				printf("TOK_CARACTER:%s\n", yytext);
-			break;
-		
-		}
-
-		tok=yylex();
-	}*/
+	/*LEEMOS TODOS LOS CARACTERES INECESARIOS HASTA ENCONTRAR UN NUMERO*/
+	while((tok=yylex())==TOK_CARACTER){
+	}
 
 	data=iniDatos();
-	tok=yylex();
 	printf("%s\n", yytext);
+	
+	/*LEEMOS CUAL ES EL NUMERO DE ATRIBUTOS*/
 	if(tok!=0){
 		switch(tok){
 			case TOK_DOUBLE:
-				fprintf(yyout,"ERROR: el formato del fichero es erroneo",yytext);
+				fprintf(yyout,"ERROR: el formato del fichero es erroneo");
+				return 1;
 			break;
 			case TOK_INTEGER:
 				data->natributos=atoi(yytext);
 			break;
 			case TOK_CARACTER:
-
-				printf("TOK_CARACTER\n");
 			break;
 		
 		}
 	}
+	/*LEEMOS TODOS LOS CARACTERES INECESARIOS HASTA ENCONTRAR UN NUMERO*/
 	while((tok=yylex())==TOK_CARACTER){
 	}
 
-	
-	printf("%s\n", yytext);
+	/*LEEMOS CUAL ES EL NUMERO DE CLASES */
 	if(tok!=0){
 		switch(tok){
 			case TOK_DOUBLE:
-				fprintf(yyout,"ERROR: el formato del fichero es erroneo",yytext);
+				fprintf(yyout,"ERROR: el formato del fichero es erroneo");
+				return 1;
 			break;
 			case TOK_INTEGER:
 				data->nclases=atoi(yytext);
 			break;
 			case TOK_CARACTER:
-				printf("TOK_CARACTER\n");
 			break;
 		
 		}
 	}
+
+	/*LEEMOS TODOS LOS CARACTERES INECESARIOS HASTA ENCONTRAR UN NUMERO*/
 	while((tok=yylex())==TOK_CARACTER){
 	}
 
+	/*LEEMOS LOS DATOS*/
 	while(tok!=0){
     	
         switch(tok){
@@ -86,9 +74,7 @@ int main(int argc, char** argv){
 		    		k++;
 		    		reservarTupla(data);
 		    	}
-				printf("TOK_DOUBLE %1.1f k=%d i=%d\n", atof(yytext), k, j);
 				data->atributos[k][i++]=atof(yytext);
-				printf("cosa que se guarda:%1.1f\n", data->atributos[k][i-1]);
 			break;
 			case TOK_INTEGER:
 				if((j + i) % (data->nclases + data->natributos)==0){
@@ -97,12 +83,13 @@ int main(int argc, char** argv){
 		    		k++;
 		    		reservarTupla(data);
 		    	}
-				printf("TOK_INTEGER %d  k=%d j=%d\n", atoi(yytext), k, j);
-				data->clase[k][j++]=atoi(yytext);
-				printf("cosa que se guarda:%d \n", data->clase[k][i-1]);
+				if(i<data->natributos)
+					data->atributos[k][i++]=atof(yytext);
+				
+				else
+					data->clase[k][j++]=atoi(yytext);
 			break;
 			case TOK_CARACTER:
-				printf("TOK_CARACTER %s k=%d j=%d i=%d\n", yytext, k, j, i);
 			break;
 		
 		}
