@@ -9,6 +9,57 @@ datos* iniDatos(){
 	return data;
 	
 }
+/*
+typedef struct {
+	int natributos;
+	int nclases;
+	int ndatos;
+	double** atributos;
+	int** clase;
+}datos;
+*/
+
+/**
+***	Dados unos datos los divide en particion
+***	de entrenamiento y de clasificacion
+***	
+***	Entradas:
+***		data-> los datos de entrada
+***		train-> datos donde devolveremos train
+***		test-> datos donde devolveremos test
+***		porcentaje-> cantidad de datos que iran a train
+***	
+**/
+int particionado(datos* data, datos* train, datos* test, double porcentaje){
+	if((data==NULL) || (train==NULL) || (test==NULL) || (porcentaje <= 0) || (porcentaje > 1))
+		return 1;
+
+	int i = 0;
+	seleccion = floor(data->ndatos * porcentaje);
+
+	train->nclases = data->nclases;
+	train->natributos = data->natributos;
+
+	for(i=0;i<seleccion;++i){
+		if(reservarTupla(train) == 1)
+			return 1;
+		train->atributos[i] = data->atributos[i];
+		train->clase[i] = data->clase[i];
+	}
+
+
+	test->nclases = data->nclases;
+	test->natributos = data->natributos;
+
+	for(i=0;i<data->ndatos - seleccion;++i){
+		if(reservarTupla(test) == 1)
+			return 1;
+		test->atributos[i] = data->atributos[i];
+		test->clase[i] = data->clase[i];
+	}
+	
+	return 0;
+}
 
 int reservarTupla(datos* data){
 	int i=0, j=0, k=0;
@@ -36,7 +87,7 @@ int printDatos(datos* data){
 	printf("nclases:%d\n",data->nclases);
 	printf("ndatos:%d\n",data->ndatos);
 	printf("tuplas\n");
-		for(i=0; i<data->ndatos; i++){
+	for(i=0; i<data->ndatos; i++){
 
 		for(j=0; j<data->natributos; j++){
 			printf(" [%1.4f]", data->atributos[i][j]);
