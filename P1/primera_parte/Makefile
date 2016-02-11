@@ -36,4 +36,4 @@ datos: $(DTSC) $(DTSL)
 	@echo datos compilado
 
 mrProper:
-	@rm -vf obj/* mcCulloch-Pits
+	@rm -vf obj/* mcCulloch-Pits lector

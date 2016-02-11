@@ -9,6 +9,18 @@ datos* iniDatos(){
 	return data;
 	
 }
+void liberaEspacioLibre(datos* data){
+	int i=0;
+	if (data== NULL)
+		return;
+	while(data->atributos[data->ndatos+i]==NULL){
+		free(data->atributos[data->ndatos+i++]);
+	}
+
+	while(data->clase[data->ndatos+i]==NULL){
+		free(data->clase[data->ndatos+i++]);
+	}
+}
 
 int particionado(datos* data, datos* train, datos* test, double porcentaje){
 	int i = 0, j=0, k=0, l=0;
@@ -27,6 +39,8 @@ int particionado(datos* data, datos* train, datos* test, double porcentaje){
 		train->atributos[i]=malloc(sizeof(double)*data->natributos);
 		train->clase[i]=malloc(sizeof(int)*data->nclases);
 	}
+	train->atributos[i]=NULL;
+	train->clase[i]=NULL;
 
 	test->nclases = data->nclases;
 	test->natributos = data->natributos;
@@ -37,6 +51,9 @@ int particionado(datos* data, datos* train, datos* test, double porcentaje){
 		test->clase[i]=malloc(sizeof(int)*data->nclases);
 	}
 
+	test->atributos[i]=NULL;
+	test->clase[i]=NULL;
+
 	for(i=0; i < data->ndatos; ++i){
 		for(l=0; l < data->ndatos; l++){
 			printf("[%d]",data->clase[l][0] );
@@ -44,14 +61,19 @@ int particionado(datos* data, datos* train, datos* test, double porcentaje){
 		printf("\n");
 		r=(double)rand()/(double)RAND_MAX;
 		if( r<porcentaje){
+			printf("TEST\n");
 			test->atributos[k] = data->atributos[i];
 			test->clase[k++] = data->clase[i];
+			test->ndatos++;
 		}else{
+			printf("TRAIN\n");
 			train->atributos[j] = data->atributos[i];
 			train->clase[j++] = data->clase[i];
+			train->ndatos++;
 		}
 	}
-
+	liberaEspacioLibre(test);
+	liberaEspacioLibre(train);
 	return 0;
 }
 
