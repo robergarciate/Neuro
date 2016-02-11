@@ -10,17 +10,52 @@ datos* iniDatos(){
 	
 }
 
-/**
-***	Dados unos datos los divide en particion
-***	de entrenamiento y de clasificacion
-***	
-***	Entradas:
-***		data-> los datos de entrada
-***		train-> datos donde devolveremos train
-***		test-> datos donde devolveremos test
-***		porcentaje-> cantidad de datos que iran a train
-***	
-**/
+int particionado(datos* data, datos* train, datos* test, double porcentaje){
+	int i = 0, j=0, k=0, l=0;
+	double r;
+	if((data==NULL) || (train==NULL) ||(test==NULL) || (porcentaje <= 0.0) || (porcentaje > 1.0))
+		return 1;
+   
+	srand(time(NULL));
+	
+	train->nclases = data->nclases;
+	train->natributos = data->natributos;
+	train->atributos=malloc(sizeof(double*)*data->ndatos);
+	train->clase=malloc(sizeof(int*)*data->ndatos);
+
+	for(i=0;i<data->natributos;i++){
+		train->atributos[i]=malloc(sizeof(double)*data->natributos);
+		train->clase[i]=malloc(sizeof(int)*data->nclases);
+	}
+
+	test->nclases = data->nclases;
+	test->natributos = data->natributos;
+	test->atributos=malloc(sizeof(double*)*data->ndatos);
+	test->clase=malloc(sizeof(int*)*data->ndatos);
+	for(i=0;i<data->natributos;i++){
+		test->atributos[i]=malloc(sizeof(double)*data->natributos);
+		test->clase[i]=malloc(sizeof(int)*data->nclases);
+	}
+
+	for(i=0; i < data->ndatos; ++i){
+		for(l=0; l < data->ndatos; l++){
+			printf("[%d]",data->clase[l][0] );
+		}
+		printf("\n");
+		r=(double)rand()/(double)RAND_MAX;
+		if( r<porcentaje){
+			test->atributos[k] = data->atributos[i];
+			test->clase[k++] = data->clase[i];
+		}else{
+			train->atributos[j] = data->atributos[i];
+			train->clase[j++] = data->clase[i];
+		}
+	}
+
+	return 0;
+}
+
+/*
 int particionado(datos* data, datos* train, datos* test, double porcentaje){
 	int i = 0, j=0, k=0, l=0;
 	double r;
@@ -36,10 +71,10 @@ int particionado(datos* data, datos* train, datos* test, double porcentaje){
 	test->natributos = data->natributos;
 
 	for(i=0; i < data->ndatos; ++i){
-		/*for(l=0; l < data->ndatos; l++){
+		for(l=0; l < data->ndatos; l++){
 			printf("[%d]",data->clase[l][0] );
 		}
-		printf("\n");*/
+		printf("\n");
 		r=(double)rand()/(double)RAND_MAX;
 		if( r<porcentaje){
 			reservarTupla(test);
@@ -56,7 +91,7 @@ int particionado(datos* data, datos* train, datos* test, double porcentaje){
 
 	return 0;
 }
-
+*/
 /*
 int particionadoSeguido(datos* data, datos* train, datos* test, double porcentaje){
 	if((data==NULL) || (train==NULL) || (test==NULL) || (porcentaje <= 0) || (porcentaje > 1))
