@@ -16,8 +16,10 @@ typedef struct {
 
 datos* iniDatos();
 
+void freeDatos(datos* data);
+
 /**
-***	Como me parecia deo reservar mas memoria de la que
+***	Como me parecia feo reservar mas memoria de la que
 ***	necesitas en particionado he añadido que las ultimas
 ***	posiciones +1 de clase y atributos sean NULL, despues
 ***	voy liberando desde el tamaño de los datos hasta NULL 

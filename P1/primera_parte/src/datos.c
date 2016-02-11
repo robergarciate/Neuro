@@ -6,9 +6,38 @@ datos* iniDatos(){
 	data->nclases=0;
 	data->natributos=0;
 	data->ndatos=0;
+	data->atributos=NULL;
+	data->clase=NULL;
 	return data;
 	
 }
+
+void freeDatos(datos* data){
+	int i=0;
+	if(data==NULL)
+		return;
+	for (i = 0; i < data->ndatos; ++i){
+
+		free(data->clase[i]);
+
+		data->clase[i]=NULL;
+
+		free(data->atributos[i]);
+
+		data->atributos[i]=NULL;
+		
+		
+	}
+	free(data->atributos);
+	data->atributos=NULL;
+
+	free(data->clase);
+	data->clase=NULL;
+	free(data);
+	data=NULL;
+
+}
+
 void liberaEspacioLibre(datos* data){
 	int i=0;
 	if (data== NULL)
@@ -35,45 +64,48 @@ int particionado(datos* data, datos* train, datos* test, double porcentaje){
 	train->atributos=malloc(sizeof(double*)*data->ndatos);
 	train->clase=malloc(sizeof(int*)*data->ndatos);
 
-	for(i=0;i<data->natributos;i++){
-		train->atributos[i]=malloc(sizeof(double)*data->natributos);
-		train->clase[i]=malloc(sizeof(int)*data->nclases);
-	}
-	train->atributos[i]=NULL;
-	train->clase[i]=NULL;
 
 	test->nclases = data->nclases;
 	test->natributos = data->natributos;
 	test->atributos=malloc(sizeof(double*)*data->ndatos);
 	test->clase=malloc(sizeof(int*)*data->ndatos);
-	for(i=0;i<data->natributos;i++){
-		test->atributos[i]=malloc(sizeof(double)*data->natributos);
-		test->clase[i]=malloc(sizeof(int)*data->nclases);
+
+	for(i=0; i< data->ndatos; i++){
+		train->atributos[i]=NULL;
+		train->clase[i]=NULL;
+		test->atributos[i]=NULL;
+		test->clase[i]=NULL;
+
 	}
 
-	test->atributos[i]=NULL;
-	test->clase[i]=NULL;
-
 	for(i=0; i < data->ndatos; ++i){
-		for(l=0; l < data->ndatos; l++){
-			printf("[%d]",data->clase[l][0] );
-		}
-		printf("\n");
 		r=(double)rand()/(double)RAND_MAX;
 		if( r<porcentaje){
-			printf("TEST\n");
-			test->atributos[k] = data->atributos[i];
-			test->clase[k++] = data->clase[i];
+			test->atributos[k]=malloc(sizeof(double)*test->natributos);
+			for(l=0; l<test->natributos; l++){
+				test->atributos[k][l]=	data->atributos[i][l];
+			}
+
+			test->clase[k]=malloc(sizeof(double)*test->nclases);
+			for(l=0; l<test->nclases; l++){
+				test->clase[k][l]=	data->clase[i][l];
+			}
+			k++;
 			test->ndatos++;
 		}else{
-			printf("TRAIN\n");
-			train->atributos[j] = data->atributos[i];
-			train->clase[j++] = data->clase[i];
+
+			train->atributos[j]=malloc(sizeof(double)*train->natributos);
+			for(l=0; l<train->natributos; l++){
+				train->atributos[j][l]=	data->atributos[i][l];
+			}
+			train->clase[j]=malloc(sizeof(double)*train->nclases);
+			for(l=0; l<train->nclases; l++){
+				train->clase[j][l]=	data->clase[i][l];
+			}
+			j++;
 			train->ndatos++;
 		}
 	}
-	liberaEspacioLibre(test);
-	liberaEspacioLibre(train);
 	return 0;
 }
 
@@ -149,17 +181,16 @@ int reservarTupla(datos* data){
 	int i=0, j=0, k=0;
 	if(data==NULL)
 		return 1;
-
 	i=data->ndatos;
 	j=data->natributos;
 	k=data->nclases;
 
 	data->atributos=realloc(data->atributos, sizeof(double*)*(i+1));
-	data->atributos[i]=malloc(sizeof(double)*j);
+	data->atributos[i]=calloc(j ,sizeof(double));
 
 	data->clase=realloc(data->clase, sizeof(int*)*(i+1));
-	data->clase[i]=malloc(sizeof(int)*k);
-
+	data->clase[i]=calloc(k ,sizeof(int));
+	
 	data->ndatos++;
 	return 0;
 }

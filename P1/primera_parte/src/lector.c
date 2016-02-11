@@ -15,12 +15,10 @@ int main(int argc, char** argv){
 		printf("Error al abrir el fichero\n"); 
 		return 0;
 	}
-	printf("1\n");
 	/*LEEMOS TODOS LOS CARACTERES INECESARIOS HASTA ENCONTRAR UN NUMERO*/
 	while((tok=yylex())==TOK_CARACTER){
 	}
 
-	printf("1\n");
 	data=iniDatos();
 	
 	/*LEEMOS CUAL ES EL NUMERO DE ATRIBUTOS*/
@@ -39,12 +37,10 @@ int main(int argc, char** argv){
 		}
 	}
 
-	printf("1\n");
 	/*LEEMOS TODOS LOS CARACTERES INECESARIOS HASTA ENCONTRAR UN NUMERO*/
 	while((tok=yylex())==TOK_CARACTER){
 	}
 
-	printf("1\n");
 	/*LEEMOS CUAL ES EL NUMERO DE CLASES */
 	if(tok!=0){
 		switch(tok){
@@ -53,6 +49,7 @@ int main(int argc, char** argv){
 				return 1;
 			break;
 			case TOK_INTEGER:
+			printf("1\n");
 				data->nclases=atoi(yytext);
 			break;
 			case TOK_CARACTER:
@@ -61,12 +58,10 @@ int main(int argc, char** argv){
 		}
 	}
 
-	printf("1\n");
 	/*LEEMOS TODOS LOS CARACTERES INECESARIOS HASTA ENCONTRAR UN NUMERO*/
+
 	while((tok=yylex())==TOK_CARACTER){
 	}
-
-	printf("1\n");
 	/*LEEMOS LOS DATOS*/
 	while(tok!=0){
     	
@@ -101,17 +96,22 @@ int main(int argc, char** argv){
 	}
 
 
-	fclose(yyin);
-
 	train= iniDatos();
 	test= iniDatos();
-	printDatos(data);
 	particionado(data, train, test, 0.5);
+
+	
 	printf("\ntrain\n");
     printDatos(train);
 	printf("\ntest\n");
     printDatos(test);
 	
+	freeDatos(train);
+	freeDatos(test);
+	freeDatos(data);
+	free(yytext);
+	fclose(yyin);
+	fclose(yyout);
 
 	return 1;
 	}
