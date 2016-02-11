@@ -13,8 +13,22 @@ typedef struct {
 }datos;
 
 
+
 datos* iniDatos();
 
+/**
+***	Como me parecia deo reservar mas memoria de la que
+***	necesitas en particionado he añadido que las ultimas
+***	posiciones +1 de clase y atributos sean NULL, despues
+***	voy liberando desde el tamaño de los datos hasta NULL 
+***	y asi no perdemos memoria a la hora de liberar ni
+***	resrvamos de mas
+***
+***	Entrada:
+***		data-> los datos a ajutar 
+***
+**/
+void liberaEspacioLibre(datos* data);
 /**
 ***	Dados unos datos los divide en particion
 ***	de entrenamiento y de clasificacion
@@ -44,3 +58,4 @@ int particionado(datos* data, datos* train, datos* test, double porcentaje);
 int reservarTupla(datos* data);
 
 int printDatos(datos* data);
+
