@@ -52,6 +52,36 @@ double actualizaNeurona(neurona* n){
 	return 0;
 }
 
+double actualizaNeuronaPerceptron(neurona* n){
+	int i=0;
+	double val=0.0;
+	for(i=0; i< n->nentradas; i++){
+		val+=n->pesos[i] * (*n->entradas[i]);
+	}
+	if (val >= n->sigma){
+		n->salida=1.0;
+	}
+	else if(val < -n->sigma){
+		n->salida=-1.0;	
+	}
+	else{
+		n->salida=0.0;	
+	}
+	return 0;
+
+}
+
+
+double actualizaNeuronaAdaline(neurona* n){
+	int i=0;
+	double val=0.0;
+	for(i=0; i< n->nentradas; i++){
+		val+=n->pesos[i] * (*n->entradas[i]);
+	}
+	n->salida=val;
+	return 0;
+}
+
 double actualizaNeuronaEntrada(neurona* n, double valor){
 	n->salida=valor;
 	return 0.0;

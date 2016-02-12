@@ -23,6 +23,10 @@ double getSalida(neurona* n);
 
 double actualizaNeurona(neurona* n);
 
+double actualizaNeuronaPerceptron(neurona* n);
+
+double actualizaNeuronaAdaline(neurona* n);
+
 double actualizaNeuronaEntrada(neurona* n, double valor);
 
 void entradasNeurona(neurona* n, double ** entradas);
