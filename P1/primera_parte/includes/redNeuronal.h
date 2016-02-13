@@ -62,10 +62,10 @@ int iniRedAdaline(redNeuronal* red, int entrada, int salida, int oculta, double 
 /**
 ***
 ***	Esta funcion devuelve la red ya entrenada
-***
+***	El primer argumento indica el tipo de entrada
 ***
 **/
-redNeuronal* redTrain(datos* data, int (*fini)(), int (*fsalida)(), int nentreada, int nsalida, int noculta);
+redNeuronal* redTrain(int tentrada,datos* data, int (*fini)(), int (*fsalida)(), int nentreada, int nsalida, int noculta);
 
 /**
 ***
