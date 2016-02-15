@@ -18,12 +18,20 @@ typedef struct{
 ***	hasta las de salida, lo contrario es para los pesos.
 */
 
-int actualizaSalida(redNeuronal* red, double (*fActualizacion)(), double* entrada){
+int actualizaSalida(redNeuronal* red, double (*fActualizacion)(neurona*), double* entrada){
+
+	int i = 0;
 
 	if ((red == NULL) || (fAcualizacion == NULL) || (entrada == NULL)){
 		return 1;
 	}
 
-	
+	for(i = 0 ; i < red->entradas ; i++)
+		actualizaNeuronaEntrada(&(red->neuronas[i+1]), entrada[i])
+
+	for(i = 1 ; i <= (red->entradas + red->salidas + red->ocultas) ; i++)
+		(*fActualizacion)(&(red->neuronas[i]))
+
+	return 0;
 
 }
