@@ -21,7 +21,7 @@ typedef struct{
 ***
 ***
 **/
-int actualizaSalida(redNeuronal* red, double (*fActualizacion)(), double* entrada);
+int actualizaSalida(redNeuronal* red, double (*fActualizacion)(neurona*), double* entrada);
 
 /**
 ***
