@@ -215,3 +215,44 @@ int printDatos(datos* data){
 	}
 	return 0;
 }
+
+
+int escribeDatos(datos* data, char* fichero){
+	FILE* f=NULL;
+	int i=0, j=0, wr=0;
+	f=fopen(fichero, "w");
+	fprintf(f, "%d\n", data->ndatos);
+	fprintf(f, "A1");
+	for (i= 1; i < data->natributos; ++i){
+		fprintf(f, ",A%d",i+1);
+	}
+
+	fprintf(f, ",Class\nContinuo");
+	for (i= 1; i < data->natributos; ++i){
+		fprintf(f, ",Continuo");
+	}
+	fprintf(f, ",Continuo\n");
+
+	for (i= 0; i < data->ndatos; ++i){
+		fprintf(f, "%1.1f",data->atributos[i][0] );
+		for(j=1; j< data->natributos; j++){
+			fprintf(f, ", %1.1f",data->atributos[i][j] );
+		}
+
+		for(j=0, wr=0; j<data->nclases; j++){
+			if(data->clase[i][j]==1){
+				fprintf(f, ", %d\n",j+1);
+				wr=1;
+				break;
+			}
+
+		}
+		if(wr==0){
+			fprintf(f, ", 0\n");
+		}
+	}
+
+	fclose(f);
+	return 0;
+
+}

@@ -61,3 +61,4 @@ int reservarTupla(datos* data);
 
 int printDatos(datos* data);
 
+int escribeDatos(datos* data, char* fichero); 

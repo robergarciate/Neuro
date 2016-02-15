@@ -101,10 +101,7 @@ int main(int argc, char** argv){
 	particionado(data, train, test, 0.5);
 
 	
-	printf("\ntrain\n");
-    printDatos(train);
-	printf("\ntest\n");
-    printDatos(test);
+	escribeDatos(data, "problema_real2.data");
 	
 	freeDatos(train);
 	freeDatos(test);
