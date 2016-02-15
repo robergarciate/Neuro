@@ -73,4 +73,4 @@ redNeuronal* redTrain(int tentrada,datos* data, int (*fini)(), int (*fsalida)(),
 ***
 ***
 **/
-int* redTest(datos* data, int (*fsalida)());
+int* redTest(datos* data, redNeuronal* red, int (*fsalida)());
