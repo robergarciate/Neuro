@@ -14,8 +14,6 @@ typedef struct{
 ***	El segundo argumento es un puntero a funcion, no se si esta bien escrito,
 ***	en concreto se usan las distintas funciones de actualizacion de neurona.
 ***
-
-
 ***	Esta funcion tiene que actualizar desde las neuronas de entrada
 ***	hasta las de salida, lo contrario es para los pesos.
 */
