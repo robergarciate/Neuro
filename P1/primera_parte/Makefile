@@ -35,5 +35,10 @@ datos: $(DTSC) $(DTSL)
 	@$(CC) $(CCF) $(CCC) $(DTSO) $(DTSC)
 	@echo datos compilado
 
+redNeuronal: src/actualizaSalida.c src/iniRed.c includes/redNeuronal.h
+	@$(CC) $(CCF) $(CCC) obj/iniRed.o src/iniRed.c
+	@$(CC) $(CCF) $(CCC) obj/actualizaSalida.o src/actualizaSalida.c
+	@echo redNeuronal compilado
+
 mrProper:
-	@rm -vf obj/* mcCulloch-Pits lector
+	@rm -vf obj/*.o mcCulloch-Pits lector

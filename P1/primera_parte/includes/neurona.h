@@ -14,6 +14,8 @@ typedef struct {
 
 neurona* iniNeurona();
 
+int iniNeurona2(neurona* n);
+
 void destroyNeurona(neurona* n);
 
 int setNeurona(neurona* n, double sigma, int nentradas, double* pesos, double** entradas);

@@ -1,4 +1,4 @@
-#include "redNeuronal.h"
+#include "../includes/redNeuronal.h"
 #include <time.h>
 
 int iniRedPerceptron(redNeuronal* red, int entrada, int salida, int oculta, double tasa){
@@ -13,47 +13,47 @@ int iniRedPerceptron(redNeuronal* red, int entrada, int salida, int oculta, doub
 	red->salidas=salida;
 	red->ocultas=oculta;
 	red->tasa=tasa;
+	red->neuronas=malloc(sizeof(neurona)*(1+entrada+oculta+salida));
 
+	for(i =0; i< (1+entrada+oculta+salida); i++){
+		iniNeurona2( &(red->neuronas[i]));
+	}
 	/*INICIALIZACION NEURONA DE SESGO*/
-	red->neuronas[0]=iniNeurona();
-	setNeurona(red->neuronas[0], 0, 0, NULL, NULL);
-	actualizaNeuronaEntrada(red->neuronas[0], 1.0);
+	setNeurona(&red->neuronas[0], 0, 0, NULL, NULL);
+	actualizaNeuronaEntrada(&(red->neuronas[0]), 1.0);
 
 
 	/*INICIALIZACION NEURONAS DE ENTRADA*/
 	for(i=0; i<entrada; i++){
-		red->neuronas[i+1]=iniNeurona();
-		setNeurona(red->neuronas[i+1], 0.0, 1, NULL, NULL);
+		setNeurona(&red->neuronas[i+1], 0.0, 1, NULL, NULL);
 	}
 
 	/*INICIALIZACION NEURONAS DE CAPA OCULTA*/
 	pesos= (double*) malloc(sizeof(double)*entrada);	
     salidas= (double**) malloc(sizeof(double*)*entrada);
     for(i=0; i<entrada; i++){
-		salidas[i]= &(redNeuronal->neuronas[i+1]->salida);
+		salidas[i]= &((red->neuronas[i+1]).salida);
 	}
 
 	for(i=0; i<oculta; i++){
 		for(j=0; j<entrada; j++){
 			pesos[j]=(double)rand()/(double)RAND_MAX;
 		}
-		red->neuronas[i+1+entrada]=iniNeurona();
-        setNeurona(red->neuronas[i+1+entrada], (double)rand()/(double)RAND_MAX, entrada, pesos, salidas);
+        setNeurona(&red->neuronas[i+1+entrada], (double)rand()/(double)RAND_MAX, entrada, pesos, salidas);
 	}
 
 	/*INICIALIZACION NEURONAS DE SALIDA*/
 	pesos= (double*) malloc(sizeof(double)*entrada);	
-    salidas= (double**) realloc(oculta, sizeof(double*));
+    salidas= (double**) realloc(salidas, sizeof(double*)*oculta);
     for(i=0; i<oculta; i++){
-		salidas[i]= &(redNeuronal->neuronas[i+1+entrada]->salida);
+		salidas[i]= &(red->neuronas[i+1+entrada]).salida;
 	}
 
 	for(i=0; i<oculta; i++){
 		for(j=0; j<oculta; j++){
 			pesos[j]=(double)rand()/(double)RAND_MAX;
 		}
-		red->neuronas[i+1+entrada]=iniNeurona();
-        setNeurona(red->neuronas[i+1+entrada], (double)rand()/(double)RAND_MAX, entrada, pesos, salidas);
+        setNeurona(&red->neuronas[i+1+entrada], (double)rand()/(double)RAND_MAX, entrada, pesos, salidas);
 	}
 
 	return 0;

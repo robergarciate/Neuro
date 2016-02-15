@@ -9,7 +9,14 @@ neurona* iniNeurona(){
 	n->salida=0.0;
 	return n;
 }
-
+int iniNeurona2(neurona* n){
+	n->sigma=0.0;
+	n->nentradas=0;
+	n->pesos=NULL;
+	n->entradas=NULL;
+	n->salida=0.0;
+	return n;
+}
 
 void destroyNeurona(neurona* n){
 	free(n->pesos);

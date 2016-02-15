@@ -22,15 +22,15 @@ int actualizaSalida(redNeuronal* red, double (*fActualizacion)(neurona*), double
 
 	int i = 0;
 
-	if ((red == NULL) || (fAcualizacion == NULL) || (entrada == NULL)){
+	if ((red == NULL) || (fActualizacion == NULL) || (entrada == NULL)){
 		return 1;
 	}
 
 	for(i = 0 ; i < red->entradas ; i++)
-		actualizaNeuronaEntrada(&(red->neuronas[i+1]), entrada[i])
+		actualizaNeuronaEntrada(&(red->neuronas[i+1]), entrada[i]);
 
 	for(i = 1 ; i <= (red->entradas + red->salidas + red->ocultas) ; i++)
-		(*fActualizacion)(&(red->neuronas[i]))
+		(*fActualizacion)(&(red->neuronas[i]));
 
 	return 0;
 

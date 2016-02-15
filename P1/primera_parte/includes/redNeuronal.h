@@ -1,9 +1,9 @@
 #include "neurona.h"
-
+#include "datos.h"
 typedef struct{
 	int entradas;		/*Neuronas en la capa de entrada*/
 	int salidas;		/*Neuronas en la capa de salida*/
-	int ocultas			/*Neuronas en la capa oculta*/
+	int ocultas;		/*Neuronas en la capa oculta*/
 	double tasa;		/*tasa de aprendizaje*/
 	neurona* neuronas; 	/*QUE NO SE NOS PASE QUE AQUI ESTA LA NEURONA DE SESGO*/
 }redNeuronal;
