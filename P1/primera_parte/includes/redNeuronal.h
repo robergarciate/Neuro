@@ -29,7 +29,9 @@ int actualizaSalida(redNeuronal* red, double (*fActualizacion)(neurona*), double
 ***	de si es un perceptron o una red de Adaline
 ***
 **/
-int actualizaPesos(redNeuronal* red);
+int actualizaPesosPerceptron(redNeuronal* red, , int* t);
+
+int actualizaPesosAdaline(redNeuronal* red, int* t);
 
 
 

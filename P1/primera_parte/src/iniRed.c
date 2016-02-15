@@ -29,17 +29,17 @@ int iniRedPerceptron(redNeuronal* red, int entrada, int salida, int oculta, doub
 	}
 
 	/*INICIALIZACION NEURONAS DE CAPA OCULTA*/
-	pesos= (double*) malloc(sizeof(double)*entrada);	
-    salidas= (double**) malloc(sizeof(double*)*entrada);
-    for(i=0; i<entrada; i++){
-		salidas[i]= &((red->neuronas[i+1]).salida);
+	pesos= (double*) malloc(sizeof(double)*entrada+1);	
+    salidas= (double**) malloc(sizeof(double*)*entrada+1);
+    for(i=0; i<entrada+1; i++){
+		salidas[i]= &((red->neuronas[i]).salida);
 	}
 
 	for(i=0; i<oculta; i++){
-		for(j=0; j<entrada; j++){
+		for(j=0; j<entrada+1; j++){
 			pesos[j]=(double)rand()/(double)RAND_MAX;
 		}
-        setNeurona(&red->neuronas[i+1+entrada], (double)rand()/(double)RAND_MAX, entrada, pesos, salidas);
+        setNeurona(&red->neuronas[i+1+entrada], (double)rand()/(double)RAND_MAX, entrada+1, pesos, salidas);
 	}
 
 	/*INICIALIZACION NEURONAS DE SALIDA*/
@@ -57,4 +57,14 @@ int iniRedPerceptron(redNeuronal* red, int entrada, int salida, int oculta, doub
 	}
 
 	return 0;
+}
+
+int actualizaPesosPerceptron(redNeuronal* red, int* t){
+	
+
+}
+
+
+int actualizaPesosAdaline(redNeuronal* red, int* t){
+
 }
