@@ -29,7 +29,7 @@ int actualizaSalida(redNeuronal* red, double (*fActualizacion)(neurona*), double
 	for(i = 0 ; i < red->entradas ; i++)
 		actualizaNeuronaEntrada(&(red->neuronas[i+1]), entrada[i]);
 
-	for(i = 1 ; i <= (red->entradas + red->salidas + red->ocultas) ; i++)
+	for(i = red->entradas ; i <= (red->entradas + red->salidas) ; i++)
 		(*fActualizacion)(&(red->neuronas[i]));
 
 	return 0;

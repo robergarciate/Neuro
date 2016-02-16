@@ -30,7 +30,7 @@ int iniRedPerceptron(redNeuronal* red, int entrada, int salida, double tasa){
 
 
 	/*INICIALIZACION NEURONAS DE SALIDA*/
-	pesos= (double*) malloc(sizeof(double)*entrada);	
+	pesos= (double*) malloc(sizeof(double)*(entrada+1));	
     salidas= (double**) realloc(salidas, sizeof(double*)*(entrada+1));
     for(i=0; i<salida; i++){
 		salidas[i]= &(red->neuronas[i+1]).salida;
@@ -40,19 +40,41 @@ int iniRedPerceptron(redNeuronal* red, int entrada, int salida, double tasa){
 		for(j=0; j<entrada; j++){
 			pesos[j]=(double)rand()/(double)RAND_MAX;
 		}
-        setNeurona(&red->neuronas[i+1], (double)rand()/(double)RAND_MAX, entrada, pesos, salidas);
+        setNeurona(&red->neuronas[i+1], (double)rand()/(double)RAND_MAX, entrada+1, pesos, salidas);
 	}
 
 	return 0;
 }
 
 int actualizaPesosPerceptron(redNeuronal* red, int* t){
-	
-	return 0;
+	int i=0, j=0;
+	if(red==NULL || t==NULL){
+		return 1;
+	}
 
+	for(i=0; i<red->salidas; i++){
+		(&red->neuronas[i])->pesos[0]+= t[i];
+		for(j=0; j<red->entradas; j++){
+			(&red->neuronas[i])->pesos[j+1]+= red->tasa*t[i]*red->neuronas[j+1].salida;
+			
+		}
+	} 
+	return 0;
 }
 
 
 int actualizaPesosAdaline(redNeuronal* red, int* t){
+	int i=0, j=0;
+	if(red==NULL || t==NULL){
+		return 1;
+	}
+
+	for(i=0; i<red->salidas; i++){	/*	 tj	 - y_inj*/
+		(&red->neuronas[i])->pesos[0]+= t[i] - red->neuronas[i+1+red->entradas].salida;
+		for(j=0; j<red->entradas; j++){				/*	     tj - y_inj*/
+			(&red->neuronas[i])->pesos[j+1]+= red->tasa * (t[i] - red->neuronas[i+1+red->entradas].salida) * red->neuronas[j+1].salida;
+			
+		}
+	} 
 	return 0;
 }
