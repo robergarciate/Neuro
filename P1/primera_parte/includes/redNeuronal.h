@@ -25,8 +25,7 @@ int actualizaSalida(redNeuronal* red, double (*fActualizacion)(neurona*), double
 
 /**
 ***
-***	Tener ojo con esto y actulizar pesos de forma adecuada en funcion 
-***	de si es un perceptron o una red de Adaline
+***	Tener ojo con usar una actulizacion bipolar
 ***
 **/
 int actualizaPesosPerceptron(redNeuronal* red, int* t);
