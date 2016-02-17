@@ -4,6 +4,7 @@
 #include <string.h>
 #include <getopt.h>
 
+
 typedef struct {
 	double sigma;
 	int nentradas;
@@ -34,5 +35,7 @@ double actualizaNeuronaEntrada(neurona* n, double valor);
 void entradasNeurona(neurona* n, double ** entradas);
 
 void pesosNeurona(neurona* n, double* pesos);
+
+int copiaPesos(neurona* n1, neurona* n2);
 
 void printNeurona(neurona* n);

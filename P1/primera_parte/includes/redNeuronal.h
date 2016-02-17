@@ -1,5 +1,9 @@
 #include "neurona.h"
 #include "datos.h"
+
+
+#define MAX_ETAPAS 100
+#define MAX_TOLERANCIA 2
 typedef struct{
 	int entradas;		/*Neuronas en la capa de entrada*/
 	int salidas;		/*Neuronas en la capa de salida*/
@@ -60,6 +64,10 @@ int iniRedPerceptron(redNeuronal* red, int entrada, int salida, double tasa);
 **/
 int iniRedAdaline(redNeuronal* red, int entrada, int salida, int oculta, double tasa);
 
+
+int paradaPerceptron(redNeuronal* red);
+
+int paradaAdaline(redNeuronal* red);
 /**
 ***
 ***	Esta funcion devuelve la red ya entrenada

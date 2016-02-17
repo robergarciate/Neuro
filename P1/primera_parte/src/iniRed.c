@@ -1,6 +1,10 @@
 #include "../includes/redNeuronal.h"
 #include <time.h>
 
+/*ESTA VARIBLE SE USA PARA LAS CONDICIONES DE PARADA*/
+redNeuronal* redpre=NULL;
+int etapa=0;
+
 int iniRedPerceptron(redNeuronal* red, int entrada, int salida, double tasa){
 	double* pesos= NULL,** salidas= NULL;
 	int i=0, j=0;
@@ -78,3 +82,94 @@ int actualizaPesosAdaline(redNeuronal* red, int* t){
 	} 
 	return 0;
 }
+
+
+int copiaRed(redNeuronal* redIn, redNeuronal* redOut){
+	int numNeu1=0, numNeu2=0, i=0;
+	if (redIn==NULL|| redOut==NULL){
+		return 1;
+	}
+	numNeu1= redIn->entradas + redIn->salida + redIn->ocultas;
+	numNeu2= redOut->entradas + redOut->salida + redOut->ocultas;
+	/*REDIMENSIONAMOS LA RED*/
+	if(numNeu1!=numNeu2){
+		for(i=0; i<numNeu2+1; i++){
+			destroyNeurona(redOut->neuronas[i]);
+		}
+
+		red->neuronas=malloc(sizeof(neurona)*(numNeu2+1));
+
+	}
+	free(redNeuronal->neuronas);
+	redOut->entradas= redIn->entradas;
+	redOut->salida= redIn->salida;
+	redOut->ocultas= redIn->ocultas;
+	redOut->tasa= redIn->tasa;
+	for(i =0; i< numNeu1+1; i++){
+		iniNeurona2( &(redOut->neuronas[i]));
+		setNeurona(&redOut->neuronas[i], redOut->neuronas[i].sigma, redOut->neuronas[i].nentradas, redOut->neuronas[i].pesos, NULL);
+	}
+	return 0;
+}
+
+int paradaPerceptron(redNeuronal* red){
+	int f=0, i=0, j=0, num=0;
+	if(redpre==NULL){
+		iniRedPerceptron(redpre, red->entradas, red->salida, red->tasa);
+		copiaRed(red, redpre);
+		etapa=0;
+		return 0;
+	}
+	/**/
+	if(etapa==MAX_ETAPAS){
+
+		redpre=NULL;
+		return 1;
+	}
+	num=1+ red->entradas + red->salida;
+	for(i=0; i< num; i++){
+		for(j=0;j<red->neuronas[i]->nentradas; j++){
+			if(red->neuronas[i]->pesos[j] != redpre->neuronas[i]->pesos[j]){
+				copiaRed(red, redpre);
+				etapa++;
+				return 0;
+			}
+		}
+	}
+
+	redpre=NULL;
+	return 1;
+}
+
+
+
+int paradaAdaline(redNeuronal* red){
+	int f=0, i=0, j=0, num=0;
+	if(redpre==NULL){
+		iniRedPerceptron(redpre, red->entradas, red->salida, red->tasa);
+		copiaRed(red, redpre);
+		etapa=0;
+		return 0;
+	}
+	/**/
+	if(etapa==MAX_ETAPAS){
+
+		redpre=NULL;
+		return 1;
+	}
+	num=1+ red->entradas + red->salida;
+	for(i=0; i< num; i++){
+		for(j=0;j<red->neuronas[i]->nentradas; j++){
+			if(redpre->neuronas[i]->pesos[j] - MAX_TOLERANCIA > red->neuronas[i]->pesos[j]
+				&& redpre->neuronas[i]->pesos[j] + MAX_TOLERANCIA < red->neuronas[i]->pesos[j]) { 
+				copiaRed(red, redpre);
+				etapa++;
+				return 0;
+			}
+		}
+	}
+
+	redpre=NULL;
+	return 1;
+}
+

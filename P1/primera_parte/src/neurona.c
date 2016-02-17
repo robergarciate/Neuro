@@ -15,7 +15,7 @@ int iniNeurona2(neurona* n){
 	n->pesos=NULL;
 	n->entradas=NULL;
 	n->salida=0.0;
-	return n;
+	return 0;
 }
 
 void destroyNeurona(neurona* n){
