@@ -74,9 +74,13 @@ int paradaAdaline(redNeuronal* red);
 ***	El primer argumento indica el tipo de entrada
 ***
 **/
-redNeuronal* redTrain(int tentrada,datos* data, int (*fini)(), int (*fsalida)(), int nentreada, int nsalida, int noculta);
 
-/**
+redNeuronal* redTrain(int tentrada,datos* data,
+					int (*fini)(redNeuronal*, int, int, double),
+					int (*fsalida) (redNeuronal*, double (*fActualizacion)(neurona*), double*),
+					int (*fParada) (redNeuronal*),
+					int nentreada, int nsalida, int noculta);
+/**1
 ***
 ***	Esta funcion devuelve las salidas esperadas de unos datos.
 ***
