@@ -9,7 +9,7 @@ DTSC= src/datos.c
 DTSL= includes/datos.h
 DTSO= obj/datos.o
 
-all: mcCulloch-Pits lector
+all: mcCulloch-Pits lector redNeuronal
 	@echo "Se compilo todo el codigo y se gneraron los ejecutables"
 
 
@@ -38,6 +38,13 @@ redNeuronal: src/actualizaSalida.c src/iniRed.c includes/redNeuronal.h
 	@$(CC) $(CCF) $(CCC) obj/iniRed.o src/iniRed.c
 	@$(CC) $(CCF) $(CCC) obj/actualizaSalida.o src/actualizaSalida.c
 	@echo redNeuronal compilado
+
+commit:
+	git add .
+	git commit -m "commit makefile"
+	git push
+pull:
+	git pull
 
 mrProper:
 	@rm -vf obj/*.o mcCulloch-Pits lector

@@ -1,6 +1,8 @@
 #include "neurona.h"
 #include "datos.h"
 
+#define ADALINE 0
+#define PERCEPTRON 1
 
 #define MAX_ETAPAS 100
 #define MAX_TOLERANCIA 2
@@ -52,7 +54,7 @@ int actualizaPesosAdaline(redNeuronal* red, int* t);
 ***
 ***
 **/
-int iniRedPerceptron(redNeuronal* red, int entrada, int salida, double tasa);
+int iniRedPerceptron(redNeuronal* red, int entrada, int oculta, int salida, double tasa);
 
 
 /**
@@ -76,10 +78,12 @@ int paradaAdaline(redNeuronal* red);
 **/
 
 redNeuronal* redTrain(int tentrada,datos* data,
-					int (*fini)(redNeuronal*, int, int, double),
+					int (*fini)(redNeuronal*, int, int, int, double),
 					int (*fsalida) (redNeuronal*, double (*fActualizacion)(neurona*), double*),
 					int (*fParada) (redNeuronal*),
-					int nentreada, int nsalida, int noculta);
+					int (*fPesos) (redNeuronal*, int*),
+					double (*fActualizacion)(neurona*),					
+					int nentreada, int nsalida, int noculta, double tasa);
 /**1
 ***
 ***	Esta funcion devuelve las salidas esperadas de unos datos.

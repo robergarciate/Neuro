@@ -5,7 +5,7 @@
 redNeuronal* redpre=NULL;
 int etapa=0;
 
-int iniRedPerceptron(redNeuronal* red, int entrada, int salida, double tasa){
+int iniRedPerceptron(redNeuronal* red, int entrada, int oculta,int salida, double tasa){
 	double* pesos= NULL,** salidas= NULL;
 	int i=0, j=0;
 	if(red==NULL || entrada==0 || salida==0 )
@@ -55,7 +55,13 @@ int actualizaPesosPerceptron(redNeuronal* red, int* t){
 	if(red==NULL || t==NULL){
 		return 1;
 	}
-
+	for(i=0, j=0; i<red->salidas; i++){
+		if(t[i]!=red->neuronas.salida)
+			j=1;
+	}
+	if(j==0)
+		return 0;
+	
 	for(i=0; i<red->salidas; i++){
 		(&red->neuronas[i])->pesos[0]+= t[i];
 		for(j=0; j<red->entradas; j++){
@@ -114,7 +120,7 @@ int copiaRed(redNeuronal* redIn, redNeuronal* redOut){
 int paradaPerceptron(redNeuronal* red){
 	int i=0, j=0, num=0;
 	if(redpre==NULL){
-		iniRedPerceptron(redpre, red->entradas, red->salidas, red->tasa);
+		iniRedPerceptron(redpre, red->entradas, 0, red->salidas, red->tasa);
 		copiaRed(red, redpre);
 		etapa=0;
 		return 0;
@@ -145,7 +151,7 @@ int paradaPerceptron(redNeuronal* red){
 int paradaAdaline(redNeuronal* red){
 	int i=0, j=0, num=0;
 	if(redpre==NULL){
-		iniRedPerceptron(redpre, red->entradas, red->salidas, red->tasa);
+		iniRedPerceptron(redpre, red->entradas, 0, red->salidas, red->tasa);
 		copiaRed(red, redpre);
 		etapa=0;
 		return 0;
@@ -174,10 +180,30 @@ int paradaAdaline(redNeuronal* red){
 
 
 redNeuronal* redTrain(int tentrada, datos* data,
-					int (*fini)(redNeuronal*, int, int, double),
+					int (*fini)(redNeuronal*, int, int, int, double),
 					int (*fsalida) (redNeuronal*, double (*fActualizacion)(neurona*), double*),
 					int (*fParada) (redNeuronal*),
-					int nentreada, int nsalida, int noculta){
-	return NULL;
+					int (*fPesos) (redNeuronal*, int*),
+					double (*fActualizacion)(neurona*),
+					int nentreada, int nsalida, int noculta, double tasa){
+
+	redNeuronal* red= NULL;
+	int i=0;
+	if(data==NULL || nentreada==0 || nsalida==0){
+		return NULL;
+	}
+	(*fini)(red, nentreada, noculta, nsalida, tasa);
+	if(red==NULL){
+		return NULL;
+	}
+
+	while((*fParada)(red)){
+		for(i=0; i<data->ndatos; i++){
+			(*fsalida) (red, (*fActualizacion), data->atributos[i]);
+			(*fPesos) (red, data->clase[i]);
+		}
+	}
+
+	return red;
 }
 
