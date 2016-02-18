@@ -39,7 +39,7 @@ redNeuronal: src/actualizaSalida.c src/iniRed.c includes/redNeuronal.h
 	@$(CC) $(CCF) $(CCC) obj/actualizaSalida.o src/actualizaSalida.c
 	@echo redNeuronal compilado
 
-commit:
+commit: mrProper
 	git add .
 	git commit -m "commit makefile"
 	git push

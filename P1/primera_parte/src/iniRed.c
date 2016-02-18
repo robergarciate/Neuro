@@ -56,12 +56,12 @@ int actualizaPesosPerceptron(redNeuronal* red, int* t){
 		return 1;
 	}
 	for(i=0, j=0; i<red->salidas; i++){
-		if(t[i]!=red->neuronas.salida)
+		if(t[i]!=red->neuronas[i+1+red->entradas].salida)
 			j=1;
 	}
 	if(j==0)
 		return 0;
-	
+
 	for(i=0; i<red->salidas; i++){
 		(&red->neuronas[i])->pesos[0]+= t[i];
 		for(j=0; j<red->entradas; j++){
