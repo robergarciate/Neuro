@@ -9,7 +9,7 @@ DTSC= src/datos.c
 DTSL= includes/datos.h
 DTSO= obj/datos.o
 
-all: mcCulloch-Pits lector redNeuronal
+all: mcCulloch-Pits lector redNeuronal perceptron-adaline
 	@echo "Se compilo todo el codigo y se gneraron los ejecutables"
 
 
@@ -24,11 +24,14 @@ obj/neurona.o: src/neurona.c includes/neurona.h
 	@echo "neurona compilado"
 
 
+perceptron-adaline: lector datos redNeuronal src/perceptron-adaline.c
+	@$(CC) $(CCE) perceptron src/perceptron-adaline.c obj/*.o
+	@echo creado ejecutable de perceptron y adaline
 
 lector: $(FLTRM) $(FLTRX) $(FLTRL) datos
 	@flex -o obj/lex.yy.c $(FLTRX)
 	@gcc  -c obj/lex.yy.c -o obj/lex.yy.o
-	@gcc $(CCF) -o lector $(FLTRM) obj/lex.yy.o $(DTSO)
+	@gcc $(CCF) $(CCC) obj/lector.o $(FLTRM)
 	@echo lector compilado
 datos: $(DTSC) $(DTSL)
 	@$(CC) $(CCF) $(CCC) $(DTSO) $(DTSC)

@@ -2,18 +2,17 @@
 #include "../includes/lector.h"
 extern int yylex();
 
-int main(int argc, char** argv){
-	datos* data,* train=NULL,* test=NULL;
+datos* leerDatos(FILE* fin){
+	datos* data;
 	int i=0, j=0, k=-1, tok=0;
 	extern FILE* yyin;
     extern FILE* yyout;
     extern char* yytext;
-    yyin=NULL;
     yyout=NULL;
-	yyin=fopen(argv[1],"r");
+	yyin=fin;
 	if(yyin==NULL){
 		printf("Error al abrir el fichero\n"); 
-		return 0;
+		return NULL;
 	}
 	/*LEEMOS TODOS LOS CARACTERES INECESARIOS HASTA ENCONTRAR UN NUMERO*/
 	while((tok=yylex())==TOK_CARACTER){
@@ -26,7 +25,7 @@ int main(int argc, char** argv){
 		switch(tok){
 			case TOK_DOUBLE:
 				fprintf(yyout,"ERROR: el formato del fichero es erroneo");
-				return 1;
+				return NULL;
 			break;
 			case TOK_INTEGER:
 				data->natributos=atoi(yytext);
@@ -46,7 +45,7 @@ int main(int argc, char** argv){
 		switch(tok){
 			case TOK_DOUBLE:
 				fprintf(yyout,"ERROR: el formato del fichero es erroneo");
-				return 1;
+				return NULL;
 			break;
 			case TOK_INTEGER:
 			printf("1\n");
@@ -95,20 +94,9 @@ int main(int argc, char** argv){
 		tok=yylex();
 	}
 
-
-	train= iniDatos();
-	test= iniDatos();
-	particionado(data, train, test, 0.5);
-
-	
-	escribeDatos(data, "problema_real2.data");
-	
-	freeDatos(train);
-	freeDatos(test);
-	freeDatos(data);
 	free(yytext);
 	fclose(yyin);
 	fclose(yyout);
 
-	return 1;
+	return data;
 	}
