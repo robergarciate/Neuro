@@ -25,7 +25,7 @@ obj/neurona.o: src/neurona.c includes/neurona.h
 
 
 perceptron-adaline: lector datos redNeuronal src/perceptron-adaline.c
-	@$(CC) $(CCE) perceptron src/perceptron-adaline.c obj/*.o
+	@$(CC) $(CCE) perceptron-adaline src/perceptron-adaline.c obj/*.o
 	@echo creado ejecutable de perceptron y adaline
 
 lector: $(FLTRM) $(FLTRX) $(FLTRL) datos
@@ -50,4 +50,4 @@ pull:
 	git pull
 
 mrProper:
-	@rm -vf obj/*.o mcCulloch-Pits lector
+	@rm -vf obj/*.o mcCulloch-Pits perceptron-adaline

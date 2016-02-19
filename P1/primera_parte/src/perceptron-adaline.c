@@ -1,7 +1,7 @@
 #include "../includes/redNeuronal.h"
 
 int main(int argc, char** argv) {
-	FILE * fin,* fout= stdout;
+	FILE * fin,* fout= NULL;
     int flagf=0, long_index=0;
     double* pesos; /*pesos de neuronas entre neuronas*/
     double** salidas; /*valores de salida de las neuronas*/
@@ -9,7 +9,7 @@ int main(int argc, char** argv) {
     char* buffer, opt;
     int i=0, sz, j;
     double ptrain=0.0, ptest=0.0;
-    neurona** redNeuronal;
+    redNeuronal* red=NULL;
     datos* data=NULL,* train=NULL,* test=NULL;
     static flagPerceptron=0, flagAdaline=0;
     static struct option options[] = {
@@ -21,7 +21,6 @@ int main(int argc, char** argv) {
         {"test", required_argument, 0, '5'},
         {0,0,0,0}
     };
-
     while ((opt = getopt_long_only(argc, argv,"1:", options, &long_index )) != -1){
         switch(opt){
             case '1':
@@ -48,11 +47,17 @@ int main(int argc, char** argv) {
     }
 
     if(fin==NULL || (ptrain==0.0 && ptest==0.0) || ptrain>1 || ptest>1){
+        printf("asdas\n");
         return 1; 
+
     }
-
+    if(fout==NULL)
+        fout=stdout;
     data = leerDatos(fin);
-
+    printDatos(data);
+    train=iniDatos();
+    test=iniDatos();
+    
     if( ptrain+ptest ==1.0){
         particionado(data, train, test, ptrain);
     }
@@ -61,8 +66,16 @@ int main(int argc, char** argv) {
         return 0;
     }
 
-    printDatos(data);
+    redTrain(0, train, );
+
+
+
+    if(fout!=stdout){
+        free(fout);
+    }
+    fclose(fin);
     freeDatos(data);
     freeDatos(train);
     freeDatos(test);
+
 }

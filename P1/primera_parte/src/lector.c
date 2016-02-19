@@ -93,10 +93,7 @@ datos* leerDatos(FILE* fin){
 		}
 		tok=yylex();
 	}
-
 	free(yytext);
-	fclose(yyin);
-	fclose(yyout);
 
 	return data;
 	}

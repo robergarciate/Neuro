@@ -196,8 +196,10 @@ int reservarTupla(datos* data){
 }
 int printDatos(datos* data){
 	int i=0, j=0;
-	if(data==NULL)
+	if(data==NULL){
+		printf("data=NULL\n");
 		return 1;
+	}
 	printf("natributos:%d\n",data->natributos);
 	printf("nclases:%d\n",data->nclases);
 	printf("ndatos:%d\n",data->ndatos);
