@@ -258,3 +258,18 @@ int escribeDatos(datos* data, char* fichero){
 	return 0;
 
 }
+
+
+
+void bipolarizar(datos* data){
+	int i=0 , j=0;
+	if(data== NULL){
+		return;
+	}
+	for(i= 0; i< data->ndatos; i++){
+		for(j=0; j<data->nclases; j++){
+			if(data->clase[i][j]==0)
+				data->clase[i][j]=-1;
+		}
+	}
+}

@@ -64,3 +64,5 @@ int printDatos(datos* data);
 int escribeDatos(datos* data, char* fichero); 
 
 datos* leerDatos(FILE* fin);
+
+void bipolarizar(datos* data);

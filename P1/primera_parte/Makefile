@@ -37,9 +37,8 @@ datos: $(DTSC) $(DTSL)
 	@$(CC) $(CCF) $(CCC) $(DTSO) $(DTSC)
 	@echo datos compilado
 
-redNeuronal: src/actualizaSalida.c src/iniRed.c includes/redNeuronal.h
-	@$(CC) $(CCF) $(CCC) obj/iniRed.o src/iniRed.c
-	@$(CC) $(CCF) $(CCC) obj/actualizaSalida.o src/actualizaSalida.c
+redNeuronal: src/redNeuronal.c includes/redNeuronal.h
+	@$(CC) $(CCF) $(CCC) obj/redNeuronal.o src/redNeuronal.c
 	@echo redNeuronal compilado
 
 commit: mrProper

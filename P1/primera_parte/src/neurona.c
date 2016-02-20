@@ -63,9 +63,11 @@ double actualizaNeuronaPerceptron(neurona* n){
 	int i=0;
 	double val=0.0;
 	for(i=0; i< n->nentradas; i++){
-		val+=n->pesos[i] * (*n->entradas[i]);
+		/*printf("%1.4f * %1.4f\n", n->pesos[i], *n->entradas[i]);
+		*/val+=n->pesos[i] * (*n->entradas[i]);
 	}
-	if (val >= n->sigma){
+	/*printf("val:%1.4f sigma:%1.4f\n", val, n->sigma);
+	*/if (val >= n->sigma){
 		n->salida=1.0;
 	}
 	else if(val < -n->sigma){
@@ -104,16 +106,17 @@ void pesosNeurona(neurona* n, double* pesos){
 
 void printNeurona(neurona* n){
 	int i=0;
-	printf("\nsigma=%0.1f\n", n->sigma);
+	printf("\nsigma=%1.4f\n", n->sigma);
 	printf("nentradas=%d\n", n->nentradas);
-	printf("salida=%0.1f\n", n->salida);
+	printf("salida=%1.4f\n", n->salida);
 	printf("pesos:");
 	for(i=0; i< n->nentradas; i++){
-		printf("%0.1f ", n->pesos[i]);
+		printf("%d", i);
+		printf(" %1.4f\n", n->pesos[i]);
 	}
 	printf("\nentradas:");
 	for(i=0; i< n->nentradas; i++){
-		printf("%0.1f ", *n->entradas[i]);
+		printf("%1.4f ", *n->entradas[i]);
 	}
 	printf("\n\n");
 	

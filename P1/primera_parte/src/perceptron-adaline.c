@@ -57,7 +57,7 @@ int main(int argc, char** argv) {
     printDatos(data);
     train=iniDatos();
     test=iniDatos();
-    
+    bipolarizar(data);
    if( ptrain+ptest ==1.0){
         particionado(data, train, test, ptest);
 
