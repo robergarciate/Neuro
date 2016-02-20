@@ -11,7 +11,7 @@ int main(int argc, char** argv) {
     double ptrain=0.0, ptest=0.0;
     redNeuronal* red=NULL;
     datos* data=NULL,* train=NULL,* test=NULL;
-    static flagPerceptron=0, flagAdaline=0;
+    static int flagPerceptron=0, flagAdaline=0;
     static struct option options[] = {
         {"fin",required_argument,0,'1'},
         {"fout",required_argument,0,'6'},
@@ -58,18 +58,29 @@ int main(int argc, char** argv) {
     train=iniDatos();
     test=iniDatos();
     
-    if( ptrain+ptest ==1.0){
-        particionado(data, train, test, ptrain);
+   if( ptrain+ptest ==1.0){
+        particionado(data, train, test, ptest);
+
+        printf("ndatos:%d\n",train->ndatos );
+
+        printf("ndatos:%d\n",test->ndatos );
+
+        red=redTrain(0, train, iniRedPerceptron, actualizaSalida,
+         paradaPerceptron, actualizaPesosPerceptron, actualizaNeuronaPerceptron,
+         data->natributos, data->nclases, 0, 0.1);
+
     }
     else{
         printf("por hacer\n");
         return 0;
     }
 
-    redTrain(0, train, );
+    if(red==NULL){
+        printf("sada\n");
+    }
 
 
-
+    printf("ndatos:%d\n",data->ndatos );
     if(fout!=stdout){
         free(fout);
     }

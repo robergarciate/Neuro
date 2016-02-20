@@ -25,11 +25,13 @@ int actualizaSalida(redNeuronal* red, double (*fActualizacion)(neurona*), double
 	if ((red == NULL) || (fActualizacion == NULL) || (entrada == NULL)){
 		return 1;
 	}
-
+	printf("actualiza neuronas de entrada\n");
 	for(i = 0 ; i < red->entradas ; i++)
 		actualizaNeuronaEntrada(&(red->neuronas[i+1]), entrada[i]);
 
-	for(i = red->entradas ; i <= (red->entradas + red->salidas) ; i++)
+	printf("actualiza neuronas de salida\n");
+
+	for(i = red->entradas+1 ; i < (red->entradas + red->salidas)+1 ; i++)
 		(*fActualizacion)(&(red->neuronas[i]));
 
 	return 0;

@@ -54,7 +54,7 @@ int actualizaPesosAdaline(redNeuronal* red, int* t);
 ***
 ***
 **/
-int iniRedPerceptron(redNeuronal* red, int entrada, int oculta, int salida, double tasa);
+redNeuronal* iniRedPerceptron(int entrada, int oculta, int salida, double tasa);
 
 
 /**
@@ -64,8 +64,16 @@ int iniRedPerceptron(redNeuronal* red, int entrada, int oculta, int salida, doub
 ***
 ***
 **/
-int iniRedAdaline(redNeuronal* red, int entrada, int salida, int oculta, double tasa);
+redNeuronal* iniRedAdaline( int entrada, int salida, int oculta, double tasa);
 
+/**
+***
+***	Funciona con 2 cosas
+***	una variable global que guarda el estado de la red anterior
+***	el numero de etaps que han transcurrido
+***
+***
+**/
 
 int paradaPerceptron(redNeuronal* red);
 
@@ -78,7 +86,7 @@ int paradaAdaline(redNeuronal* red);
 **/
 
 redNeuronal* redTrain(int tentrada,datos* data,
-					int (*fini)(redNeuronal*, int, int, int, double),
+					redNeuronal* (*fini)(int, int, int, double),
 					int (*fsalida) (redNeuronal*, double (*fActualizacion)(neurona*), double*),
 					int (*fParada) (redNeuronal*),
 					int (*fPesos) (redNeuronal*, int*),
@@ -91,3 +99,5 @@ redNeuronal* redTrain(int tentrada,datos* data,
 ***
 **/
 int* redTest(datos* data, redNeuronal* red, int (*fsalida)());
+
+void printSalidas(redNeuronal* red);

@@ -5,33 +5,41 @@
 redNeuronal* redpre=NULL;
 int etapa=0;
 
-int iniRedPerceptron(redNeuronal* red, int entrada, int oculta,int salida, double tasa){
+redNeuronal* iniRedPerceptron(int entrada, int oculta,int salida, double tasa){
 	double* pesos= NULL,** salidas= NULL;
 	int i=0, j=0;
-	if(red==NULL || entrada==0 || salida==0 )
-		return 1;
-
+	redNeuronal* red=NULL;
+	if( entrada==0 || salida==0 )
+		return NULL;
+	if(red==NULL){
+		red= malloc(sizeof(redNeuronal));
+	}
 	srand(time(NULL));
-	red= malloc(sizeof(redNeuronal));
 	red->entradas=entrada;
 	red->salidas=salida;
 	red->ocultas=0;
 	red->tasa=tasa;
 	red->neuronas=malloc(sizeof(neurona)*(1+entrada+salida));
-
+	
+	printf("inicializados valores de la red\n");
 	for(i =0; i< (1+entrada+salida); i++){
 		iniNeurona2( &(red->neuronas[i]));
 	}
+	
+	printf("creadas neuronas\n");
+
 	/*INICIALIZACION NEURONA DE SESGO*/
 	setNeurona(&red->neuronas[0], 0, 0, NULL, NULL);
 	actualizaNeuronaEntrada(&(red->neuronas[0]), 1.0);
 
+	printf("inicializada neurons de sesgo\n");
 
 	/*INICIALIZACION NEURONAS DE ENTRADA*/
 	for(i=0; i<entrada; i++){
-		setNeurona(&red->neuronas[i+1], 0.0, 1, NULL, NULL);
+		setNeurona(&red->neuronas[i+1], 0.0, 0, NULL, NULL);
 	}
 
+	printf("inicializadas neuronas de entrada\n");
 
 	/*INICIALIZACION NEURONAS DE SALIDA*/
 	pesos= (double*) malloc(sizeof(double)*(entrada+1));	
@@ -46,16 +54,20 @@ int iniRedPerceptron(redNeuronal* red, int entrada, int oculta,int salida, doubl
 		}
         setNeurona(&red->neuronas[i+1], (double)rand()/(double)RAND_MAX, entrada+1, pesos, salidas);
 	}
+	printf("inicializadas neuronas de salida\n\n");
 
-	return 0;
+	return red;
 }
 
 int actualizaPesosPerceptron(redNeuronal* red, int* t){
 	int i=0, j=0;
 	if(red==NULL || t==NULL){
+		printf("ha devuelto mal\n");
 		return 1;
 	}
+	printf("salidas\n");
 	for(i=0, j=0; i<red->salidas; i++){
+		printf("esp:%d res:%1.1f\n", t[i], red->neuronas[i+1+red->entradas].salida);
 		if(t[i]!=red->neuronas[i+1+red->entradas].salida)
 			j=1;
 	}
@@ -120,16 +132,16 @@ int copiaRed(redNeuronal* redIn, redNeuronal* redOut){
 int paradaPerceptron(redNeuronal* red){
 	int i=0, j=0, num=0;
 	if(redpre==NULL){
-		iniRedPerceptron(redpre, red->entradas, 0, red->salidas, red->tasa);
+		redpre=iniRedPerceptron( red->entradas, 0, red->salidas, red->tasa);
 		copiaRed(red, redpre);
 		etapa=0;
-		return 0;
+		return 1;
 	}
 	/**/
 	if(etapa==MAX_ETAPAS){
 
 		redpre=NULL;
-		return 1;
+		return 0;
 	}
 	num=1+ red->entradas + red->salidas;
 	for(i=0; i< num; i++){
@@ -151,7 +163,7 @@ int paradaPerceptron(redNeuronal* red){
 int paradaAdaline(redNeuronal* red){
 	int i=0, j=0, num=0;
 	if(redpre==NULL){
-		iniRedPerceptron(redpre, red->entradas, 0, red->salidas, red->tasa);
+		redpre=iniRedPerceptron(red->entradas, 0, red->salidas, red->tasa);
 		copiaRed(red, redpre);
 		etapa=0;
 		return 0;
@@ -179,8 +191,29 @@ int paradaAdaline(redNeuronal* red){
 }
 
 
+
+
+void printSalidas(redNeuronal* red){
+
+	int i=0, j=0;
+
+	if (red==NULL)
+		return;
+	printf("\n");
+	printf("%1.1f\n", red->neuronas[0].salida);
+	j= 1 + red->entradas;
+	for(i=1 ; i<red->entradas+1; i++){
+		if(j>= red->entradas+1 +red->salidas)
+			printf("%1.1f\n", red->neuronas[i].salida);
+		else
+			printf("%1.1f\t %1.1f\n", red->neuronas[i].salida, red->neuronas[j++].salida);
+	}
+	printf("\n");
+}
+
+
 redNeuronal* redTrain(int tentrada, datos* data,
-					int (*fini)(redNeuronal*, int, int, int, double),
+					redNeuronal* (*fini)(int, int, int, double),
 					int (*fsalida) (redNeuronal*, double (*fActualizacion)(neurona*), double*),
 					int (*fParada) (redNeuronal*),
 					int (*fPesos) (redNeuronal*, int*),
@@ -189,21 +222,30 @@ redNeuronal* redTrain(int tentrada, datos* data,
 
 	redNeuronal* red= NULL;
 	int i=0;
+	printf("ndatos:%d\n",data->ndatos );
 	if(data==NULL || nentreada==0 || nsalida==0){
 		return NULL;
 	}
-	(*fini)(red, nentreada, noculta, nsalida, tasa);
+	red =(*fini)(nentreada, noculta, nsalida, tasa);
+
 	if(red==NULL){
+		printf("cosa\n");
 		return NULL;
 	}
-
+	printf("ndatos:%d\n",data->ndatos );
+	printf("compuebca parada\n");
 	while((*fParada)(red)){
 		for(i=0; i<data->ndatos; i++){
+			printf("actualiza salida\n");
 			(*fsalida) (red, (*fActualizacion), data->atributos[i]);
+			printSalidas(red);
+			printf("actualiza pesos\n");
 			(*fPesos) (red, data->clase[i]);
 		}
-	}
+		printf("compuebca parada\n");
 
+	}
+	printf("fin\n");
 	return red;
 }
 
