@@ -76,7 +76,6 @@ int actualizaPesosPerceptron(redNeuronal* red, int* t){
 		(&red->neuronas[i])->pesos[0]+= t[i];
 		for(j=0; j<red->entradas; j++){
 			(&red->neuronas[i])->pesos[j+1]+= red->tasa*t[i]*red->neuronas[j+1].salida;
-			printf("%1.4f ", red->neuronas[i].pesos[j+1]);
 		}
 		printf("\n");
 	} 
@@ -228,7 +227,6 @@ int actualizaSalida(redNeuronal* red, double (*fActualizacion)(neurona*), double
 
 	for(i = red->entradas+1 ; i < (red->entradas + red->salidas)+1 ; i++){
 		(*fActualizacion)(&(red->neuronas[i]));
-		printf("%d:%d\n", i, (red->entradas + red->salidas)+1);
 	}
 
 	return 0;
@@ -260,7 +258,6 @@ redNeuronal* redTrain(int tentrada, datos* data,
 		for(i=0; i<data->ndatos; i++){
 			printf("actualiza salida\n");
 			(*fsalida) (red, (*fActualizacion), data->atributos[i]);
-			printSalidas(red);
 			printf("actualiza pesos\n");
 			(*fPesos) (red, data->clase[i]);
 		}
