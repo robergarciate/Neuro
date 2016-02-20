@@ -71,7 +71,6 @@ int actualizaPesosPerceptron(redNeuronal* red, int* t){
 		printf("predijo bien\n");
 		return 0;
 	}
-	printf("\npesos nuevos:");
 	for(i=0; i<red->salidas; i++){
 		(&red->neuronas[i])->pesos[0]+= t[i];
 		for(j=0; j<red->entradas; j++){
@@ -148,13 +147,14 @@ int paradaPerceptron(redNeuronal* red){
 			if(red->neuronas[i].pesos[j] != redpre->neuronas[i].pesos[j]){
 				copiaRed(red, redpre);
 				etapa++;
-				return 0;
+				printf("etapa:%d\n", etapa);
+				return 1;
 			}
 		}
 	}
-
+	printf("etapa2:%d\n", etapa);
 	redpre=NULL;
-	return 1;
+	return 0;
 }
 
 
