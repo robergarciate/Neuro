@@ -73,6 +73,16 @@ int main(int argc, char** argv) {
         printf("tasa de fallo: %3.2f %%\n", ((double)fallos/(double)test->ndatos) *100);
         printf("fallos:%d\n",fallos );
     }
+    else if( ptrain ==1.0 && ptest==1.0){
+        red=redTrain(0, data, iniRedPerceptron, actualizaSalida,
+         paradaPerceptron, actualizaPesosPerceptron, actualizaNeuronaPerceptron,
+         data->natributos, data->nclases, 0, 1);
+        printf("red entrenada\n");
+        fallos=redTest(data, red, actualizaSalida, actualizaNeuronaPerceptron);
+        printf("tasa de fallo: %3.2f %%\n", ((double)fallos/(double)data->ndatos) *100);
+        printf("fallos:%d\n",fallos );
+        
+    }
     else{
         printf("por hacer\n");
         return 0;

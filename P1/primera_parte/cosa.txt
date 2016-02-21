@@ -1,0 +1,28 @@
+1
+
+
+
+
+
+val:0.0000 sigma:0.4065
+val:0.0000 sigma:0.3992
+val:0.0000 sigma:0.4065
+val:0.0000 sigma:0.3992
+val:0.0000 sigma:0.4065
+val:0.0000 sigma:0.3992
+val:-1.0000 sigma:0.4065
+val:0.0000 sigma:0.3992
+red entrenada
+val:-1.0000 sigma:0.4065
+val:0.0000 sigma:0.3992
+val:0.0000 sigma:0.4065
+val:0.0000 sigma:0.3992
+val:0.0000 sigma:0.4065
+val:0.0000 sigma:0.3992
+val:1.0000 sigma:0.4065
+val:0.0000 sigma:0.3992
+tasa de fallo: 100.00 %
+fallos:4
+pesos:0.0000 1.0000 1.0000 
+pesos:0.0000 0.0000 0.0000 
+ndatos:4
