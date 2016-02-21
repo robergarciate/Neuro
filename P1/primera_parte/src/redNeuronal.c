@@ -54,6 +54,7 @@ redNeuronal* iniRedPerceptron(int entrada, int oculta,int salida, double tasa){
 	return red;
 }
 
+
 int actualizaPesosPerceptron(redNeuronal* red, int* t){
 	int i=0, j=0;
 	double val=0;
