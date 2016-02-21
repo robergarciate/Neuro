@@ -56,30 +56,30 @@ redNeuronal* iniRedPerceptron(int entrada, int oculta,int salida, double tasa){
 
 int actualizaPesosPerceptron(redNeuronal* red, int* t){
 	int i=0, j=0;
+	double val=0;
 	if(red==NULL || t==NULL){
-		printf("ha devuelto mal\n");
 		return 1;
 	}
-	printf("salidas\n");
-	for(i=0, j=0; i<red->salidas; i++){
-		printf("esp:%d res:%1.1f\n", t[i], red->neuronas[i+1+red->entradas].salida);
-		if(t[i]!=red->neuronas[i+1+red->entradas].salida)
-			j=1;
-	}
-	printf("j=%d\n", j);
-	if(j==0){
-		printf("predijo bien\n");
-		return 0;
-	}
 	for(i=0; i<red->salidas; i++){
-		(&red->neuronas[i])->pesos[0]+= t[i];
-		for(j=0; j<red->entradas; j++){
-			(&red->neuronas[i])->pesos[j+1]+= red->tasa*t[i]*red->neuronas[j+1].salida;
+		/*printf("esp:%d res:%1.1f\n", t[i], red->neuronas[i+1+red->entradas].salida);
+		*/
+		val=red->neuronas[i+1+red->entradas].salida;
+		
+		if( (t[i]==0 && val!=0) || (t[i]==-1 && val!=-1) || (t[i]==1 && val!=1)){
+			/*printf("se reajusta la salida %d\n", i);
+			*/(&red->neuronas[i])->pesos[0]+= red->tasa*t[i];
+			/*printf("%2.4f ", (&red->neuronas[i])->pesos[0]);
+			*/for(j=0; j<red->entradas; j++){
+				(&red->neuronas[i+1+red->entradas])->pesos[j+1]+= red->tasa* (t[i]-val)*red->neuronas[j+1].salida;
+				/*printf("%2.4f ", (&red->neuronas[i+1+red->entradas])->pesos[j+1]);
+				*/
+			}
+			/*printf("\n");
+			*/
 		}
-		printf("\n");
 	} 
-	printf("\n");
-	return 0;
+	/*printf("\n");
+	*/return 0;
 }
 
 
@@ -147,12 +147,11 @@ int paradaPerceptron(redNeuronal* red){
 			if(red->neuronas[i].pesos[j] != redpre->neuronas[i].pesos[j]){
 				copiaRed(red, redpre);
 				etapa++;
-				printf("etapa:%d\n", etapa);
 				return 1;
 			}
 		}
 	}
-	printf("etapa2:%d\n", etapa);
+	/*printf("etapa2:%d\n", etapa);*/
 	redpre=NULL;
 	return 0;
 }
@@ -219,12 +218,12 @@ int actualizaSalida(redNeuronal* red, double (*fActualizacion)(neurona*), double
 	if ((red == NULL) || (fActualizacion == NULL) || (entrada == NULL)){
 		return 1;
 	}
-	printf("actualiza neuronas de entrada\n");
-	for(i = 0 ; i < red->entradas ; i++)
+	/*printf("actualiza neuronas de entrada\n");
+	*/for(i = 0 ; i < red->entradas ; i++)
 		actualizaNeuronaEntrada(&(red->neuronas[i+1]), entrada[i]);
 
-	printf("actualiza neuronas de salida\n");
-
+	/*printf("actualiza neuronas de salida\n");
+*/
 	for(i = red->entradas+1 ; i < (red->entradas + red->salidas)+1 ; i++){
 		(*fActualizacion)(&(red->neuronas[i]));
 	}
@@ -243,7 +242,6 @@ redNeuronal* redTrain(int tentrada, datos* data,
 
 	redNeuronal* red= NULL;
 	int i=0;
-	printf("ndatos:%d\n",data->ndatos );
 	if(data==NULL || nentreada==0 || nsalida==0){
 		return NULL;
 	}
@@ -251,20 +249,34 @@ redNeuronal* redTrain(int tentrada, datos* data,
 
 
 	if(red==NULL){
-		printf("cosa\n");
 		return NULL;
 	}
 	while((*fParada)(red)){
 		for(i=0; i<data->ndatos; i++){
-			printf("actualiza salida\n");
 			(*fsalida) (red, (*fActualizacion), data->atributos[i]);
-			printf("actualiza pesos\n");
 			(*fPesos) (red, data->clase[i]);
 		}
-		printf("compuebca parada\n");
 
 	}
-	printf("fin\n");
 	return red;
 }
 
+int redTest(datos* data, redNeuronal* red,
+			int (*fsalida) (redNeuronal*, double (*fActualizacion)(neurona*), double*),
+			double (*fActualizacion)(neurona*)){
+
+ 	int res=0, i=0, j=0;
+ 	for(i=0; i<data->ndatos; i++){
+ 		(*fsalida) (red, (*fActualizacion), data->atributos[i]);
+ 		for(j=0; j<data->nclases; j++){
+ 			
+ 			if((double)data->clase[i][j] != red->neuronas[j + 1 + red->entradas].salida){
+ 				res++;
+ 				break;
+ 			}
+ 		}
+ 	}
+
+ 	return res;
+
+}

@@ -7,7 +7,7 @@ int main(int argc, char** argv) {
     double** salidas; /*valores de salida de las neuronas*/
     int* entradas; /*valorede entrada de fichero*/
     char* buffer, opt;
-    int i=0, sz, j;
+    int i=0, sz, j, fallos=0;
     double ptrain=0.0, ptest=0.0;
     redNeuronal* red=NULL;
     datos* data=NULL,* train=NULL,* test=NULL;
@@ -53,8 +53,8 @@ int main(int argc, char** argv) {
     }
     if(fout==NULL)
         fout=stdout;
+
     data = leerDatos(fin);
-    printDatos(data);
     train=iniDatos();
     test=iniDatos();
     bipolarizar(data);
@@ -68,7 +68,10 @@ int main(int argc, char** argv) {
         red=redTrain(0, train, iniRedPerceptron, actualizaSalida,
          paradaPerceptron, actualizaPesosPerceptron, actualizaNeuronaPerceptron,
          data->natributos, data->nclases, 0, 0.1);
-
+        printf("red entrenada\n");
+        fallos=redTest(test, red, actualizaSalida, actualizaNeuronaPerceptron);
+        printf("tasa de fallo: %3.2f %%\n", ((double)fallos/(double)test->ndatos) *100);
+        printf("fallos:%d\n",fallos );
     }
     else{
         printf("por hacer\n");
@@ -79,6 +82,13 @@ int main(int argc, char** argv) {
         printf("sada\n");
     }
 
+    for(i=0; i<red->salidas; i++){
+        printf("pesos:");
+        for(j=0; j<red->entradas+1; j++){
+            printf("%2.4f ", red->neuronas[i+1+red->entradas].pesos[j]);
+        }
+        printf("\n");
+    }
 
     printf("ndatos:%d\n",data->ndatos );
     if(fout!=stdout){

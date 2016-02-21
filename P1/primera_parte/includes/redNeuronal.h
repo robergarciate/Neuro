@@ -4,7 +4,7 @@
 #define ADALINE 0
 #define PERCEPTRON 1
 
-#define MAX_ETAPAS 100
+#define MAX_ETAPAS 100000
 #define MAX_TOLERANCIA 2
 typedef struct{
 	int entradas;		/*Neuronas en la capa de entrada*/
@@ -98,6 +98,9 @@ redNeuronal* redTrain(int tentrada,datos* data,
 ***
 ***
 **/
-int* redTest(datos* data, redNeuronal* red, int (*fsalida)());
+int redTest(datos* data, redNeuronal* red,
+			int (*fsalida) (redNeuronal*, double (*fActualizacion)(neurona*), double*),
+			double (*fActualizacion)(neurona*));
+					
 
 void printSalidas(redNeuronal* red);
