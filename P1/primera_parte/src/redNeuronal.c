@@ -52,10 +52,50 @@ redNeuronal* iniRedPerceptron(int entrada, int oculta,int salida, double tasa){
 		}
         setNeurona(&red->neuronas[i], (double)rand()/(double)RAND_MAX -0.5, entrada+1, pesos, salidas);
 	}
-
+	free(pesos);
+	free(salidas);
 	return red;
 }
+void destRed1(redNeuronal* red){
+	int i=0, n=0;
+	n= 1+ red->entradas + red->salidas +red->ocultas ;
+	for(i=0; i<n; i++){
+		destroyNeurona(&red->neuronas[i]);		
+	}
+	free(red->neuronas);
+	free(red);
+}
 
+void destRed2(redNeuronal* red){
+	int i=0, n=0;
+	n= 1+ red->entradas + red->salidas +red->ocultas;
+	for(i=0; i<n; i++){
+		destroyNeurona(&(red->neuronas[i]));		
+	}
+	free(red->neuronas);
+}
+
+int copiaRed(redNeuronal* redIn, redNeuronal* redOut){
+	int numNeu1=0, i=0;
+	if (redIn==NULL|| redOut==NULL){
+		return 1;
+	}
+	numNeu1= 1+ redIn->entradas + redIn->salidas + redIn->ocultas;
+	redOut->neuronas= malloc(sizeof(neurona)*numNeu1);
+	for(i=0 ; i<numNeu1;i++){
+		iniNeurona2(&redOut->neuronas[i]);
+	}
+	redOut->entradas= redIn->entradas;
+	redOut->salidas= redIn->salidas;
+	redOut->ocultas= redIn->ocultas;
+	redOut->tasa= redIn->tasa;
+
+	/*COPIAMOS LA RED*/
+	for(i=0; i< numNeu1; i++){
+		copiaNeurona(&redIn->neuronas[i], &redOut->neuronas[i]);
+	}
+	return 0;
+}
 
 int actualizaPesosPerceptron(redNeuronal* red, int* t){
 	int i=0, j=0;
@@ -103,44 +143,22 @@ int actualizaPesosAdaline(redNeuronal* red, int* t){
 }
 
 
-int copiaRed(redNeuronal* redIn, redNeuronal* redOut){
-	int numNeu1=0, numNeu2=0, i=0;
-	if (redIn==NULL|| redOut==NULL){
-		return 1;
-	}
-	numNeu1= redIn->entradas + redIn->salidas + redIn->ocultas;
-	numNeu2= redOut->entradas + redOut->salidas + redOut->ocultas;
-	/*REDIMENSIONAMOS LA RED*/
-	if(numNeu1!=numNeu2){
-		for(i=0; i<numNeu2+1; i++){
-			destroyNeurona(&redOut->neuronas[i]);
-		}
-		free(redOut->neuronas);
-		redOut->neuronas=malloc(sizeof(neurona)*(numNeu1+1));
 
-	}
-	redOut->entradas= redIn->entradas;
-	redOut->salidas= redIn->salidas;
-	redOut->ocultas= redIn->ocultas;
-	redOut->tasa= redIn->tasa;
-	for(i =0; i< numNeu1+1; i++){
-		iniNeurona2( &(redOut->neuronas[i]));
-		setNeurona(&redOut->neuronas[i], redOut->neuronas[i].sigma, redOut->neuronas[i].nentradas, redOut->neuronas[i].pesos, NULL);
-	}
-	return 0;
-}
 
 int paradaPerceptron(redNeuronal* red){
 	int i=0, j=0, num=0;
 	if(redpre==NULL){
-		redpre=iniRedPerceptron( red->entradas, 0, red->salidas, red->tasa);
+		redpre=malloc(sizeof(redNeuronal));
+		redpre->entradas=0;
+		redpre->ocultas=0;
+		redpre->salidas=0;
 		copiaRed(red, redpre);
 		etapa=0;
 		return 1;
 	}
 	
 	if(etapa==MAX_ETAPAS){
-
+		destRed1(redpre);
 		redpre=NULL;
 		return 0;
 	}
@@ -150,6 +168,7 @@ int paradaPerceptron(redNeuronal* red){
 	for(i=0; i< num; i++){
 		for(j=0;j<red->neuronas[i].nentradas; j++){
 			if(red->neuronas[i].pesos[j] != redpre->neuronas[i].pesos[j]){
+				destRed2(redpre);
 				copiaRed(red, redpre);
 				etapa++;
 				return 1;
@@ -157,6 +176,8 @@ int paradaPerceptron(redNeuronal* red){
 		}
 	}
 	printf("etapa2:%d\n", etapa);
+	destRed1(redpre);
+	free(redpre);
 	redpre=NULL;
 	return 0;
 }
@@ -246,7 +267,8 @@ redNeuronal* redTrain(int tentrada, datos* data,
 					int nentreada, int nsalida, int noculta, double tasa){
 
 	redNeuronal* red= NULL;
-	int i=0;
+	int i=0, fallos=0;
+	FILE * f=NULL;
 	if(data==NULL || nentreada==0 || nsalida==0){
 		return NULL;
 	}
@@ -256,12 +278,18 @@ redNeuronal* redTrain(int tentrada, datos* data,
 	if(red==NULL){
 		return NULL;
 	}
+	f=fopen("adaptacion.data", "w");
 	while((*fParada)(red)){
+		/*QUITAR ESO PARA LA ENTREGA*/
+		fallos=redTest(data, red,fsalida, fActualizacion);
+		fprintf(f, "%2.4f\n", (double)fallos/(double)data->ndatos);
+		/**/
 		for(i=0; i<data->ndatos; i++){
 			(*fsalida) (red, (*fActualizacion), data->atributos[i]);
 			(*fPesos) (red, data->clase[i]);
 		}
 	}
+	fclose(f);
 	return red;
 }
 

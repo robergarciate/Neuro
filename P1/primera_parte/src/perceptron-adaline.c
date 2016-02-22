@@ -2,12 +2,9 @@
 
 int main(int argc, char** argv) {
 	FILE * fin,* fout= NULL;
-    int flagf=0, long_index=0;
-    double* pesos; /*pesos de neuronas entre neuronas*/
-    double** salidas; /*valores de salida de las neuronas*/
-    int* entradas; /*valorede entrada de fichero*/
-    char* buffer, opt;
-    int i=0, sz, j, fallos=0;
+    int long_index=0;
+    char opt;
+    int i=0, j, fallos=0;
     double ptrain=0.0, ptest=0.0;
     redNeuronal* red=NULL;
     datos* data=NULL,* train=NULL,* test=NULL;
@@ -25,7 +22,6 @@ int main(int argc, char** argv) {
         switch(opt){
             case '1':
                 fin=fopen (optarg, "r");
-                flagf=1;
             break;
 
             case '6':
@@ -104,10 +100,11 @@ int main(int argc, char** argv) {
     if(fout!=stdout){
         free(fout);
     }
+    destRed1(red);
     fclose(fin);
     freeDatos(data);
     freeDatos(train);
     freeDatos(test);
 
-
+    return 0;
 }

@@ -21,8 +21,23 @@ int iniNeurona2(neurona* n){
 void destroyNeurona(neurona* n){
 	free(n->pesos);
 	free(n->entradas);
-	free(n);
-	n=NULL;
+}
+void copiaNeurona(neurona* n1, neurona* n2){
+	int i=0;
+	if(n1==NULL || n2==NULL){
+		return;
+	}
+	free(n2->pesos);
+	free(n2->entradas);
+	n2->sigma= n1->sigma;
+	n2->nentradas= n1->nentradas;
+	n2->salida= n1->salida;
+	n2->pesos=malloc(sizeof(double)*n1->nentradas);
+	n2->entradas=malloc(sizeof(double*)*n1->nentradas);
+	for(i=0; i< n1->nentradas; i++){
+		n2->pesos[i]=n1->pesos[i];
+		n2->entradas[i]=n1->entradas[i];
+	}
 }
 
 int setNeurona(neurona* n, double sigma, int nentradas, double* pesos, double** entradas){

@@ -4,7 +4,7 @@
 #define ADALINE 0
 #define PERCEPTRON 1
 
-#define MAX_ETAPAS 100000
+#define MAX_ETAPAS 10000
 #define MAX_TOLERANCIA 2
 typedef struct{
 	int entradas;		/*Neuronas en la capa de entrada*/
@@ -14,6 +14,39 @@ typedef struct{
 	neurona* neuronas; 	/*QUE NO SE NOS PASE QUE AQUI ESTA LA NEURONA DE SESGO*/
 }redNeuronal;
 
+
+/**
+***	No hay mucha diferencia entre una inicializacion y otra.
+***	Si despues hacemos graficas sobre la valocidad con la 
+***	que aprende una red y otra probar si alguna inicializacion
+***	es mejor.
+**/
+
+/**
+***
+***	Inicializa toda la red y da valores a los pesos iniciales y a los sesgos
+***	En las traspas pone que inicializa a cero.
+***
+***
+**/
+redNeuronal* iniRedPerceptron(int entrada, int oculta, int salida, double tasa);
+
+
+
+/**
+***
+***	Inicializa toda la red y da valores a los pesos iniciales y a los sesgos
+***	En las traspas pone que inicializa aleatorio con valores pequeños.
+***
+***
+**/
+redNeuronal* iniRedAdaline( int entrada, int salida, int oculta, double tasa);
+
+void destRed1(redNeuronal* red);
+
+void destRed2(redNeuronal* red);
+
+int copiaRed(redNeuronal* redIn, redNeuronal* redOut);
 
 /**
 ***
@@ -38,33 +71,6 @@ int actualizaPesosPerceptron(redNeuronal* red, int* t);
 
 int actualizaPesosAdaline(redNeuronal* red, int* t);
 
-
-
-/**
-***	No hay mucha diferencia entre una inicializacion y otra.
-***	Si despues hacemos graficas sobre la valocidad con la 
-***	que aprende una red y otra probar si alguna inicializacion
-***	es mejor.
-**/
-
-/**
-***
-***	Inicializa toda la red y da valores a los pesos iniciales y a los sesgos
-***	En las traspas pone que inicializa a cero.
-***
-***
-**/
-redNeuronal* iniRedPerceptron(int entrada, int oculta, int salida, double tasa);
-
-
-/**
-***
-***	Inicializa toda la red y da valores a los pesos iniciales y a los sesgos
-***	En las traspas pone que inicializa aleatorio con valores pequeños.
-***
-***
-**/
-redNeuronal* iniRedAdaline( int entrada, int salida, int oculta, double tasa);
 
 /**
 ***
