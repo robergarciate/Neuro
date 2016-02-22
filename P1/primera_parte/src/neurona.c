@@ -103,7 +103,10 @@ double actualizaNeuronaAdaline(neurona* n){
 	for(i=0; i< n->nentradas; i++){
 		val+=n->pesos[i] * (*n->entradas[i]);
 	}
-	n->salida=val;
+	if(val<0)
+		n->salida=-1;
+	else
+		n->salida=1;
 	return 0;
 }
 

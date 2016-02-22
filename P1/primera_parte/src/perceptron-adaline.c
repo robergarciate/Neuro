@@ -60,23 +60,49 @@ int main(int argc, char** argv) {
         printf("ndatos:%d\n",train->ndatos );
 
         printf("ndatos:%d\n",test->ndatos );
-
-        red=redTrain(0, train, iniRedPerceptron, actualizaSalida,
-         paradaPerceptron, actualizaPesosPerceptron, actualizaNeuronaPerceptron,
-         data->natributos, data->nclases, 0, 0.01);
-        printf("red entrenada\n");
-        fallos=redTest(test, red, actualizaSalida, actualizaNeuronaPerceptron);
-        printf("tasa de fallo: %3.2f %%\n", ((double)fallos/(double)test->ndatos) *100);
-        printf("fallos:%d\n",fallos );
+        if(flagPerceptron){
+        	printf("perceptron\n");
+            red=redTrain(0, train, iniRedPerceptron, actualizaSalida,
+             paradaPerceptron, actualizaPesosPerceptron, actualizaNeuronaPerceptron,
+             data->natributos, data->nclases, 0, 0.01);
+            printf("red entrenada\n");
+            fallos=redTest(test, red, actualizaSalida, actualizaNeuronaPerceptron);
+            printf("tasa de fallo: %3.2f %%\n", ((double)fallos/(double)test->ndatos) *100);
+            printf("fallos:%d\n",fallos );
+        }
+        else{
+        	printf("adaline\n");
+        	red=redTrain(0, train, iniRedPerceptron, actualizaSalida,
+             paradaAdaline, actualizaPesosAdaline, actualizaNeuronaAdaline,
+             data->natributos, data->nclases, 0, 0.01);
+            printf("red entrenada\n");
+            fallos=redTest(test, red, actualizaSalida, actualizaNeuronaAdaline);
+            printf("tasa de fallo: %3.2f %%\n", ((double)fallos/(double)test->ndatos) *100);
+            printf("fallos:%d\n",fallos );	
+        }
     }
     else if( ptrain ==1.0 && ptest==1.0){
-        red=redTrain(0, data, iniRedPerceptron, actualizaSalida,
-         paradaPerceptron, actualizaPesosPerceptron, actualizaNeuronaPerceptron,
-         data->natributos, data->nclases, 0, 1);
-        printf("red entrenada\n");
-        fallos=redTest(data, red, actualizaSalida, actualizaNeuronaPerceptron);
-        printf("tasa de fallo: %3.2f %%\n", ((double)fallos/(double)data->ndatos) *100);
-        printf("fallos:%d\n",fallos );
+        
+        if(flagPerceptron){
+        	printf("perceptron\n");
+            red=redTrain(0, train, iniRedPerceptron, actualizaSalida,
+             paradaPerceptron, actualizaPesosPerceptron, actualizaNeuronaPerceptron,
+             data->natributos, data->nclases, 0, 0.01);
+            printf("red entrenada\n");
+            fallos=redTest(test, red, actualizaSalida, actualizaNeuronaPerceptron);
+            printf("tasa de fallo: %3.2f %%\n", ((double)fallos/(double)test->ndatos) *100);
+            printf("fallos:%d\n",fallos );
+        }
+        else{
+        	printf("adaline\n");
+        	red=redTrain(0, train, iniRedPerceptron, actualizaSalida,
+             paradaAdaline, actualizaPesosAdaline, actualizaNeuronaAdaline,
+             data->natributos, data->nclases, 0, 0.01);
+            printf("red entrenada\n");
+            fallos=redTest(test, red, actualizaSalida, actualizaNeuronaAdaline);
+            printf("tasa de fallo: %3.2f %%\n", ((double)fallos/(double)test->ndatos) *100);
+            printf("fallos:%d\n",fallos );	
+        }
         
     }
     else{
@@ -100,6 +126,7 @@ int main(int argc, char** argv) {
     if(fout!=stdout){
         free(fout);
     }
+    printf("%d\n", flagPerceptron);
     destRed1(red);
     fclose(fin);
     freeDatos(data);

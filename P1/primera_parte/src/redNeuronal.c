@@ -48,7 +48,7 @@ redNeuronal* iniRedPerceptron(int entrada, int oculta,int salida, double tasa){
 
 	for(i=1+entrada; i<salida+1+entrada; i++){
 		for(j=0; j<entrada+1; j++){
-			pesos[j]= (double)rand()/RAND_MAX -0.5;
+			pesos[j]= (double)rand()/(double)RAND_MAX -0.5;
 		}
         setNeurona(&red->neuronas[i], (double)rand()/(double)RAND_MAX -0.5, entrada+1, pesos, salidas);
 	}
@@ -131,13 +131,21 @@ int actualizaPesosAdaline(redNeuronal* red, int* t){
 	if(red==NULL || t==NULL){
 		return 1;
 	}
-
-	for(i=0; i<red->salidas; i++){	/*	 tj	 - y_inj*/
-		(&red->neuronas[i])->pesos[0]+= t[i] - red->neuronas[i+1+red->entradas].salida;
-		for(j=0; j<red->entradas; j++){				/*	     tj - y_inj*/
-			(&red->neuronas[i])->pesos[j+1]+= red->tasa * (t[i] - red->neuronas[i+1+red->entradas].salida) * red->neuronas[j+1].salida;
-			
+	for(i=0; i<red->salidas; i++){		
+		
+		/*printf("se reajusta la salida %d\n", i);
+		*/for(j=0; j<red->entradas; j++){
+			(&red->neuronas[i+1+red->entradas])->pesos[j]+= red->tasa*
+								(t[i] - red->neuronas[i+1+red->entradas].salida)*red->neuronas[j].salida;
+			/*printf("j=%d %2.4f ", j, (&red->neuronas[i+1+red->entradas])->pesos[j]);
+			*/
 		}
+
+		(&red->neuronas[i+1+red->entradas])->pesos[j]+= red->tasa*t[i];
+		/*printf("j=%d %2.4f\n", j, (&red->neuronas[i+1+red->entradas])->pesos[j]);
+		*/
+	
+		
 	} 
 	return 0;
 }
@@ -187,31 +195,38 @@ int paradaPerceptron(redNeuronal* red){
 int paradaAdaline(redNeuronal* red){
 	int i=0, j=0, num=0;
 	if(redpre==NULL){
-		redpre=iniRedPerceptron(red->entradas, 0, red->salidas, red->tasa);
+		redpre=malloc(sizeof(redNeuronal));
+		redpre->entradas=0;
+		redpre->ocultas=0;
+		redpre->salidas=0;
 		copiaRed(red, redpre);
 		etapa=0;
-		return 0;
-	}
-	/**/
-	if(etapa==MAX_ETAPAS){
-
-		redpre=NULL;
 		return 1;
 	}
-	num=1+ red->entradas + red->salidas;
+	
+	if(etapa==MAX_ETAPAS){
+		destRed1(redpre);
+		redpre=NULL;
+		return 0;
+	}
+	printf("etapa:%d\n", etapa);
+	num=1 + red->entradas + red->salidas;
+
 	for(i=0; i< num; i++){
 		for(j=0;j<red->neuronas[i].nentradas; j++){
-			if(redpre->neuronas[i].pesos[j] - MAX_TOLERANCIA > red->neuronas[i].pesos[j]
-				&& redpre->neuronas[i].pesos[j] + MAX_TOLERANCIA < red->neuronas[i].pesos[j]) { 
+			if(red->neuronas[i].pesos[j] > redpre->neuronas[i].pesos[j] + MAX_TOLERANCIA ||
+				red->neuronas[i].pesos[j] < redpre->neuronas[i].pesos[j] - MAX_TOLERANCIA){
+				destRed2(redpre);
 				copiaRed(red, redpre);
 				etapa++;
-				return 0;
+				return 1;
 			}
 		}
 	}
-
+	printf("etapa2:%d\n", etapa);
+	destRed1(redpre);
 	redpre=NULL;
-	return 1;
+	return 0;
 }
 
 
