@@ -53,4 +53,4 @@ pull:
 	git pull
 
 mrProper:
-	@rm -vf obj/*.o mcCulloch-Pits perceptron-adaline
+	@rm -vf obj/*.o mcCulloch-Pits perceptron-adaline prueba
