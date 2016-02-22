@@ -4,7 +4,7 @@
 #define ADALINE 0
 #define PERCEPTRON 1
 
-#define MAX_ETAPAS 10000
+#define MAX_ETAPAS 100000
 #define MAX_TOLERANCIA 2
 typedef struct{
 	int entradas;		/*Neuronas en la capa de entrada*/
