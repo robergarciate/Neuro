@@ -55,4 +55,4 @@ pull:
 	git pull
 
 mrProper:
-	@rm -vf obj/*.o mcCulloch-Pits perceptron-adaline prueba
+	@rm -vf obj/*.o mcCulloch-Pits perceptron-adaline prueba adaptacion.data
