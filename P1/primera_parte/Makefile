@@ -33,10 +33,12 @@ perceptron-adaline: lector datos redNeuronal src/perceptron-adaline.c
 	@echo creado ejecutable de perceptron y adaline
 
 lector: $(FLTRM) $(FLTRX) $(FLTRL) datos
-	@flex -o obj/lex.yy.c $(FLTRX)
 	@gcc  -c obj/lex.yy.c -o obj/lex.yy.o
 	@gcc $(CCF) $(CCC) obj/lector.o $(FLTRM)
 	@echo lector compilado
+flex: obj/lex.yy.c
+	@flex -o obj/lex.yy.c $(FLTRX)
+
 datos: $(DTSC) $(DTSL)
 	@$(CC) $(CCF) $(CCC) $(DTSO) $(DTSC)
 	@echo datos compilado
