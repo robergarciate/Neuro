@@ -141,7 +141,7 @@ int actualizaPesosAdaline(redNeuronal* red, int* t){
 			*/
 		}
 
-		(&red->neuronas[i+1+red->entradas])->pesos[j]+= red->tasa*t[i];
+		(&red->neuronas[i+1+red->entradas])->pesos[j]+= red->tasa*(t[i] - red->neuronas[i+1+red->entradas].salida);
 		/*printf("j=%d %2.4f\n", j, (&red->neuronas[i+1+red->entradas])->pesos[j]);
 		*/
 	

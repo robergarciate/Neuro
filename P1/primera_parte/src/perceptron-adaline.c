@@ -5,7 +5,7 @@ int main(int argc, char** argv) {
     int long_index=0;
     char opt;
     int i=0, j, fallos=0;
-    double ptrain=0.0, ptest=0.0;
+    double ptrain=0.0, ptest=0.0, tasa=0.0;
     redNeuronal* red=NULL;
     datos* data=NULL,* train=NULL,* test=NULL;
     static int flagPerceptron=0, flagAdaline=0;
@@ -16,6 +16,7 @@ int main(int argc, char** argv) {
         {"p", no_argument, &flagPerceptron, '3'},
         {"train", required_argument, 0, '4'},
         {"test", required_argument, 0, '5'},
+        {"tasa", required_argument, 0, '7'},
         {0,0,0,0}
     };
     while ((opt = getopt_long_only(argc, argv,"1:", options, &long_index )) != -1){
@@ -33,7 +34,9 @@ int main(int argc, char** argv) {
             case '5':
                 ptest=atof(optarg);
             break;
-
+            case '7':
+                tasa=atof(optarg);
+            break;
             case'?':
                 printf("ERROR1: se esperaba ./maCulloch-Pits {-f fin } \n");
 
@@ -42,7 +45,7 @@ int main(int argc, char** argv) {
         }
     }
 
-    if(fin==NULL || (ptrain==0.0 && ptest==0.0) || ptrain>1 || ptest>1){
+    if(fin==NULL || (ptrain==0.0 && ptest==0.0) || ptrain>1 || ptest>1 || tasa==0.0){
         printf("asdas\n");
         return 1; 
 
@@ -64,7 +67,7 @@ int main(int argc, char** argv) {
         	printf("perceptron\n");
             red=redTrain(0, train, iniRedPerceptron, actualizaSalida,
              paradaPerceptron, actualizaPesosPerceptron, actualizaNeuronaPerceptron,
-             data->natributos, data->nclases, 0, 0.01);
+             data->natributos, data->nclases, 0, tasa);
             printf("red entrenada\n");
             fallos=redTest(test, red, actualizaSalida, actualizaNeuronaPerceptron);
             printf("tasa de fallo: %3.2f %%\n", ((double)fallos/(double)test->ndatos) *100);
@@ -74,7 +77,7 @@ int main(int argc, char** argv) {
         	printf("adaline\n");
         	red=redTrain(0, train, iniRedPerceptron, actualizaSalida,
              paradaAdaline, actualizaPesosAdaline, actualizaNeuronaAdaline,
-             data->natributos, data->nclases, 0, 0.01);
+             data->natributos, data->nclases, 0, tasa);
             printf("red entrenada\n");
             fallos=redTest(test, red, actualizaSalida, actualizaNeuronaAdaline);
             printf("tasa de fallo: %3.2f %%\n", ((double)fallos/(double)test->ndatos) *100);
@@ -87,7 +90,7 @@ int main(int argc, char** argv) {
         	printf("perceptron\n");
             red=redTrain(0, train, iniRedPerceptron, actualizaSalida,
              paradaPerceptron, actualizaPesosPerceptron, actualizaNeuronaPerceptron,
-             data->natributos, data->nclases, 0, 0.01);
+             data->natributos, data->nclases, 0, tasa);
             printf("red entrenada\n");
             fallos=redTest(test, red, actualizaSalida, actualizaNeuronaPerceptron);
             printf("tasa de fallo: %3.2f %%\n", ((double)fallos/(double)test->ndatos) *100);
@@ -97,7 +100,7 @@ int main(int argc, char** argv) {
         	printf("adaline\n");
         	red=redTrain(0, train, iniRedPerceptron, actualizaSalida,
              paradaAdaline, actualizaPesosAdaline, actualizaNeuronaAdaline,
-             data->natributos, data->nclases, 0, 0.01);
+             data->natributos, data->nclases, 0, tasa);
             printf("red entrenada\n");
             fallos=redTest(test, red, actualizaSalida, actualizaNeuronaAdaline);
             printf("tasa de fallo: %3.2f %%\n", ((double)fallos/(double)test->ndatos) *100);
