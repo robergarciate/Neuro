@@ -63,7 +63,7 @@ int main(int argc, char** argv) {
 
         red=redTrain(0, train, iniRedPerceptron, actualizaSalida,
          paradaPerceptron, actualizaPesosPerceptron, actualizaNeuronaPerceptron,
-         data->natributos, data->nclases, 0, 0.1);
+         data->natributos, data->nclases, 0, 0.01);
         printf("red entrenada\n");
         fallos=redTest(test, red, actualizaSalida, actualizaNeuronaPerceptron);
         printf("tasa de fallo: %3.2f %%\n", ((double)fallos/(double)test->ndatos) *100);
