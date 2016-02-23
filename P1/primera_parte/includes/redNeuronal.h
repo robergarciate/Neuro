@@ -4,8 +4,6 @@
 #define ADALINE 0
 #define PERCEPTRON 1
 
-#define MAX_ETAPAS 100000
-#define MAX_TOLERANCIA 0.001
 typedef struct{
 	int entradas;		/*Neuronas en la capa de entrada*/
 	int salidas;		/*Neuronas en la capa de salida*/
@@ -14,7 +12,8 @@ typedef struct{
 	neurona* neuronas; 	/*QUE NO SE NOS PASE QUE AQUI ESTA LA NEURONA DE SESGO*/
 }redNeuronal;
 
-
+extern int maxEtapas;
+extern double maxTolerancia;
 /**
 ***	No hay mucha diferencia entre una inicializacion y otra.
 ***	Si despues hacemos graficas sobre la valocidad con la 

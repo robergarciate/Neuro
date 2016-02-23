@@ -165,7 +165,7 @@ int paradaPerceptron(redNeuronal* red){
 		return 1;
 	}
 	
-	if(etapa==MAX_ETAPAS){
+	if(etapa==maxEtapas){
 		destRed1(redpre);
 		redpre=NULL;
 		return 0;
@@ -184,8 +184,8 @@ int paradaPerceptron(redNeuronal* red){
 		}
 	}
 	printf("etapa2:%d\n", etapa);
-	destRed1(redpre);
-	free(redpre);
+	/*destRed2(redpre);
+	*/free(redpre);
 	redpre=NULL;
 	return 0;
 }
@@ -204,7 +204,7 @@ int paradaAdaline(redNeuronal* red){
 		return 1;
 	}
 	
-	if(etapa==MAX_ETAPAS){
+	if(etapa==maxEtapas){
 		destRed1(redpre);
 		redpre=NULL;
 		return 0;
@@ -214,8 +214,8 @@ int paradaAdaline(redNeuronal* red){
 
 	for(i=0; i< num; i++){
 		for(j=0;j<red->neuronas[i].nentradas; j++){
-			if(red->neuronas[i].pesos[j] > redpre->neuronas[i].pesos[j] + MAX_TOLERANCIA ||
-				red->neuronas[i].pesos[j] < redpre->neuronas[i].pesos[j] - MAX_TOLERANCIA){
+			if(red->neuronas[i].pesos[j] > redpre->neuronas[i].pesos[j] + maxTolerancia ||
+				red->neuronas[i].pesos[j] < redpre->neuronas[i].pesos[j] - maxTolerancia){
 				destRed2(redpre);
 				copiaRed(red, redpre);
 				etapa++;
