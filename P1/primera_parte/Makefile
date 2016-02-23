@@ -8,8 +8,9 @@ FLTRL= includes/lector.h
 DTSC= src/datos.c
 DTSL= includes/datos.h
 DTSO= obj/datos.o
-
-all: mcCulloch-Pits lector redNeuronal perceptron-adaline prueba
+all: compile
+	
+compile: mcCulloch-Pits lector redNeuronal perceptron-adaline prueba
 	@echo "Se compilo todo el codigo y se gneraron los ejecutables"
 
 
