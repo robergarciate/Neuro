@@ -12,46 +12,51 @@ int main(int argc, char** argv) {
     redNeuronal* red=NULL;
     datos* data=NULL,* train=NULL,* test=NULL;
     static int flagPerceptron=0, flagAdaline=0;
+    static int interSum=0, interPrd=0;
     static struct option options[] = {
-        {"fin",required_argument,0,'1'},
-        {"fout",required_argument,0,'6'},
-        {"a", no_argument, &flagAdaline, '2'},
-        {"p", no_argument, &flagPerceptron, '3'},
-        {"train", required_argument, 0, '4'},
-        {"test", required_argument, 0, '5'},
-        {"tasa", required_argument, 0, '7'},
-        {"etapas", required_argument, 0, '8'},
-        {"tolerancia", required_argument, 0, '9'},
+        {"fin",required_argument,0, 1},
+        {"fout",required_argument,0, 2},
+        {"a", no_argument, &flagAdaline, 3},
+        {"p", no_argument, &flagPerceptron, 4},
+        {"train", required_argument, 0, 5},
+        {"test", required_argument, 0, 6},
+        {"tasa", required_argument, 0, 7},
+        {"etapas", required_argument, 0, 8},
+        {"tolerancia", required_argument, 0, 9},
+        {"iniAleat", no_argument, &aleat, 10},
+        {"interSum", no_argument, &interSum, 11},        
+        {"interPrd", no_argument, &interPrd, 12},
         {0,0,0,0}
     };
     while ((opt = getopt_long_only(argc, argv,"1:", options, &long_index )) != -1){
         switch(opt){
-            case '1':
+            case 1:
                 fin=fopen (optarg, "r");
             break;
 
-            case '6':
+            case 2:
                 fout=fopen (optarg, "w");
             break;
-            case '4':
+            case 5:
                 ptrain=atof(optarg);
             break;
-            case '5':
+            case 6:
                 ptest=atof(optarg);
             break;
-            case '7':
+            case 7:
                 tasa=atof(optarg);
 
-            case '8':
+            case 8:
                 maxEtapas=atoi(optarg);
             break;
-            case '9':
+            case 9:
                 maxTolerancia=atof(optarg);
-            break;
+            break;  
             case'?':
                 printf("ERROR1: parametro no reconocido\n"
                 	"se esperaba:\n"
-                	"./perceptron-adaline {-fin file } [-fout file] {-a | -p} {-train num} {-test num} {-tasa num} {-etapas num} [-tolerancia num]\n");
+                	"./perceptron-adaline {-fin file } [-fout file] {-a | -p}"
+                	" {-train num} {-test num} {-tasa num} {-etapas num} [-tolerancia num] [-iniAleat] [-interPrd | -interSum]\n");
                 return 0;
             break;
  
@@ -60,11 +65,12 @@ int main(int argc, char** argv) {
 
     if(fin==NULL || ptrain>1 || ptest>1 
       || (flagPerceptron==0 && flagAdaline==0)
-      || (flagPerceptron==1 && flagAdaline==1)){
+      || (flagPerceptron!=0 && flagAdaline!=0)
+      || (interPrd!=0 && interSum!=0)){
         printf("se esperaba:\n"
         "./perceptron-adaline {-fin file } [-fout file] {-a | -p}"
-        " {-train num} {-test num} {-etapas num} [-tolerancia num]\n");
-               
+       	" {-train num} {-test num} {-tasa num} {-etapas num} [-tolerancia num] [-iniAleat] [-interPrd | -interSum]\n");
+            
         return 0; 
 
     }
@@ -93,6 +99,21 @@ int main(int argc, char** argv) {
     	printf("tolerancia no especificada se establece en %1.4f\n", maxTolerancia);
     }
     data = leerDatos(fin);
+    
+    if(interSum!=0){
+    	train= interpolarSuma(data);
+    	freeDatos(data);
+    	data=train;
+    	train=NULL;
+    }
+
+    if(interPrd!=0){
+    	train= interpolarProducto(data);
+    	freeDatos(data);
+    	data=train;
+    	train=NULL;
+    }
+
     train=iniDatos();
     test=iniDatos();
     bipolarizar(data);
@@ -109,8 +130,6 @@ int main(int argc, char** argv) {
              data->natributos, data->nclases, 0, tasa);
             printf("red entrenada\n");
             fallos=redTest(test, red, actualizaSalida, actualizaNeuronaPerceptron);
-            printf("tasa de fallo: %3.2f %%\n", ((double)fallos/(double)test->ndatos) *100);
-            printf("fallos:%d\n",fallos );
         }
         else{
         	printf("adaline\n");
@@ -119,9 +138,10 @@ int main(int argc, char** argv) {
              data->natributos, data->nclases, 0, tasa);
             printf("red entrenada\n");
             fallos=redTest(test, red, actualizaSalida, actualizaNeuronaAdaline);
-            printf("tasa de fallo: %3.2f %%\n", ((double)fallos/(double)test->ndatos) *100);
-            printf("fallos:%d\n",fallos );	
         }
+        printf("tasa de fallo: %3.2f %%\n", ((double)fallos/(double)test->ndatos) *100);
+    	printf("fallos:%d datos:%d\n",fallos, test->ndatos );	
+
     }
     else if( ptrain ==1.0 && ptest==1.0){
        	printf("datos: %d\n",data->ndatos );
@@ -132,8 +152,6 @@ int main(int argc, char** argv) {
              data->natributos, data->nclases, 0, tasa);
             printf("red entrenada\n");
             fallos=redTest(data, red, actualizaSalida, actualizaNeuronaPerceptron);
-            printf("tasa de fallo: %3.2f %%\n", ((double)fallos/(double)data->ndatos) *100);
-            printf("fallos:%d\n",fallos );
         }
         else{
         	printf("adaline\n");
@@ -142,11 +160,11 @@ int main(int argc, char** argv) {
              data->natributos, data->nclases, 0, tasa);
             printf("red entrenada\n");
             fallos=redTest(data, red, actualizaSalida, actualizaNeuronaAdaline);
-            printf("tasa de fallo: %3.2f %%\n", ((double)fallos/(double)data->ndatos) *100);
-            printf("fallos:%d\n",fallos );	
 
         }
-       	printf("datos: %d\n",data->ndatos );
+        printf("tasa de fallo: %3.2f %%\n", ((double)fallos/(double)data->ndatos) *100);
+        printf("fallos:%d datos:%d\n",fallos, data->ndatos);	
+
         
     }
     else{
@@ -166,11 +184,10 @@ int main(int argc, char** argv) {
         printf("\n");
     }
 
-    printf("ndatos:%d\n",data->ndatos );
     if(fout!=stdout){
         free(fout);
     }
-    printf("%d\n", flagPerceptron);
+    printDatos(data);
     destRed1(red);
     fclose(fin);
     freeDatos(data);
@@ -182,5 +199,6 @@ int main(int argc, char** argv) {
     if(flagPerceptron)
     	printf("tasa %1.4f train %1.4f  test %1.4f  etapas %d\n",
     			tasa, ptrain, ptest, maxEtapas);
+    printf("interPrd %d interSum %d\n", interPrd, interSum);
     return 0;
 }

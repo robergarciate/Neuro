@@ -136,7 +136,7 @@ int printDatos(datos* data){
 	printf("nclases:%d\n",data->nclases);
 	printf("ndatos:%d\n",data->ndatos);
 	printf("tuplas\n");
-	for(i=0; i<data->ndatos; i++){
+	for(i=0; i<0; i++){
 
 		for(j=0; j<data->natributos; j++){
 			printf(" [%1.4f]", data->atributos[i][j]);
@@ -190,6 +190,75 @@ int escribeDatos(datos* data, char* fichero){
 	return 0;
 
 }
+
+datos* interpolarSuma(datos* d){
+	datos* res=NULL;
+	int i=0, j=0, k=0;
+	if(d==NULL){
+		return NULL;
+	}
+	res= iniDatos();
+
+	res->natributos=d->natributos*2 -1;
+	res->nclases=d->nclases;
+	res->ndatos=d->ndatos;
+	res->atributos=malloc(sizeof(double*)*res->ndatos);
+	res->clase=malloc(sizeof(int*)*res->ndatos);
+	for(i=0; i<d->ndatos; i++){
+		res->atributos[i]=malloc(sizeof(double)*res->natributos);
+		res->clase[i]=malloc(sizeof(int)*res->nclases);
+	}
+
+	for(i=0; i<d->ndatos; i++){
+		for(j=0; j<d->natributos; j++){
+			res->atributos[i][j]= d->atributos[i][j];
+		}
+
+		for(k=1, j=d->natributos; j< res->natributos; j++,k++){
+			res->atributos[i][j]= d->atributos[i][k] + d->atributos[i][k-1];
+		}
+
+		for(j=0; j<d->nclases; j++){
+			res->clase[i][j]= d->clase[i][j];
+		}
+	}
+	return res;	
+}	
+
+datos* interpolarProducto(datos* d){
+	datos* res=NULL;
+	int i=0, j=0, k=0;
+	if(d==NULL){
+		return NULL;
+	}
+	res= iniDatos();
+	
+	res->natributos=d->natributos*2 -1;
+	res->nclases=d->nclases;
+	res->ndatos=d->ndatos;
+	res->atributos=malloc(sizeof(double*)*res->ndatos);
+	res->clase=malloc(sizeof(int*)*res->ndatos);
+	for(i=0; i<d->ndatos; i++){
+		res->atributos[i]=malloc(sizeof(double)*res->natributos);
+		res->clase[i]=malloc(sizeof(int)*res->nclases);
+	}
+
+	for(i=0; i<d->ndatos; i++){
+		for(j=0; j<d->natributos; j++){
+			res->atributos[i][j]= d->atributos[i][j];
+		}
+
+		for(k=1, j=d->natributos; j< res->natributos; j++,k++){
+			res->atributos[i][j]= d->atributos[i][k] * d->atributos[i][k-1];
+		}
+
+		for(j=0; j<d->nclases; j++){
+			res->clase[i][j]= d->clase[i][j];
+		}
+	}
+	return res;	
+}	
+
 
 
 

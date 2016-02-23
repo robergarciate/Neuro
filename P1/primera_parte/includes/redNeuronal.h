@@ -13,6 +13,7 @@ typedef struct{
 }redNeuronal;
 
 extern int maxEtapas;
+static int aleat;
 extern double maxTolerancia;
 /**
 ***	No hay mucha diferencia entre una inicializacion y otra.

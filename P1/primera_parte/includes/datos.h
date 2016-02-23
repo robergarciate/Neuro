@@ -66,3 +66,8 @@ int escribeDatos(datos* data, char* fichero);
 datos* leerDatos(FILE* fin);
 
 void bipolarizar(datos* data);
+
+datos* interpolarSuma(datos* d);
+
+
+datos* interpolarProducto(datos* d);

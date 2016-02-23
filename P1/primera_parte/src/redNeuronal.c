@@ -48,9 +48,12 @@ redNeuronal* iniRedPerceptron(int entrada, int oculta,int salida, double tasa){
 
 	for(i=1+entrada; i<salida+1+entrada; i++){
 		for(j=0; j<entrada+1; j++){
-			pesos[j]= (double)rand()/(double)RAND_MAX -0.5;
+			if(aleat!=0)
+				pesos[j]= (double)rand()/(double)RAND_MAX -0.5;
+			else
+				pesos[j]=0;
 		}
-        setNeurona(&red->neuronas[i], (double)rand()/(double)RAND_MAX -0.5, entrada+1, pesos, salidas);
+        setNeurona(&red->neuronas[i], aleat!=0 ? (double)rand()/(double)RAND_MAX -0.5 : 0, entrada+1, pesos, salidas);
 	}
 	free(pesos);
 	free(salidas);
