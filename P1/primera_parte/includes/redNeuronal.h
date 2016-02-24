@@ -13,7 +13,7 @@ typedef struct{
 }redNeuronal;
 
 extern int maxEtapas;
-static int aleat;
+extern int aleat;
 extern double maxTolerancia;
 /**
 ***	No hay mucha diferencia entre una inicializacion y otra.
@@ -107,6 +107,11 @@ redNeuronal* redTrain(int tentrada,datos* data,
 int redTest(datos* data, redNeuronal* red,
 			int (*fsalida) (redNeuronal*, double (*fActualizacion)(neurona*), double*),
 			double (*fActualizacion)(neurona*));
+					
+
+int clasificar(datos* data, redNeuronal* red,
+			int (*fsalida) (redNeuronal*, double (*fActualizacion)(neurona*), double*),
+			double (*fActualizacion)(neurona*), FILE* fout);
 					
 
 void printSalidas(redNeuronal* red);

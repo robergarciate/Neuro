@@ -36,7 +36,7 @@ perceptron-adaline: lector datos redNeuronal src/perceptron-adaline.c
 	@$(CC) $(CCF) $(CCE) perceptron-adaline src/perceptron-adaline.c obj/*.o
 	@printf "${VERDE}creado ejecutable de perceptron y adaline${NC}\n"
 
-lector: $(FLTRM) $(FLTRX) $(FLTRL) datos
+lector: $(FLTRM) $(FLTRX) $(FLTRL) datos flex
 	@gcc  -c obj/lex.yy.c -o obj/lex.yy.o
 	@gcc $(CCF) $(CCC) obj/lector.o $(FLTRM)
 	@printf "${AMARILLO}lector compilado${NC}\n"

@@ -5,6 +5,7 @@
 redNeuronal* redpre=NULL;
 int etapa=0;
 
+
 redNeuronal* iniRedPerceptron(int entrada, int oculta,int salida, double tasa){
 	double* pesos= NULL,** salidas= NULL;
 	int i=0, j=0;
@@ -330,3 +331,25 @@ int redTest(datos* data, redNeuronal* red,
  	return res;
 
 }
+
+
+int clasificar(datos* data, redNeuronal* red,
+			int (*fsalida) (redNeuronal*, double (*fActualizacion)(neurona*), double*),
+			double (*fActualizacion)(neurona*), FILE* fout){
+
+ 	int i=0, j=0,n=0;
+ 	if(fout ==NULL || red==NULL || data==NULL)
+ 		return 1;
+ 	n=red->entradas+1+red->salidas+red->ocultas;
+ 	for(i=0; i<data->ndatos; i++){
+ 		(*fsalida) (red, (*fActualizacion), data->atributos[i]);
+ 		for(j= n- red->salidas; j<n; j++){
+ 			fprintf(fout, "%1.1f ",red->neuronas[j].salida); 			
+ 		}
+ 		fprintf(fout, "\n");
+ 	}
+
+ 	return 0;
+
+}
+					

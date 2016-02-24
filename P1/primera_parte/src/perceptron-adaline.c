@@ -1,62 +1,72 @@
 #include "../includes/redNeuronal.h"
 
-int maxEtapas =0;
+int maxEtapas =0, aleat=0;
 double maxTolerancia=0.0;
 
 int main(int argc, char** argv) {
-	FILE * fin,* fout= NULL;
+	FILE * fin,* fout= NULL,* fclasf;
     int long_index=0;
     char opt;
     int i=0, j, fallos=0;
     double ptrain=0.0, ptest=0.0, tasa=0.0;
     redNeuronal* red=NULL;
     datos* data=NULL,* train=NULL,* test=NULL;
-    static int flagPerceptron=0, flagAdaline=0;
+    static int flagPerceptron=0, flagAdaline=0, flagClasf;
     static int interSum=0, interPrd=0;
     static struct option options[] = {
-        {"fin",required_argument,0, 1},
-        {"fout",required_argument,0, 2},
-        {"a", no_argument, &flagAdaline, 3},
-        {"p", no_argument, &flagPerceptron, 4},
-        {"train", required_argument, 0, 5},
-        {"test", required_argument, 0, 6},
-        {"tasa", required_argument, 0, 7},
-        {"etapas", required_argument, 0, 8},
-        {"tolerancia", required_argument, 0, 9},
-        {"iniAleat", no_argument, &aleat, 10},
-        {"interSum", no_argument, &interSum, 11},        
-        {"interPrd", no_argument, &interPrd, 12},
+        {"fin",required_argument,0, 'a'},
+        {"fout",required_argument,0, 'b'},
+        {"a", no_argument, &flagAdaline, 'c'},
+        {"p", no_argument, &flagPerceptron, 'd'},
+        {"train", required_argument, 0, 'e'},
+        {"test", required_argument, 0, 'f'},
+        {"tasa", required_argument, 0, 'g'},
+        {"etapas", required_argument, 0, 'h'},
+        {"tolerancia", required_argument, 0, 'i'},
+        {"iniAleat", no_argument, 0, 'j'},
+        {"interSum", no_argument, &interSum, 'k'},        
+        {"interPrd", no_argument, &interPrd, 'l'},    
+        {"clasificar", no_argument, &flagClasf, 'm'},    
+        {"fclasf", required_argument, 0, 'n'},
         {0,0,0,0}
     };
     while ((opt = getopt_long_only(argc, argv,"1:", options, &long_index )) != -1){
         switch(opt){
-            case 1:
+            case 'a':
                 fin=fopen (optarg, "r");
             break;
 
-            case 2:
+            case 'b':
                 fout=fopen (optarg, "w");
             break;
-            case 5:
+            case 'e':
                 ptrain=atof(optarg);
             break;
-            case 6:
+            case 'f':
                 ptest=atof(optarg);
             break;
-            case 7:
+            case 'g':
                 tasa=atof(optarg);
 
-            case 8:
+            case 'h':
                 maxEtapas=atoi(optarg);
             break;
-            case 9:
+            case 'i':
                 maxTolerancia=atof(optarg);
-            break;  
+            break;
+            case 'j':
+            	aleat =1;
+            break;
+            case 'n':
+            	fclasf=fopen (optarg, "r");
+            break;
             case'?':
                 printf("ERROR1: parametro no reconocido\n"
                 	"se esperaba:\n"
-                	"./perceptron-adaline {-fin file } [-fout file] {-a | -p}"
-                	" {-train num} {-test num} {-tasa num} {-etapas num} [-tolerancia num] [-iniAleat] [-interPrd | -interSum]\n");
+			        "./perceptron-adaline {-fin file }  {-a | -p}"
+			    	" {-train num} {-test num} {-tasa num} {-etapas num}" 
+			    	"[-clasificar -fclasf file [-fout file]]"
+			    	"[-tolerancia num] [-iniAleat] [-interPrd | -interSum]\n");
                 return 0;
             break;
  
@@ -66,11 +76,12 @@ int main(int argc, char** argv) {
     if(fin==NULL || ptrain>1 || ptest>1 
       || (flagPerceptron==0 && flagAdaline==0)
       || (flagPerceptron!=0 && flagAdaline!=0)
-      || (interPrd!=0 && interSum!=0)){
+      || (interPrd!=0 && interSum!=0) || (flagClasf!=0 && fclasf==NULL) ){
         printf("se esperaba:\n"
-        "./perceptron-adaline {-fin file } [-fout file] {-a | -p}"
-       	" {-train num} {-test num} {-tasa num} {-etapas num} [-tolerancia num] [-iniAleat] [-interPrd | -interSum]\n");
-            
+        "./perceptron-adaline {-fin file }  {-a | -p}"
+    	" {-train num} {-test num} {-tasa num} {-etapas num}" 
+    	"[-clasificar -fclasf file [-fout file]]"
+    	"[-tolerancia num] [-iniAleat] [-interPrd | -interSum]\n");
         return 0; 
 
     }
@@ -117,19 +128,28 @@ int main(int argc, char** argv) {
     train=iniDatos();
     test=iniDatos();
     bipolarizar(data);
-   if( ptrain+ptest ==1.0){
+	if( ptrain+ptest ==1.0){
         particionado(data, train, test, ptest);
 
         printf("ndatos:%d\n",train->ndatos );
 
         printf("ndatos:%d\n",test->ndatos );
+
         if(flagPerceptron){
+
         	printf("perceptron\n");
             red=redTrain(0, train, iniRedPerceptron, actualizaSalida,
              paradaPerceptron, actualizaPesosPerceptron, actualizaNeuronaPerceptron,
              data->natributos, data->nclases, 0, tasa);
             printf("red entrenada\n");
-            fallos=redTest(test, red, actualizaSalida, actualizaNeuronaPerceptron);
+            if(flagClasf!=0){
+            	freeDatos(test);
+            	test=iniDatos();
+            	test=leerDatos(fclasf);
+            	clasificar(test, red, actualizaSalida, actualizaNeuronaPerceptron, fout);
+            }
+            else
+            	fallos=redTest(test, red, actualizaSalida, actualizaNeuronaPerceptron);
         }
         else{
         	printf("adaline\n");
@@ -137,7 +157,14 @@ int main(int argc, char** argv) {
              paradaAdaline, actualizaPesosAdaline, actualizaNeuronaAdaline,
              data->natributos, data->nclases, 0, tasa);
             printf("red entrenada\n");
-            fallos=redTest(test, red, actualizaSalida, actualizaNeuronaAdaline);
+             if(flagClasf!=0){
+            	freeDatos(test);
+            	test=iniDatos();
+            	test=leerDatos(fclasf);
+            	clasificar(test, red, actualizaSalida, actualizaNeuronaPerceptron, fout);
+            }
+            else
+            	fallos=redTest(test, red, actualizaSalida, actualizaNeuronaAdaline);
         }
         printf("tasa de fallo: %3.2f %%\n", ((double)fallos/(double)test->ndatos) *100);
     	printf("fallos:%d datos:%d\n",fallos, test->ndatos );	
@@ -151,7 +178,13 @@ int main(int argc, char** argv) {
              paradaPerceptron, actualizaPesosPerceptron, actualizaNeuronaPerceptron,
              data->natributos, data->nclases, 0, tasa);
             printf("red entrenada\n");
-            fallos=redTest(data, red, actualizaSalida, actualizaNeuronaPerceptron);
+            if(flagClasf!=0){
+            	freeDatos(test);
+            	test=leerDatos(fclasf);
+            	clasificar(test, red, actualizaSalida, actualizaNeuronaPerceptron, fout);
+            }
+            else
+            	fallos=redTest(data, red, actualizaSalida, actualizaNeuronaPerceptron);
         }
         else{
         	printf("adaline\n");
@@ -159,7 +192,14 @@ int main(int argc, char** argv) {
              paradaAdaline, actualizaPesosAdaline, actualizaNeuronaAdaline,
              data->natributos, data->nclases, 0, tasa);
             printf("red entrenada\n");
-            fallos=redTest(data, red, actualizaSalida, actualizaNeuronaAdaline);
+            if(flagClasf!=0){
+            	freeDatos(test);
+            	test=iniDatos();
+            	test=leerDatos(fclasf);
+            	clasificar(test, red, actualizaSalida, actualizaNeuronaPerceptron, fout);
+            }
+            else
+            	fallos=redTest(data, red, actualizaSalida, actualizaNeuronaAdaline);
 
         }
         printf("tasa de fallo: %3.2f %%\n", ((double)fallos/(double)data->ndatos) *100);
@@ -187,7 +227,6 @@ int main(int argc, char** argv) {
     if(fout!=stdout){
         free(fout);
     }
-    printDatos(data);
     destRed1(red);
     fclose(fin);
     freeDatos(data);
@@ -199,6 +238,6 @@ int main(int argc, char** argv) {
     if(flagPerceptron)
     	printf("tasa %1.4f train %1.4f  test %1.4f  etapas %d\n",
     			tasa, ptrain, ptest, maxEtapas);
-    printf("interPrd %d interSum %d\n", interPrd, interSum);
+    printf("? %d\n", '?');
     return 0;
 }

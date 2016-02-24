@@ -136,7 +136,7 @@ int printDatos(datos* data){
 	printf("nclases:%d\n",data->nclases);
 	printf("ndatos:%d\n",data->ndatos);
 	printf("tuplas\n");
-	for(i=0; i<0; i++){
+	for(i=0; i<data->natributos; i++){
 
 		for(j=0; j<data->natributos; j++){
 			printf(" [%1.4f]", data->atributos[i][j]);
