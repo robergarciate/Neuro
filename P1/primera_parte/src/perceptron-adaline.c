@@ -4,7 +4,7 @@ int maxEtapas =0, aleat=0;
 double maxTolerancia=0.0;
 
 int main(int argc, char** argv) {
-	FILE * fin,* fout= NULL,* fclasf;
+	FILE * fin=NULL,* fout= NULL,* fclasf=NULL;
     int long_index=0;
     char opt;
     int i=0, j, fallos=0;
@@ -221,10 +221,15 @@ int main(int argc, char** argv) {
         printf("\n");
     }
 
-    if(fout!=stdout){
-        free(fout);
-    }
+    
     destRed1(red);
+
+    if (fclasf!=NULL)
+    	fclose(fclasf);
+
+    if(fout!=stdout)
+        free(fout);
+    
     fclose(fin);
     freeDatos(data);
     freeDatos(train);
