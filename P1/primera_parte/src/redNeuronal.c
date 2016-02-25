@@ -337,16 +337,22 @@ int clasificar(datos* data, redNeuronal* red,
 			int (*fsalida) (redNeuronal*, double (*fActualizacion)(neurona*), double*),
 			double (*fActualizacion)(neurona*), FILE* fout){
 
- 	int i=0, j=0,n=0;
+ 	int i=0, j=0, n=0, k=0;
+ 	char s[32]="";
  	if(fout ==NULL || red==NULL || data==NULL)
  		return 1;
  	n=red->entradas+1+red->salidas+red->ocultas;
  	for(i=0; i<data->ndatos; i++){
  		(*fsalida) (red, (*fActualizacion), data->atributos[i]);
- 		for(j= n- red->salidas; j<n; j++){
- 			fprintf(fout, "%1.1f ",red->neuronas[j].salida); 			
+ 		for(j= n- red->salidas, k=0; j<n; j++,k=0){
+
+ 			sprintf(s, "%1.1f ", red->neuronas[j].salida);
+ 			while(s[k]!='\0'){
+ 				fwrite(&s[k++], 1,1, fout); 			
+ 			}
  		}
- 		fprintf(fout, "\n");
+ 		s[0]='\n';
+ 		fwrite(&s[0], 1,1, fout);
  	}
 
  	return 0;
