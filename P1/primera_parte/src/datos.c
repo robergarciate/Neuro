@@ -116,13 +116,20 @@ int reservarTupla(datos* data){
 	i=data->ndatos;
 	j=data->natributos;
 	k=data->nclases;
-
 	data->atributos=realloc(data->atributos, sizeof(double*)*(i+1));
-	data->atributos[i]=calloc(j ,sizeof(double));
+	data->atributos[i]=malloc(sizeof(double)*j);
+	
+	for(j=0; j<data->natributos; j++){
+		data->atributos[i][j]=0;
+	}
 
 	data->clase=realloc(data->clase, sizeof(int*)*(i+1));
-	data->clase[i]=calloc(k ,sizeof(int));
-	
+	data->clase[i]=malloc(sizeof(int)*k);
+
+	for(j=0; j<data->nclases; j++){
+		data->atributos[i][j]=0;
+	}	
+
 	data->ndatos++;
 	return 0;
 }

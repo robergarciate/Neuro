@@ -144,7 +144,6 @@ int main(int argc, char** argv) {
             printf("red entrenada\n");
             if(flagClasf!=0){
             	freeDatos(test);
-            	test=iniDatos();
             	test=leerDatos(fclasf);
             	clasificar(test, red, actualizaSalida, actualizaNeuronaPerceptron, fout);
             }
@@ -159,7 +158,6 @@ int main(int argc, char** argv) {
             printf("red entrenada\n");
              if(flagClasf!=0){
             	freeDatos(test);
-            	test=iniDatos();
             	test=leerDatos(fclasf);
             	clasificar(test, red, actualizaSalida, actualizaNeuronaPerceptron, fout);
             }
@@ -194,7 +192,6 @@ int main(int argc, char** argv) {
             printf("red entrenada\n");
             if(flagClasf!=0){
             	freeDatos(test);
-            	test=iniDatos();
             	test=leerDatos(fclasf);
             	clasificar(test, red, actualizaSalida, actualizaNeuronaPerceptron, fout);
             }
@@ -232,12 +229,12 @@ int main(int argc, char** argv) {
     freeDatos(data);
     freeDatos(train);
     freeDatos(test);
+    liberarLex();
     if(flagAdaline)
     	printf("tasa %1.4f train %1.4f test %1.4f tolerancia %1.16f etapas %d\n",
     			tasa, ptrain, ptest, maxTolerancia, maxEtapas);
     if(flagPerceptron)
     	printf("tasa %1.4f train %1.4f  test %1.4f  etapas %d\n",
     			tasa, ptrain, ptest, maxEtapas);
-    printf("? %d\n", '?');
     return 0;
 }

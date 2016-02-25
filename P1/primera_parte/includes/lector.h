@@ -15,6 +15,6 @@ Descripci�n: Definici�n de tokens para el lenguaje ALFA
 #define TOK_CARACTER			102
 
 /**/
-int lector(datos* data, char* argv);
-
+datos* leerDatos(FILE* fin);
+int lectorChusco(FILE * f);
 #endif
