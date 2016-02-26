@@ -15,6 +15,7 @@ typedef struct{
 extern int maxEtapas;
 extern int aleat;
 extern double maxTolerancia;
+extern datos* adapt;
 /**
 ***	No hay mucha diferencia entre una inicializacion y otra.
 ***	Si despues hacemos graficas sobre la valocidad con la 

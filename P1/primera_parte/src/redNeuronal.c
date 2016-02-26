@@ -300,7 +300,7 @@ redNeuronal* redTrain(int tentrada, datos* data,
 	f=fopen("adaptacion.data", "w");
 	while((*fParada)(red)){
 		/*QUITAR ESO PARA LA ENTREGA*/
-		fallos=redTest(data, red,fsalida, fActualizacion);
+		fallos=redTest(adapt, red,fsalida, fActualizacion);
 		fprintf(f, "%2.4f\n", (double)fallos/(double)data->ndatos);
 		/**/
 		for(i=0; i<data->ndatos; i++){

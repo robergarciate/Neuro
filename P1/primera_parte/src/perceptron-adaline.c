@@ -3,6 +3,8 @@
 int maxEtapas =0, aleat=0;
 double maxTolerancia=0.0;
 
+datos* adapt=NULL;
+
 int main(int argc, char** argv) {
 	FILE * fin=NULL,* fout= NULL,* fclasf=NULL;
     int long_index=0;
@@ -130,7 +132,7 @@ int main(int argc, char** argv) {
     bipolarizar(data);
 	if( ptrain+ptest ==1.0){
         particionado(data, train, test, ptest);
-
+        adapt=test;
         printf("ndatos:%d\n",train->ndatos );
 
         printf("ndatos:%d\n",test->ndatos );
@@ -172,6 +174,7 @@ int main(int argc, char** argv) {
        	printf("datos: %d\n",data->ndatos );
         if(flagPerceptron){
         	printf("perceptron\n");
+            adapt=data;
             red=redTrain(0, data, iniRedPerceptron, actualizaSalida,
              paradaPerceptron, actualizaPesosPerceptron, actualizaNeuronaPerceptron,
              data->natributos, data->nclases, 0, tasa);
@@ -186,6 +189,7 @@ int main(int argc, char** argv) {
         }
         else{
         	printf("adaline\n");
+            adapt=test;
         	red=redTrain(0, data, iniRedPerceptron, actualizaSalida,
              paradaAdaline, actualizaPesosAdaline, actualizaNeuronaAdaline,
              data->natributos, data->nclases, 0, tasa);
