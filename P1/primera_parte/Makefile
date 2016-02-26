@@ -32,7 +32,7 @@ prueba: lector datos redNeuronal src/prueba.c
 	@$(CC) $(CCE) prueba src/prueba.c obj/*.o
 
 
-perceptron-adaline: lector datos redNeuronal src/perceptron-adaline.c
+perceptron-adaline: lector datos redNeuronal obj/neurona.o src/perceptron-adaline.c
 	@$(CC) $(CCF) $(CCE) perceptron-adaline src/perceptron-adaline.c obj/*.o
 	@printf "${VERDE}creado ejecutable de perceptron y adaline${NC}\n"
 
@@ -60,3 +60,44 @@ pull:
 
 mrProper:
 	@rm -vf obj/*.o mcCulloch-Pits perceptron-adaline prueba adaptacion.data
+
+
+help:
+	@cat doc/help.txt
+#EJECUCIONES DE PRUEBA
+
+pruebaMcCulloch-Pits: mcCulloch-Pits entrada.txt
+	@./mcCulloch-Pits -f entrada.txt
+
+pruebaPerceptronNAND: perceptron-adaline bases-de-datos-p1/nand.txt
+	@./perceptron-adaline -p -fin bases-de-datos-p1/nand.txt -test 1.0 -train 1.0
+
+
+pruebaPerceptronXOR: perceptron-adaline bases-de-datos-p1/xor.txt
+	@./perceptron-adaline -p -fin bases-de-datos-p1/xor.txt -test 1.0 -train 1.0
+
+
+
+pruebaPerceptronP1: perceptron-adaline bases-de-datos-p1/problema_real1.txt 
+	@./perceptron-adaline -p -fin bases-de-datos-p1/problema_real1.txt 
+
+
+pruebaPerceptronP2: perceptron-adaline bases-de-datos-p1/problema_real2.txt 
+	@./perceptron-adaline -p -fin bases-de-datos-p1/problema_real2.txt 
+
+
+pruebaAdalineNAND: perceptron-adaline bases-de-datos-p1/nand.txt
+	@./perceptron-adaline -a -fin bases-de-datos-p1/nand.txt -test 1.0 -train 1.0
+
+
+pruebaAdalineXOR: perceptron-adaline bases-de-datos-p1/xor.txt
+	@./perceptron-adaline -a -fin bases-de-datos-p1/xor.txt -test 1.0 -train 1.0
+
+
+
+pruebaAdalineP1: perceptron-adaline bases-de-datos-p1/problema_real1.txt 
+	@./perceptron-adaline -a -fin bases-de-datos-p1/problema_real1.txt 
+
+
+pruebaAdalineP2: perceptron-adaline bases-de-datos-p1/problema_real2.txt 
+	@./perceptron-adaline -a -fin bases-de-datos-p1/problema_real2.txt 
