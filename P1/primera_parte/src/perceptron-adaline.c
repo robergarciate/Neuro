@@ -79,7 +79,7 @@ int main(int argc, char** argv) {
     if(fin==NULL || ptrain>1 || ptest>1 
       || (flagPerceptron==0 && flagAdaline==0)
       || (flagPerceptron!=0 && flagAdaline!=0)
-      || (interPrd!=0 && interSum!=0) || (flagClasf!=0 && fclasf==NULL) ){
+      || (interPrd!=0 && interSum!=0 && interMed!=0) || (flagClasf!=0 && fclasf==NULL) ){
         printf("se esperaba:\n"
         "./perceptron-adaline {-fin file }  {-a | -p}"
     	" {-train num} {-test num} {-tasa num} {-etapas num}" 
@@ -253,5 +253,6 @@ int main(int argc, char** argv) {
     if(flagPerceptron)
     	printf("tasa %1.4f train %1.4f  test %1.4f  etapas %d\n",
     			tasa, ptrain, ptest, maxEtapas);
+    printf("interMed %d interPrd %d interSum %d\n", interMed, interPrd, interSum );
     return 0;
 }
