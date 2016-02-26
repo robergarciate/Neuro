@@ -14,7 +14,7 @@ int main(int argc, char** argv) {
     redNeuronal* red=NULL;
     datos* data=NULL,* train=NULL,* test=NULL;
     static int flagPerceptron=0, flagAdaline=0, flagClasf;
-    static int interSum=0, interPrd=0;
+    static int interSum=0, interPrd=0, interMed=0;
     static struct option options[] = {
         {"fin",required_argument,0, 'a'},
         {"fout",required_argument,0, 'b'},
@@ -29,7 +29,8 @@ int main(int argc, char** argv) {
         {"interSum", no_argument, &interSum, 'k'},        
         {"interPrd", no_argument, &interPrd, 'l'},    
         {"clasificar", no_argument, &flagClasf, 'm'},    
-        {"fclasf", required_argument, 0, 'n'},
+        {"fclasf", required_argument, 0, 'n'},    
+		{"interMed", no_argument, &interMed, 'o'},
         {0,0,0,0}
     };
     while ((opt = getopt_long_only(argc, argv,"1:", options, &long_index )) != -1){
@@ -68,7 +69,7 @@ int main(int argc, char** argv) {
 			        "./perceptron-adaline {-fin file }  {-a | -p}"
 			    	" {-train num} {-test num} {-tasa num} {-etapas num}" 
 			    	"[-clasificar -fclasf file [-fout file]]"
-			    	"[-tolerancia num] [-iniAleat] [-interPrd | -interSum]\n");
+			    	"[-tolerancia num] [-iniAleat] [-interPrd | -interSum | -interMed]\n");
                 return 0;
             break;
  
@@ -83,7 +84,7 @@ int main(int argc, char** argv) {
         "./perceptron-adaline {-fin file }  {-a | -p}"
     	" {-train num} {-test num} {-tasa num} {-etapas num}" 
     	"[-clasificar -fclasf file [-fout file]]"
-    	"[-tolerancia num] [-iniAleat] [-interPrd | -interSum]\n");
+    	"[-tolerancia num] [-iniAleat] [-interPrd | -interSum | -interMed]\n");
         return 0; 
 
     }
@@ -122,6 +123,13 @@ int main(int argc, char** argv) {
 
     if(interPrd!=0){
     	train= interpolarProducto(data);
+    	freeDatos(data);
+    	data=train;
+    	train=NULL;
+    }
+
+    if(interMed!=0){
+    	train= interpolarMedia(data);
     	freeDatos(data);
     	data=train;
     	train=NULL;

@@ -266,6 +266,38 @@ datos* interpolarProducto(datos* d){
 	return res;	
 }	
 
+datos* interpolarMedia(datos* d){
+	datos* res=NULL;
+	int i=0, j=0;
+	double val=0;
+	if(d==NULL){
+		return NULL;
+	}
+	res= iniDatos();
+	
+	res->natributos=d->natributos+1;
+	res->nclases=d->nclases;
+	res->ndatos=d->ndatos;
+	res->atributos=malloc(sizeof(double*)*res->ndatos);
+	res->clase=malloc(sizeof(int*)*res->ndatos);
+	for(i=0; i<d->ndatos; i++){
+		res->atributos[i]=malloc(sizeof(double)*res->natributos);
+		res->clase[i]=malloc(sizeof(int)*res->nclases);
+	}
+
+	for(i=0; i<d->ndatos; i++){
+		for(j=0; j<d->natributos; j++){
+			res->atributos[i][j]= d->atributos[i][j];
+			val=d->atributos[i][j];
+		}
+		res->atributos[i][j]=val/j;
+
+		for(j=0; j<d->nclases; j++){
+			res->clase[i][j]= d->clase[i][j];
+		}
+	}
+	return res;	
+}	
 
 
 

@@ -72,3 +72,5 @@ datos* interpolarSuma(datos* d);
 
 
 datos* interpolarProducto(datos* d);
+
+datos* interpolarMedia(datos* d);
