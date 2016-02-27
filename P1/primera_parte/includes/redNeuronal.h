@@ -105,7 +105,7 @@ redNeuronal* redTrain(int tentrada,datos* data,
 ***
 ***
 **/
-int redTest(datos* data, redNeuronal* red,
+double redTest(datos* data, redNeuronal* red,
 			int (*fsalida) (redNeuronal*, double (*fActualizacion)(neurona*), double*),
 			double (*fActualizacion)(neurona*));
 					

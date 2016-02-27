@@ -312,22 +312,25 @@ redNeuronal* redTrain(int tentrada, datos* data,
 	return red;
 }
 
-int redTest(datos* data, redNeuronal* red,
+double redTest(datos* data, redNeuronal* red,
 			int (*fsalida) (redNeuronal*, double (*fActualizacion)(neurona*), double*),
 			double (*fActualizacion)(neurona*)){
 
- 	int res=0, i=0, j=0;
+ 	int i=0, j=0;
+ 	double res=0, aux=0;
  	for(i=0; i<data->ndatos; i++){
  		(*fsalida) (red, (*fActualizacion), data->atributos[i]);
- 		for(j=0; j<data->nclases; j++){
+ 		for(j=0, aux=0; j<data->nclases; j++){
+ 			aux=(*fActualizacion)(&red->neuronas[j + 1 + red->entradas]) - (double)data->clase[i][j];
  			
- 			if((double)data->clase[i][j] != red->neuronas[j + 1 + red->entradas].salida){
+ 			/*if((double)data->clase[i][j] != red->neuronas[j + 1 + red->entradas].salida){
  				res++;
  				break;
- 			}
+ 			}*/
+ 			res+=aux*aux;
  		}
  	}
-
+ 	res= res/data->nclases;
  	return res;
 
 }

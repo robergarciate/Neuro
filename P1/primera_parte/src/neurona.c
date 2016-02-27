@@ -71,7 +71,7 @@ double actualizaNeurona(neurona* n){
 	else{
 		n->salida=0.0;	
 	}
-	return 0;
+	return val;
 }
 
 double actualizaNeuronaPerceptron(neurona* n){
@@ -92,7 +92,7 @@ double actualizaNeuronaPerceptron(neurona* n){
 		n->salida=0.0;	
 	}
 	/*printf("salida: %1.4f\n", n->salida);
-	*/return 0;
+	*/return val;
 
 }
 
@@ -107,7 +107,7 @@ double actualizaNeuronaAdaline(neurona* n){
 		n->salida=-1;
 	else
 		n->salida=1;
-	return 0;
+	return val;
 }
 
 double actualizaNeuronaEntrada(neurona* n, double valor){
