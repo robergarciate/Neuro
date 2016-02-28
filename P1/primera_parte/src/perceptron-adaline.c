@@ -12,7 +12,7 @@ int main(int argc, char** argv) {
     int i=0, j, fallos=0;
     double ptrain=0.0, ptest=0.0, tasa=0.0;
     redNeuronal* red=NULL;
-    datos* data=NULL,* train=NULL,* test=NULL;
+    datos* data=NULL,* train=NULL,* test=NULL,* aux=NULL;
     static int flagPerceptron=0, flagAdaline=0, flagClasf;
     static int interSum=0, interPrd=0, interMed=0;
     static struct option options[] = {
@@ -121,14 +121,14 @@ int main(int argc, char** argv) {
     	train=NULL;
     }
 
-    if(interPrd!=0){
+    else if(interPrd!=0){
     	train= interpolarProducto(data);
     	freeDatos(data);
     	data=train;
     	train=NULL;
     }
 
-    if(interMed!=0){
+    else if(interMed!=0){
     	train= interpolarMedia(data);
     	freeDatos(data);
     	data=train;
@@ -153,8 +153,28 @@ int main(int argc, char** argv) {
              data->natributos, data->nclases, 0, tasa);
             printf("red entrenada\n");
             if(flagClasf!=0){
-            	freeDatos(test);
-            	test=leerDatos(fclasf);
+                freeDatos(test);
+                test=leerDatos(fclasf);
+                if(interSum!=0){
+                    aux= interpolarSuma(test);
+                    freeDatos(test);
+                    test=aux;
+                    aux=NULL;
+                }
+
+                else if(interPrd!=0){
+                    aux= interpolarProducto(test);
+                    freeDatos(test);
+                    test=aux;
+                    aux=NULL;
+                }
+
+                else if(interMed!=0){
+                    aux= interpolarMedia(test);
+                    freeDatos(test);
+                    test=aux;
+                    aux=NULL;
+                }
             	clasificar(test, red, actualizaSalida, actualizaNeuronaPerceptron, fout);
             }
             else
@@ -169,6 +189,27 @@ int main(int argc, char** argv) {
              if(flagClasf!=0){
             	freeDatos(test);
             	test=leerDatos(fclasf);
+
+                if(interSum!=0){
+                    aux= interpolarSuma(test);
+                    freeDatos(test);
+                    test=aux;
+                    aux=NULL;
+                }
+
+                else if(interPrd!=0){
+                    aux= interpolarProducto(test);
+                    freeDatos(test);
+                    test=aux;
+                    aux=NULL;
+                }
+
+                else if(interMed!=0){
+                    aux= interpolarMedia(test);
+                    freeDatos(test);
+                    test=aux;
+                    aux=NULL;
+                }
             	clasificar(test, red, actualizaSalida, actualizaNeuronaPerceptron, fout);
             }
             else
@@ -180,9 +221,9 @@ int main(int argc, char** argv) {
     }
     else if( ptrain ==1.0 && ptest==1.0){
        	printf("datos: %d\n",data->ndatos );
+        adapt=data;
         if(flagPerceptron){
         	printf("perceptron\n");
-            adapt=data;
             red=redTrain(0, data, iniRedPerceptron, actualizaSalida,
              paradaPerceptron, actualizaPesosPerceptron, actualizaNeuronaPerceptron,
              data->natributos, data->nclases, 0, tasa);
@@ -190,6 +231,27 @@ int main(int argc, char** argv) {
             if(flagClasf!=0){
             	freeDatos(test);
             	test=leerDatos(fclasf);
+
+                if(interSum!=0){
+                    aux= interpolarSuma(test);
+                    freeDatos(test);
+                    test=aux;
+                    aux=NULL;
+                }
+
+                else if(interPrd!=0){
+                    aux= interpolarProducto(test);
+                    freeDatos(test);
+                    test=aux;
+                    aux=NULL;
+                }
+
+                else if(interMed!=0){
+                    aux= interpolarMedia(test);
+                    freeDatos(test);
+                    test=aux;
+                    aux=NULL;
+                }
             	clasificar(test, red, actualizaSalida, actualizaNeuronaPerceptron, fout);
             }
             else
@@ -197,7 +259,6 @@ int main(int argc, char** argv) {
         }
         else{
         	printf("adaline\n");
-            adapt=test;
         	red=redTrain(0, data, iniRedPerceptron, actualizaSalida,
              paradaAdaline, actualizaPesosAdaline, actualizaNeuronaAdaline,
              data->natributos, data->nclases, 0, tasa);
@@ -205,6 +266,26 @@ int main(int argc, char** argv) {
             if(flagClasf!=0){
             	freeDatos(test);
             	test=leerDatos(fclasf);
+                if(interSum!=0){
+                    aux= interpolarSuma(test);
+                    freeDatos(test);
+                    test=aux;
+                    aux=NULL;
+                }
+
+                else if(interPrd!=0){
+                    aux= interpolarProducto(test);
+                    freeDatos(test);
+                    test=aux;
+                    aux=NULL;
+                }
+
+                else if(interMed!=0){
+                    aux= interpolarMedia(test);
+                    freeDatos(test);
+                    test=aux;
+                    aux=NULL;
+                }
             	clasificar(test, red, actualizaSalida, actualizaNeuronaPerceptron, fout);
             }
             else
@@ -253,6 +334,5 @@ int main(int argc, char** argv) {
     if(flagPerceptron)
     	printf("tasa %1.4f train %1.4f  test %1.4f  etapas %d\n",
     			tasa, ptrain, ptest, maxEtapas);
-    printf("interMed %d interPrd %d interSum %d\n", interMed, interPrd, interSum );
     return 0;
 }

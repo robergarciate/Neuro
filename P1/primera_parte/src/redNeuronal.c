@@ -317,20 +317,21 @@ double redTest(datos* data, redNeuronal* red,
 			double (*fActualizacion)(neurona*)){
 
  	int i=0, j=0;
- 	double res=0, aux=0;
+ 	double res=0;
+ 	/*double aux=0;*/
  	for(i=0; i<data->ndatos; i++){
  		(*fsalida) (red, (*fActualizacion), data->atributos[i]);
- 		for(j=0, aux=0; j<data->nclases; j++){
- 			aux=(*fActualizacion)(&red->neuronas[j + 1 + red->entradas]) - (double)data->clase[i][j];
+ 		for(j=0; j<data->nclases; j++){
+ 			/*aux=(*fActualizacion)(&red->neuronas[j + 1 + red->entradas]) - (double)data->clase[i][j];
+ 			res+=aux*aux;*/
  			
- 			/*if((double)data->clase[i][j] != red->neuronas[j + 1 + red->entradas].salida){
+ 			if((double)data->clase[i][j] != red->neuronas[j + 1 + red->entradas].salida){
  				res++;
  				break;
- 			}*/
- 			res+=aux*aux;
+ 			}
  		}
  	}
- 	res= res/data->nclases;
+ 	/*res= res/data->nclases;*/
  	return res;
 
 }
