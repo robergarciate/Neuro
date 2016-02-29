@@ -324,8 +324,8 @@ double redTest(datos* data, redNeuronal* red,
  		(*fsalida) (red, (*fActualizacion), data->atributos[i]);
  		for(j=0; j<data->nclases; j++){
  			/*aux=(*fActualizacion)(&red->neuronas[j + 1 + red->entradas]) - (double)data->clase[i][j];
- 			res+=aux*aux;*/
- 			
+ 			res+=aux*aux;
+ 			*/
  			if((double)data->clase[i][j] != red->neuronas[j + 1 + red->entradas].salida){
  				res++;
  				break;
