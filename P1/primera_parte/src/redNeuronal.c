@@ -132,20 +132,21 @@ int actualizaPesosPerceptron(redNeuronal* red, int* t){
 
 int actualizaPesosAdaline(redNeuronal* red, int* t){
 	int i=0, j=0;
+	double val=0;
 	if(red==NULL || t==NULL){
 		return 1;
 	}
 	for(i=0; i<red->salidas; i++){		
-		
+		val=actualizaNeuronaAdaline(&red->neuronas[i+1+red->entradas]);
 		/*printf("se reajusta la salida %d\n", i);
 		*/for(j=0; j<red->entradas; j++){
 			(&red->neuronas[i+1+red->entradas])->pesos[j]+= red->tasa*
-								(t[i] - red->neuronas[i+1+red->entradas].salida)*red->neuronas[j].salida;
+						(t[i] - val)*red->neuronas[j].salida;
 			/*printf("j=%d %2.4f ", j, (&red->neuronas[i+1+red->entradas])->pesos[j]);
 			*/
 		}
 
-		(&red->neuronas[i+1+red->entradas])->pesos[j]+= red->tasa*(t[i] - red->neuronas[i+1+red->entradas].salida);
+		(&red->neuronas[i+1+red->entradas])->pesos[j]+= red->tasa*(t[i] - val);
 		/*printf("j=%d %2.4f\n", j, (&red->neuronas[i+1+red->entradas])->pesos[j]);
 		*/
 	
