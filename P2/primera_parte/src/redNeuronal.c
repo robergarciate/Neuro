@@ -60,6 +60,73 @@ redNeuronal* iniRedPerceptron(int entrada, int oculta,int salida, double tasa){
 	free(salidas);
 	return red;
 }
+
+redNeuronal* iniRedRetropropagacion(int entrada, int oculta,int salida, double tasa){
+	double* pesos= NULL,** salidas= NULL;
+	double factorEscala = 0.0;
+	int i=0, j=0;
+	redNeuronal* red=NULL;
+	if( entrada==0 || salida==0 )
+		return NULL;
+	if(red==NULL){
+		red= malloc(sizeof(redNeuronal));
+	}
+	srand(time(NULL));
+	red->entradas=entrada;
+	red->salidas=salida;
+	red->ocultas=oculta;
+	red->tasa=tasa;
+	red->neuronas=malloc(sizeof(neurona)*(2+entrada+salida+oculta));
+	
+	for(i =0; i< (1+entrada+salida); i++){
+		iniNeurona2( &(red->neuronas[i]));
+	}
+	factorEscala = 0.7 * pow(oculta, (1/entrada))
+
+	
+	/*INICIALIZACION NEURONAS DE ENTRADA*/
+	for(i=0; i<entrada; i++){
+		setNeurona(&red->neuronas[i], 0.0, 0, NULL, NULL);
+	}
+
+	/*INICIALIZACION NEURONA DE SESGO*/
+
+	setNeurona(&red->neuronas[entrada], 0, 0, NULL, NULL);
+	actualizaNeuronaEntrada(&(red->neuronas[entrada]), 1.0);
+	setNeurona(&red->neuronas[entrada+1], 0, 0, NULL, NULL);
+	actualizaNeuronaEntrada(&(red->neuronas[entrada+1]), 1.0);
+
+	/**/
+	/*INICIALIZACION NEURONAS DE OCULTA*/
+	pesos= (double*) malloc(sizeof(double)*(entrada+2));	
+    salidas= (double**) realloc(salidas, sizeof(double*)*(entrada+2));
+    for(i=0; i<entrada+2; i++){
+		salidas[i]= &(red->neuronas[i]).salida;
+	}
+
+	/*cambiado entrada por oculta*/
+	/*INICIALIZACION NEURONAS DE SALIDA*/
+	pesos= (double*) malloc(sizeof(double)*(oculta+2));	
+    salidas= (double**) realloc(salidas, sizeof(double*)*(oculta+2));
+    for(i=0; i<oculta+2; i++){
+		salidas[i]= &(red->neuronas[i]).salida;
+	}
+
+	/*Añadido el "+oculta"*/
+	for(i=2+entrada; i<salida+2+entrada+oculta; i++){
+		for(j=0; j<entrada+2+oculta; j++){
+			if(aleat!=0)
+				pesos[j]= (double)rand()/(double)RAND_MAX -0.5;
+			else
+				pesos[j]=0;
+		}
+        setNeurona(&red->neuronas[i], aleat!=0 ? (double)rand()/(double)RAND_MAX -0.5 : 0, entrada+2+oculta, pesos, salidas);
+	}
+	free(pesos);
+	free(salidas);
+	return red;
+}
+
 void destRed1(redNeuronal* red){
 	int i=0, n=0;
 	n= 1+ red->entradas + red->salidas +red->ocultas ;
@@ -232,6 +299,11 @@ int paradaAdaline(redNeuronal* red){
 	destRed1(redpre);
 	redpre=NULL;
 	return 0;
+}
+
+/*Es la misma??? TODO */
+int paradaRetropropagacion(redNeuronal* red){
+	return paradaAdaline(red);
 }
 
 

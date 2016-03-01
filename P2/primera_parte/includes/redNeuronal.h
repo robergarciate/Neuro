@@ -43,6 +43,10 @@ redNeuronal* iniRedPerceptron(int entrada, int oculta, int salida, double tasa);
 **/
 redNeuronal* iniRedAdaline( int entrada, int salida, int oculta, double tasa);
 
+redNeuronal* iniRedRetropropagacion( int entrada, int salida, int oculta, double tasa);
+
+
+
 void destRed1(redNeuronal* red);
 
 void destRed2(redNeuronal* red);
@@ -73,6 +77,8 @@ int actualizaPesosPerceptron(redNeuronal* red, int* t);
 int actualizaPesosAdaline(redNeuronal* red, int* t);
 
 
+int actualizaPesosRetropropagacion(redNeuronal* red, int* t);
+
 /**
 ***
 ***	Funciona con 2 cosas
@@ -85,6 +91,9 @@ int actualizaPesosAdaline(redNeuronal* red, int* t);
 int paradaPerceptron(redNeuronal* red);
 
 int paradaAdaline(redNeuronal* red);
+
+
+int paradaRetropropagacion(redNeuronal* red);
 /**
 ***
 ***	Esta funcion devuelve la red ya entrenada
