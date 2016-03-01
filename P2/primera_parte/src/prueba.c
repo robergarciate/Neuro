@@ -8,14 +8,9 @@ int main(){
 	redNeuronal* r2=NULL;
 	FILE* f=NULL;
 	datos* d =NULL;
-	f=fopen("bases-de-datos-p1/problema_real1.txt", "r");
+	f=fopen("bases-de-datos-p1/problema-real4.txt", "r");
 	d=leerDatos(f);
-	freeDatos(d);
-	fclose(f);
-	f=fopen("bases-de-datos-p1/problema_real2_no_etiquetados.txt", "r");
-	leerDatos(f);
-
-	freeDatos(d);	
+	escribeDatos(d, "problema-real4.txt");
 
 	fclose(f);
 }
