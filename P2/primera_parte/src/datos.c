@@ -313,3 +313,27 @@ void bipolarizar(datos* data){
 		}
 	}
 }
+
+
+void normalizarDatos(datos* d){
+	int i=0, j=0;
+	double media=0.0, varianza=0.0; 
+	if(d==NULL)
+		return;
+	for(j=0; j<d->natributos; j++){
+		media=0.0;
+		varianza=0.0;
+		for(i=0; i<d->ndatos; i++){
+			media+=d->atributos[i][j];
+		}
+		media/=d->ndatos;
+		for(i=0; i<d->ndatos; i++){
+			varianza+=pow(d->atributos[i][j] -media, 2.0);
+		}
+		varianza/=d->ndatos;
+		for(i=0; i<d->ndatos; i++){
+			d->datos[i][j]= d->datos[i][j]-media/sqrt(varianza);
+		}
+
+	}
+}
