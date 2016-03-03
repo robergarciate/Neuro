@@ -53,7 +53,7 @@ redNeuronal: src/redNeuronal.c includes/redNeuronal.h
 
 commit: mrProper
 	git add .
-	git commit -m "commit makefile"
+	git commit
 	git push
 pull:
 	git pull
