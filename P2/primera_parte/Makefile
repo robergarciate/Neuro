@@ -29,22 +29,22 @@ obj/neurona.o: src/neurona.c includes/neurona.h
 
 
 prueba: lector datos redNeuronal src/prueba.c
-	@$(CC) $(CCE) prueba src/prueba.c obj/*.o
+	@$(CC) $(CCE) prueba src/prueba.c obj/*.o -lm
 
 
 perceptron-adaline: lector datos redNeuronal obj/neurona.o src/perceptron-adaline.c
-	@$(CC) $(CCF) $(CCE) perceptron-adaline src/perceptron-adaline.c obj/*.o
+	@$(CC) $(CCF) $(CCE) perceptron-adaline src/perceptron-adaline.c obj/*.o -lm
 	@printf "${VERDE}creado ejecutable de perceptron y adaline${NC}\n"
 
 lector: $(FLTRM) $(FLTRX) $(FLTRL) datos flex
-	@gcc  -c obj/lex.yy.c -o obj/lex.yy.o
+	@gcc  -c obj/lex.yy.c -o obj/lex.yy.o -lm
 	@gcc $(CCF) $(CCC) obj/lector.o $(FLTRM)
 	@printf "${AMARILLO}lector compilado${NC}\n"
 flex: obj/lex.yy.c
 	@flex -o obj/lex.yy.c $(FLTRX)
 
 datos: $(DTSC) $(DTSL)
-	@$(CC) $(CCF) $(CCC) $(DTSO) $(DTSC)
+	@$(CC) $(CCF) $(CCC) $(DTSO) $(DTSC) -lm
 	@printf "${AMARILLO}datos compilado${NC}\n"
 
 redNeuronal: src/redNeuronal.c includes/redNeuronal.h

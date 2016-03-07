@@ -332,7 +332,7 @@ void normalizarDatos(datos* d){
 		}
 		varianza/=d->ndatos;
 		for(i=0; i<d->ndatos; i++){
-			d->datos[i][j]= d->datos[i][j]-media/sqrt(varianza);
+			d->atributos[i][j]= d->atributos[i][j]-media/sqrt(varianza);
 		}
 
 	}
