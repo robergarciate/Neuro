@@ -20,11 +20,11 @@ compile: mcCulloch-Pits perceptron-adaline prueba
 
 
 mcCulloch-Pits:  obj/neurona.o src/mcCulloch-Pits.c
-	@$(CC) $(CCF) $(CCE) mcCulloch-Pits src/mcCulloch-Pits.c obj/neurona.o
+	@$(CC) $(CCF) $(CCE) mcCulloch-Pits src/mcCulloch-Pits.c obj/neurona.o -lm
 	@printf "${VERDE}mcCulloch-Pits generado ejecutable ${NC}\n"
 
 obj/neurona.o: src/neurona.c includes/neurona.h
-	@$(CC) $(CCF) $(CCC) obj/neurona.o src/neurona.c
+	@$(CC) $(CCF) $(CCC) obj/neurona.o src/neurona.c -lm
 	@printf "${AMARILLO}neurona compilado${NC}\n"
 
 

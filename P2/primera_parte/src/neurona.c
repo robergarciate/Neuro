@@ -107,6 +107,17 @@ double actualizaNeuronaAdaline(neurona* n){
 	return val;
 }
 
+double actualizaNeuronaSigmoidalBipolar(neurona* n){
+	int i=0;
+	double val=0.0;
+	for(i=0; i< n->nentradas; i++){
+		val+=n->pesos[i] * (*n->entradas[i]);
+	}
+	val = 2 / (1 + exp(-val)) - 1;
+	n->salida = val;
+	return val; 
+}
+
 double actualizaNeuronaEntrada(neurona* n, double valor){
 	n->salida=valor;
 	return 0.0;

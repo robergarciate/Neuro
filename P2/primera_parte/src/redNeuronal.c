@@ -143,7 +143,11 @@ redNeuronal* iniRedRetropropagacion(int entrada, int oculta,int salida, double t
 
 void destRed1(redNeuronal* red){
 	int i=0, n=0;
-	n= 1+ red->entradas + red->salidas +red->ocultas ;
+	if(red->ocultas == 0){
+		n= 1+ red->entradas + red->salidas ;
+	}else{
+		n= 2+ red->entradas + red->salidas + red->ocultas;
+	}
 	for(i=0; i<n; i++){
 		destroyNeurona(&red->neuronas[i]);		
 	}
@@ -153,6 +157,11 @@ void destRed1(redNeuronal* red){
 
 void destRed2(redNeuronal* red){
 	int i=0, n=0;
+	if(red->ocultas == 0){
+		n= 1+ red->entradas + red->salidas ;
+	}else{
+		n= 2+ red->entradas + red->salidas + red->ocultas;
+	}
 	n= 1+ red->entradas + red->salidas +red->ocultas;
 	for(i=0; i<n; i++){
 		destroyNeurona(&(red->neuronas[i]));		
@@ -234,6 +243,27 @@ int actualizaPesosAdaline(redNeuronal* red, int* t){
 		
 	} 
 	return 0;
+}
+
+
+
+
+int actualizaPesosRetropropagacion(redNeuronal* red, int* t){
+	double* deltas = NULL;
+	double delta = 0.0;
+	int i = 0;
+
+	deltas = (double*) malloc(sizeof(double)*red->salidas);
+
+	for(i = 0; i < red->salidas; ++i){
+		delta = t[i] - red->neuronas[i + 2 + red->entradas + red->ocultas].salida;
+		delta *= 0.5 * (1 + red->neuronas[i + 2 + red->entradas + red->ocultas].salida);
+		delta *= (1 - red->neuronas[i + 2 + red->entradas + red->ocultas].salida);
+		deltas[i] = delta;
+	}
+
+	/*TODO*/
+
 }
 
 
@@ -357,8 +387,14 @@ int actualizaSalida(redNeuronal* red, double (*fActualizacion)(neurona*), double
 
 	/*printf("actualiza neuronas de salida\n");
 */
+
 	for(i = red->entradas+1 ; i < (red->entradas + red->salidas)+1 ; i++){
 		(*fActualizacion)(&(red->neuronas[i]));
+	}
+	if(red->ocultas > 0){
+		for(i = red->entradas+2+red->ocultas ; i < (red->entradas + red->salidas +2 + red->ocultas); i++){
+			(*fActualizacion)(&(red->neuronas[i]));
+		}
 	}
 
 	return 0;

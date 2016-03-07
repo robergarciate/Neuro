@@ -3,14 +3,15 @@
 #include <stdlib.h>
 #include <string.h>
 #include <getopt.h>
-
+#include <math.h>
 
 typedef struct {
 	double sigma;
 	int nentradas;
 	double* pesos;
 	double** entradas;
-	double salida; 
+	double salida;
+	double delta;
 }neurona;
 
 neurona* iniNeurona();
@@ -33,6 +34,8 @@ double actualizaNeuronaPerceptron(neurona* n);
 double actualizaNeuronaAdaline(neurona* n);
 
 double actualizaNeuronaEntrada(neurona* n, double valor);
+
+double actualizaNeuronaSigmoidalBipolar(neurona* n);
 
 void entradasNeurona(neurona* n, double ** entradas);
 
