@@ -153,12 +153,11 @@ void destRed1(redNeuronal* red){
 
 void destRed2(redNeuronal* red){
 	int i=0, n=0;
-	n= 2+ red->entradas + red->salidas +red->ocultas ;
+	n= 1+ red->entradas + red->salidas +red->ocultas;
 	for(i=0; i<n; i++){
-		destroyNeurona(&red->neuronas[i]);		
+		destroyNeurona(&(red->neuronas[i]));		
 	}
 	free(red->neuronas);
-	free(red);
 }
 
 int copiaRed(redNeuronal* redIn, redNeuronal* redOut){
@@ -344,6 +343,7 @@ void printSalidas(redNeuronal* red){
 
 
 
+
 int actualizaSalida(redNeuronal* red, double (*fActualizacion)(neurona*), double* entrada){
 
 	int i = 0;
@@ -357,17 +357,9 @@ int actualizaSalida(redNeuronal* red, double (*fActualizacion)(neurona*), double
 
 	/*printf("actualiza neuronas de salida\n");
 */
-	if(red->ocultas==0){
-		for(i = red->entradas+1 ; i < (red->entradas + red->salidas)+1 ; i++){
-			(*fActualizacion)(&(red->neuronas[i]));
-		}
+	for(i = red->entradas+1 ; i < (red->entradas + red->salidas)+1 ; i++){
+		(*fActualizacion)(&(red->neuronas[i]));
 	}
-	else{
-		for(i = red->entradas+1 ; i < (red->entradas + red->salidas + red->ocultas)+2 ; i++){
-			(*fActualizacion)(&(red->neuronas[i]));
-		}	
-	}
-
 
 	return 0;
 
@@ -420,13 +412,13 @@ double redTest(datos* data, redNeuronal* red,
  		(*fsalida) (red, (*fActualizacion), data->atributos[i]);
  		for(j=0; j<data->nclases; j++){
  			
- 			aux=(*fActualizacion)(&red->neuronas[j + 1 + red->entradas]) - (double)data->clase[i][j];
- 			res+=aux*aux;
+ 			/*aux=(*fActualizacion)(&red->neuronas[j + 1 + red->entradas]) - (double)data->clase[i][j];
+ 			res+=aux*aux;*/
  			
- 			/*if((double)data->clase[i][j] != red->neuronas[j + 1 + red->entradas].salida){
+ 			if((double)data->clase[i][j] != red->neuronas[j + 1 + red->entradas].salida){
  				res++;
  				break;
- 			}*/
+ 			}
  		}
  	}
  	res= res/data->nclases;

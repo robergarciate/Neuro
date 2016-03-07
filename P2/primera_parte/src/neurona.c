@@ -85,12 +85,9 @@ double actualizaNeuronaPerceptron(neurona* n){
 	*/if (val > n->sigma){
 		n->salida=1.0;
 	}
-	else if(val < -n->sigma){
+	else 
 		n->salida=-1.0;	
-	}
-	else{
-		n->salida=0.0;	
-	}
+	
 	/*printf("salida: %1.4f\n", n->salida);
 	*/return val;
 
