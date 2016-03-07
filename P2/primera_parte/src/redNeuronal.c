@@ -94,8 +94,6 @@ redNeuronal* iniRedRetropropagacion(int entrada, int oculta,int salida, double t
 
 	setNeurona(&red->neuronas[entrada], 0, 0, NULL, NULL);
 	actualizaNeuronaEntrada(&(red->neuronas[entrada]), 1.0);
-	setNeurona(&red->neuronas[entrada+1], 0, 0, NULL, NULL);
-	actualizaNeuronaEntrada(&(red->neuronas[entrada+1]), 1.0);
 
 	/**/
 	/*INICIALIZACION NEURONAS DE OCULTA*/
@@ -105,26 +103,41 @@ redNeuronal* iniRedRetropropagacion(int entrada, int oculta,int salida, double t
 		salidas[i]= &(red->neuronas[i]).salida;
 	}
 
-	/*cambiado entrada por oculta*/
-	/*INICIALIZACION NEURONAS DE SALIDA*/
-	pesos= (double*) malloc(sizeof(double)*(oculta+2));	
-    salidas= (double**) realloc(salidas, sizeof(double*)*(oculta+2));
-    for(i=0; i<oculta+2; i++){
-		salidas[i]= &(red->neuronas[i]).salida;
-	}
-
-	/*Añadido el "+oculta"*/
-	for(i=2+entrada; i<salida+2+entrada+oculta; i++){
-		for(j=0; j<entrada+2+oculta; j++){
+	for(i=1+entrada; i<oculta+1+entrada; i++){
+		for(j=0; j<entrada+1; j++){
 			if(aleat!=0)
 				pesos[j]= (double)rand()/(double)RAND_MAX -0.5;
 			else
 				pesos[j]=0;
 		}
-        setNeurona(&red->neuronas[i], aleat!=0 ? (double)rand()/(double)RAND_MAX -0.5 : 0, entrada+2+oculta, pesos, salidas);
+        setNeurona(&red->neuronas[i], aleat!=0 ? (double)rand()/(double)RAND_MAX -0.5 : 0, entrada+1, pesos, salidas);
 	}
+
+	setNeurona(&red->neuronas[entrada+oculta+1], 0, 0, NULL, NULL);
+	actualizaNeuronaEntrada(&(red->neuronas[entrada+1]), 1.0);
+
+	/*cambiado entrada por oculta*/
+	/*INICIALIZACION NEURONAS DE SALIDA*/
+	pesos= (double*) realloc(pesos, sizeof(double)*(oculta+1));	
+    salidas= (double**) realloc(salidas, sizeof(double*)*(oculta+1));
+    for(i=0; i<oculta+1; i++){
+		salidas[i]= &(red->neuronas[i+entrada+1]).salida;
+	}
+
+	/*Añadido el "+oculta"*/
+	for(i=2+entrada+oculta; i<salida+2+entrada+oculta; i++){
+		for(j=0; j<1+oculta; j++){
+			if(aleat!=0)
+				pesos[j]= (double)rand()/(double)RAND_MAX -0.5;
+			else
+				pesos[j]=0;
+		}
+        setNeurona(&red->neuronas[i], aleat!=0 ? (double)rand()/(double)RAND_MAX -0.5 : 0, 1+oculta, pesos, salidas);
+	}
+
 	free(pesos);
 	free(salidas);
+
 	return red;
 }
 
@@ -140,11 +153,12 @@ void destRed1(redNeuronal* red){
 
 void destRed2(redNeuronal* red){
 	int i=0, n=0;
-	n= 1+ red->entradas + red->salidas +red->ocultas;
+	n= 2+ red->entradas + red->salidas +red->ocultas ;
 	for(i=0; i<n; i++){
-		destroyNeurona(&(red->neuronas[i]));		
+		destroyNeurona(&red->neuronas[i]);		
 	}
 	free(red->neuronas);
+	free(red);
 }
 
 int copiaRed(redNeuronal* redIn, redNeuronal* redOut){
@@ -343,9 +357,17 @@ int actualizaSalida(redNeuronal* red, double (*fActualizacion)(neurona*), double
 
 	/*printf("actualiza neuronas de salida\n");
 */
-	for(i = red->entradas+1 ; i < (red->entradas + red->salidas)+1 ; i++){
-		(*fActualizacion)(&(red->neuronas[i]));
+	if(red->ocultas==0){
+		for(i = red->entradas+1 ; i < (red->entradas + red->salidas)+1 ; i++){
+			(*fActualizacion)(&(red->neuronas[i]));
+		}
 	}
+	else{
+		for(i = red->entradas+1 ; i < (red->entradas + red->salidas + red->ocultas)+2 ; i++){
+			(*fActualizacion)(&(red->neuronas[i]));
+		}	
+	}
+
 
 	return 0;
 

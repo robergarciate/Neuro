@@ -7,5 +7,5 @@ int main(){
 	redNeuronal* r1=NULL;
 
 	r1=iniRedRetropropagacion( 5, 2, 2, 0.2);
-
+	destRed2(r1);
 }
