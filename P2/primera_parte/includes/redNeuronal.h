@@ -1,5 +1,6 @@
 #include "neurona.h"
 #include "datos.h"
+#include <math.h>
 
 #define ADALINE 0
 #define PERCEPTRON 1

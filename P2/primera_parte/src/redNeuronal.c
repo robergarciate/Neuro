@@ -82,7 +82,7 @@ redNeuronal* iniRedRetropropagacion(int entrada, int oculta,int salida, double t
 	for(i =0; i< (1+entrada+salida); i++){
 		iniNeurona2( &(red->neuronas[i]));
 	}
-	/*factorEscala = 0.7 * pow(oculta, (1/entrada));*/
+	factorEscala = 0.7 * pow(oculta, (1/entrada));
 
 	
 	/*INICIALIZACION NEURONAS DE ENTRADA*/
