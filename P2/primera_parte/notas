@@ -1,0 +1,3 @@
+ciretrio de parada:
+	ECM estancado	-> |ECM(i)- ECM(i-1)| < x ~10E-8
+					-> |1- ECM(i)/ECM(i-1)| < x
