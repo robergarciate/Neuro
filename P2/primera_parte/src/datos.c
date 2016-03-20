@@ -143,7 +143,7 @@ int printDatos(datos* data){
 	printf("nclases:%d\n",data->nclases);
 	printf("ndatos:%d\n",data->ndatos);
 	printf("tuplas\n");
-	for(i=0; i<data->natributos; i++){
+	for(i=0; i<data->ndatos; i++){
 
 		for(j=0; j<data->natributos; j++){
 			printf(" [%1.4f]", data->atributos[i][j]);
@@ -320,10 +320,14 @@ void normalizarDatos(datos* d){
 	double media=0.0, varianza=0.0; 
 	if(d==NULL)
 		return;
+
 	for(j=0; j<d->natributos; j++){
+		printf("Se normaliza la columna:%d\n", j);
 		media=0.0;
 		varianza=0.0;
 		for(i=0; i<d->ndatos; i++){
+			if(j==0)
+				printf("%1.4f\n", media);
 			media+=d->atributos[i][j];
 		}
 		media/=d->ndatos;
@@ -331,8 +335,9 @@ void normalizarDatos(datos* d){
 			varianza+=pow(d->atributos[i][j] -media, 2.0);
 		}
 		varianza/=d->ndatos;
+		printf("media: %1.5f varianza: %1.4f\n\n", media, varianza);
 		for(i=0; i<d->ndatos; i++){
-			d->atributos[i][j]= d->atributos[i][j]-media/sqrt(varianza);
+			d->atributos[i][j]= (d->atributos[i][j]-media)/sqrt(varianza);
 		}
 
 	}

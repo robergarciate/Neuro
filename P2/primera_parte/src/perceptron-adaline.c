@@ -12,9 +12,19 @@ int main(int argc, char** argv) {
     int i=0, j, fallos=0;
     double ptrain=0.0, ptest=0.0, tasa=0.0;
     redNeuronal* red=NULL;
+
+
+    redNeuronal* (*fini)(int, int, int, double)=NULL;
+    int (*fsalida) (redNeuronal*, double (*fActualizacion)(neurona*), double*)=NULL;
+    int (*fParada) (redNeuronal*)=NULL;
+    int (*fPesos) (redNeuronal*, int*)=NULL;
+    double (*fActualizacion)(neurona*)=NULL;
+
+
+
     datos* data=NULL,* train=NULL,* test=NULL,* aux=NULL;
-    static int flagPerceptron=0, flagAdaline=0, flagClasf;
-    static int interSum=0, interPrd=0, interMed=0;
+    static int flagPerceptron=0, flagAdaline=0, flagClasf, flagBP;
+    static int interSum=0, interPrd=0, interMed=0, norm=0;
     static struct option options[] = {
         {"fin",required_argument,0, 'a'},
         {"fout",required_argument,0, 'b'},
@@ -31,6 +41,8 @@ int main(int argc, char** argv) {
         {"clasificar", no_argument, &flagClasf, 'm'},    
         {"fclasf", required_argument, 0, 'n'},    
 		{"interMed", no_argument, &interMed, 'o'},
+        {"norm", no_argument, &norm, 'p'},
+        {"bp", no_argument, &flagBP, 'r'},
         {0,0,0,0}
     };
     while ((opt = getopt_long_only(argc, argv,"1:", options, &long_index )) != -1){
@@ -77,7 +89,7 @@ int main(int argc, char** argv) {
     }
 
     if(fin==NULL || ptrain>1 || ptest>1 
-      || (flagPerceptron==0 && flagAdaline==0)
+      || (flagPerceptron==0 && flagAdaline==0 && flagBP==0)
       || (flagPerceptron!=0 && flagAdaline!=0)
       || (interPrd!=0 && interSum!=0 && interMed!=0) || (flagClasf!=0 && fclasf==NULL) ){
         printf("se esperaba:\n"
@@ -138,6 +150,35 @@ int main(int argc, char** argv) {
     train=iniDatos();
     test=iniDatos();
     bipolarizar(data);
+
+    if(flagPerceptron){
+        fini=iniRedPerceptron;
+        fsalida=actualizaSalida;
+        fParada=paradaPerceptron;
+        fPesos=actualizaPesosPerceptron;
+        fActualizacion=actualizaNeuronaPerceptron;
+    }
+    else if(flagAdaline){
+        fini=iniRedPerceptron;
+        fsalida=actualizaSalida;
+        fParada=paradaAdaline;
+        fPesos=actualizaPesosAdaline;
+        fActualizacion=actualizaNeuronaAdaline;
+    }
+    else if(flagBP){
+        fini=iniRedRetropropagacion;
+        fsalida=actualizaSalida;
+        fParada=paradaRetropropagacion;
+        fPesos=actualizaPesosRetropropagacion;
+        fActualizacion=actualizaNeuronaSigmoidalBipolar;
+    }
+    else{
+        return 0;
+    }
+º
+
+
+
 	if( ptrain+ptest ==1.0){
         particionado(data, train, test, ptest);
         adapt=test;
