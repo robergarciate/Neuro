@@ -147,11 +147,16 @@ int main(int argc, char** argv) {
     	train=NULL;
     }
 
+    if(norm!=0){
+        normalizarDatos(data);
+    }
+
     train=iniDatos();
     test=iniDatos();
     bipolarizar(data);
 
     if(flagPerceptron){
+    	printf("Perceptron\n");
         fini=iniRedPerceptron;
         fsalida=actualizaSalida;
         fParada=paradaPerceptron;
@@ -159,6 +164,7 @@ int main(int argc, char** argv) {
         fActualizacion=actualizaNeuronaPerceptron;
     }
     else if(flagAdaline){
+    	printf("Adaline\n");
         fini=iniRedPerceptron;
         fsalida=actualizaSalida;
         fParada=paradaAdaline;
@@ -166,6 +172,7 @@ int main(int argc, char** argv) {
         fActualizacion=actualizaNeuronaAdaline;
     }
     else if(flagBP){
+    	printf("Retropropagacion\n");
         fini=iniRedRetropropagacion;
         fsalida=actualizaSalida;
         fParada=paradaRetropropagacion;
@@ -175,11 +182,38 @@ int main(int argc, char** argv) {
     else{
         return 0;
     }
-º
+    
+    if(ptrain+ptest ==1.0){
+        particionado(data, train, test, ptest);
+        adapt=test;
+    }
+    else if(ptrain ==1.0){
+        train=data;
+        test=data;
+        adapt=data;
+
+    }
+    else{
+        return 1;
+    }
 
 
+    red=redTrain(0, train, fini, fsalida,
+    	fParada, fPesos, fActualizacion,
+        data->natributos, data->nclases, data->natributos*2, tasa);
+    printf("red entrenada\n");
 
-	if( ptrain+ptest ==1.0){
+
+    if(flagClasf!=0){
+		clasificar(test, red, fsalida, fActualizacion, fout);
+    }
+    else{
+        fallos=redTest(test, red, fsalida, fActualizacion);
+        printf("tasa de fallo: %3.2f %%\n", ((double)fallos/(double)test->ndatos) *100);
+    	printf("fallos:%d datos:%d\n",fallos, test->ndatos );	
+    }
+/*
+	if(ptrain+ptest ==1.0){
         particionado(data, train, test, ptest);
         adapt=test;
         printf("ndatos:%d\n",train->ndatos );
@@ -251,8 +285,7 @@ int main(int argc, char** argv) {
                     test=aux;
                     aux=NULL;
                 }
-            	clasificar(test, red, actualizaSalida, actualizaNeuronaPerceptron, fout);
-            }
+                        }
             else
             	fallos=redTest(test, red, actualizaSalida, actualizaNeuronaAdaline);
         }
@@ -342,18 +375,12 @@ int main(int argc, char** argv) {
         printf("por hacer\n");
         return 0;
     }
-
+	*/
     if(red==NULL){
         printf("sada\n");
     }
 
-    for(i=0; i<red->salidas; i++){
-        printf("pesos:");
-        for(j=0; j<red->entradas+1; j++){
-            printf("%2.4f ", red->neuronas[i+1+red->entradas].pesos[j]);
-        }
-        printf("\n");
-    }
+   	/*printPesos(red);*/
 
     
     destRed1(red);

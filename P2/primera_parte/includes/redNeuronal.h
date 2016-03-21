@@ -126,3 +126,5 @@ int clasificar(datos* data, redNeuronal* red,
 					
 
 void printSalidas(redNeuronal* red);
+
+void printPesos(redNeuronal * red);
