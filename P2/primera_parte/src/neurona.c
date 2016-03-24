@@ -2,7 +2,7 @@
 
 neurona* iniNeurona(){
 	neurona* n= (neurona*) malloc(sizeof(neurona));
-	n->sigma=0.0;
+	n->umbral=0.0;
 	n->nentradas=0;
 	n->pesos=NULL;
 	n->entradas=NULL;
@@ -10,7 +10,7 @@ neurona* iniNeurona(){
 	return n;
 }
 int iniNeurona2(neurona* n){
-	n->sigma=0.0;
+	n->umbral=0.0;
 	n->nentradas=0;
 	n->pesos=NULL;
 	n->entradas=NULL;
@@ -29,7 +29,7 @@ void copiaNeurona(neurona* n1, neurona* n2){
 	}
 	free(n2->pesos);
 	free(n2->entradas);
-	n2->sigma= n1->sigma;
+	n2->umbral= n1->umbral;
 	n2->nentradas= n1->nentradas;
 	n2->salida= n1->salida;
 	n2->pesos=malloc(sizeof(double)*n1->nentradas);
@@ -40,9 +40,9 @@ void copiaNeurona(neurona* n1, neurona* n2){
 	}
 }
 
-int setNeurona(neurona* n, double sigma, int nentradas, double* pesos, double** entradas){
+int setNeurona(neurona* n, double umbral, int nentradas, double* pesos, double** entradas){
 	int i=0;
-	n->sigma=sigma;
+	n->umbral=umbral;
 	n->nentradas=nentradas;
 
 	n->pesos= (double*) malloc(sizeof(double)*nentradas);
@@ -65,7 +65,7 @@ double actualizaNeurona(neurona* n){
 	for(i=0; i< n->nentradas; i++){
 		val+=n->pesos[i] * (*n->entradas[i]);
 	}
-	if (val >= n->sigma){
+	if (val >= n->umbral){
 		n->salida=1.0;
 	}
 	else{
@@ -81,8 +81,8 @@ double actualizaNeuronaPerceptron(neurona* n){
 		/*printf("\ti:%d %1.4f * %1.4f\n", i, n->pesos[i], *n->entradas[i]);
 		*/val+=n->pesos[i] * (*n->entradas[i]);
 	}
-	/*printf("val:%1.4f sigma:%1.4f", val, n->sigma);
-	*/if (val > n->sigma){
+	/*printf("val:%1.4f umbral:%1.4f", val, n->umbral);
+	*/if (val > n->umbral){
 		n->salida=1.0;
 	}
 	else 
@@ -133,7 +133,7 @@ void pesosNeurona(neurona* n, double* pesos){
 
 void printNeurona(neurona* n){
 	int i=0;
-	printf("\nsigma=%1.4f\n", n->sigma);
+	printf("\numbral=%1.4f\n", n->umbral);
 	printf("nentradas=%d\n", n->nentradas);
 	printf("salida=%1.4f\n", n->salida);
 	printf("pesos:");

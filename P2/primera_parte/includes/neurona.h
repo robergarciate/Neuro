@@ -6,7 +6,7 @@
 #include <math.h>
 
 typedef struct {
-	double sigma;
+	double umbral;
 	int nentradas;
 	double* pesos;
 	double** entradas;
@@ -22,7 +22,7 @@ void destroyNeurona(neurona* n);
 
 void copiaNeurona(neurona* n1, neurona* n2);
 
-int setNeurona(neurona* n, double sigma, int nentradas, double* pesos, double** entradas);
+int setNeurona(neurona* n, double umbral, int nentradas, double* pesos, double** entradas);
 
 double getSalida(neurona* n);
 
