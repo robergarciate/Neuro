@@ -15,7 +15,7 @@ NC='\033[0m' # No Color
 
 all: compile
 
-compile: mcCulloch-Pits perceptron-adaline prueba
+compile: mcCulloch-Pits main prueba
 	@printf "${VERDE}Se compilo todo el codigo y se gneraron los ejecutables${NC}\n"
 
 
@@ -32,8 +32,8 @@ prueba: lector datos redNeuronal src/prueba.c
 	@$(CC) $(CCE) prueba src/prueba.c obj/*.o -lm
 
 
-perceptron-adaline: lector datos redNeuronal obj/neurona.o src/perceptron-adaline.c
-	@$(CC) $(CCF) $(CCE) perceptron-adaline src/perceptron-adaline.c obj/*.o -lm
+main: lector datos redNeuronal obj/neurona.o src/main.c
+	@$(CC) $(CCF) $(CCE) main src/main.c obj/*.o -lm
 	@printf "${VERDE}creado ejecutable de perceptron y adaline${NC}\n"
 
 lector: $(FLTRM) $(FLTRX) $(FLTRL) datos flex
@@ -59,7 +59,7 @@ pull:
 	git pull
 
 mrProper:
-	@rm -vf obj/*.o mcCulloch-Pits perceptron-adaline prueba adaptacion.data
+	@rm -vf obj/*.o mcCulloch-Pits main prueba adaptacion.data
 
 
 help:
@@ -69,35 +69,35 @@ help:
 pruebaMcCulloch-Pits: mcCulloch-Pits entrada.txt
 	@./mcCulloch-Pits -f entrada.txt
 
-pruebaPerceptronNAND: perceptron-adaline bases-de-datos-p1/nand.txt
-	@./perceptron-adaline -p -fin bases-de-datos-p1/nand.txt -test 1.0 -train 1.0
+pruebaPerceptronNAND: main bases-de-datos-p1/nand.txt
+	@./main -p -fin bases-de-datos-p1/nand.txt -test 1.0 -train 1.0
 
 
-pruebaPerceptronXOR: perceptron-adaline bases-de-datos-p1/xor.txt
-	@./perceptron-adaline -p -fin bases-de-datos-p1/xor.txt -test 1.0 -train 1.0
-
-
-
-pruebaPerceptronP1: perceptron-adaline bases-de-datos-p1/problema_real1.txt 
-	@./perceptron-adaline -p -fin bases-de-datos-p1/problema_real1.txt 
-
-
-pruebaPerceptronP2: perceptron-adaline bases-de-datos-p1/problema_real2.txt 
-	@./perceptron-adaline -p -fin bases-de-datos-p1/problema_real2.txt 
-
-
-pruebaAdalineNAND: perceptron-adaline bases-de-datos-p1/nand.txt
-	@./perceptron-adaline -a -fin bases-de-datos-p1/nand.txt -test 1.0 -train 1.0
-
-
-pruebaAdalineXOR: perceptron-adaline bases-de-datos-p1/xor.txt
-	@./perceptron-adaline -a -fin bases-de-datos-p1/xor.txt -test 1.0 -train 1.0
+pruebaPerceptronXOR: main bases-de-datos-p1/xor.txt
+	@./main -p -fin bases-de-datos-p1/xor.txt -test 1.0 -train 1.0
 
 
 
-pruebaAdalineP1: perceptron-adaline bases-de-datos-p1/problema_real1.txt 
-	@./perceptron-adaline -a -fin bases-de-datos-p1/problema_real1.txt 
+pruebaPerceptronP1: main bases-de-datos-p1/problema_real1.txt 
+	@./main -p -fin bases-de-datos-p1/problema_real1.txt 
 
 
-pruebaAdalineP2: perceptron-adaline bases-de-datos-p1/problema_real2.txt 
-	@./perceptron-adaline -a -fin bases-de-datos-p1/problema_real2.txt 
+pruebaPerceptronP2: main bases-de-datos-p1/problema_real2.txt 
+	@./main -p -fin bases-de-datos-p1/problema_real2.txt 
+
+
+pruebaAdalineNAND: main bases-de-datos-p1/nand.txt
+	@./main -a -fin bases-de-datos-p1/nand.txt -test 1.0 -train 1.0
+
+
+pruebaAdalineXOR: main bases-de-datos-p1/xor.txt
+	@./main -a -fin bases-de-datos-p1/xor.txt -test 1.0 -train 1.0
+
+
+
+pruebaAdalineP1: main bases-de-datos-p1/problema_real1.txt 
+	@./main -a -fin bases-de-datos-p1/problema_real1.txt 
+
+
+pruebaAdalineP2: main bases-de-datos-p1/problema_real2.txt 
+	@./main -a -fin bases-de-datos-p1/problema_real2.txt 

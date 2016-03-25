@@ -9,7 +9,7 @@ int main(int argc, char** argv) {
 	FILE * fin=NULL,* fout= NULL,* fclasf=NULL;
     int long_index=0;
     char opt;
-    int i=0, j, fallos=0;
+    int fallos=0;
     double ptrain=0.0, ptest=0.0, tasa=0.0;
     redNeuronal* red=NULL;
 
@@ -19,10 +19,11 @@ int main(int argc, char** argv) {
     int (*fParada) (redNeuronal*)=NULL;
     double (*fPesos) (redNeuronal*, int*)=NULL;
     double (*fActualizacion)(neurona*)=NULL;
+    int ocultas=0;
 
 
 
-    datos* data=NULL,* train=NULL,* test=NULL,* aux=NULL;
+    datos* data=NULL,* train=NULL,* test=NULL;
     static int flagPerceptron=0, flagAdaline=0, flagClasf, flagBP;
     static int interSum=0, interPrd=0, interMed=0, norm=0;
     static struct option options[] = {
@@ -43,6 +44,7 @@ int main(int argc, char** argv) {
 		{"interMed", no_argument, &interMed, 'o'},
         {"norm", no_argument, &norm, 'p'},
         {"bp", no_argument, &flagBP, 'r'},
+        {"nOcultas", required_argument, 0, 's'},
         {0,0,0,0}
     };
     while ((opt = getopt_long_only(argc, argv,"1:", options, &long_index )) != -1){
@@ -75,12 +77,15 @@ int main(int argc, char** argv) {
             case 'n':
             	fclasf=fopen (optarg, "r");
             break;
+            case 's':
+                ocultas=atoi(optarg);
+            break;
             case'?':
                 printf("ERROR1: parametro no reconocido\n"
                 	"se esperaba:\n"
-			        "./perceptron-adaline {-fin file }  {-a | -p}"
+			        "./perceptron-adaline {-fin file }  {-a | -p | -bp -nOcultas num}"
 			    	" {-train num} {-test num} {-tasa num} {-etapas num}" 
-			    	"[-clasificar -fclasf file [-fout file]]"
+			    	"[-clasificar -fclasf file [-fout file]] [-norm]"
 			    	"[-tolerancia num] [-iniAleat] [-interPrd | -interSum | -interMed]\n");
                 return 0;
             break;
@@ -151,8 +156,6 @@ int main(int argc, char** argv) {
         normalizarDatos(data);
     }
 
-    train=iniDatos();
-    test=iniDatos();
     bipolarizar(data);
 
     if(flagPerceptron){
@@ -173,6 +176,9 @@ int main(int argc, char** argv) {
     }
     else if(flagBP){
     	printf("Retropropagacion\n");
+        if(ocultas==0){
+           ocultas=data->natributos*2;
+        }
         fini=iniRedRetropropagacion;
         fsalida=actualizaSalida;
         fParada=paradaRetropropagacion;
@@ -184,6 +190,8 @@ int main(int argc, char** argv) {
     }
     
     if(ptrain+ptest ==1.0){
+        train=iniDatos();
+        test=iniDatos();
         particionado(data, train, test, ptest);
         adapt=test;
     }
@@ -200,9 +208,12 @@ int main(int argc, char** argv) {
 
     red=redTrain(0, train, fini, fsalida,
     	fParada, fPesos, fActualizacion,
-        data->natributos, data->nclases, data->natributos*2, tasa);
+        data->natributos, data->nclases, ocultas, tasa);
     printf("red entrenada\n");
 
+
+
+    printPesos(red);
 
     if(flagClasf!=0){
 		clasificar(test, red, fsalida, fActualizacion, fout);
@@ -380,8 +391,6 @@ int main(int argc, char** argv) {
         printf("sada\n");
     }
 
-   	printPesos(red);
-
     
     destRed1(red);
 
@@ -391,16 +400,22 @@ int main(int argc, char** argv) {
     if(fout!=stdout)
         free(fout);
     
-    fclose(fin);
-    freeDatos(data);
-    freeDatos(train);
-    freeDatos(test);
-    liberarLex();
+
     if(flagAdaline)
     	printf("tasa %1.4f train %1.4f test %1.4f tolerancia %1.16f etapas %d\n",
     			tasa, ptrain, ptest, maxTolerancia, maxEtapas);
     if(flagPerceptron)
     	printf("tasa %1.4f train %1.4f  test %1.4f  etapas %d\n",
     			tasa, ptrain, ptest, maxEtapas);
+
+    fclose(fin);
+    if(ptrain ==1.0)
+        freeDatos(data);
+    else{
+        freeDatos(data);
+        freeDatos(train);
+        freeDatos(test);
+    }
+    liberarLex();
     return 0;
 }

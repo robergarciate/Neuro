@@ -5,6 +5,7 @@
 /*ESTA VARIBLE SE USA PARA LAS CONDICIONES DE PARADA*/
 redNeuronal* redpre=NULL;
 int etapa=0;
+double ecmAnt, ecmAhr;
 
 
 redNeuronal* iniRedPerceptron(int entrada, int oculta,int salida, double tasa){
@@ -383,15 +384,30 @@ int paradaAdaline(redNeuronal* red){
 	return 0;
 }
 
+double absolute(double val){
+	if(val<0)
+		return -val;
+	return val;
+}
+
 /*Es la misma??? TODO */
 int paradaRetropropagacion(redNeuronal* red){
+	if (etapa ==0){
+		ecmAnt=ecmAhr;
+		etapa++;
+		return 1;
+	}
 	if (etapa==maxEtapas)
 		return 0;
 	etapa++;
-	if(etapa%100==0)
-		printf("etapa %d\n", etapa);
+	if(absolute(ecmAnt - ecmAhr)>0.00000001){
+		if(etapa%100==0)
+			printf("etapa %d %1.8f ecm:%1.4f\n", etapa, absolute(ecmAnt - ecmAhr), ecmAhr);
+		ecmAnt=ecmAhr;
+		return 1;
+	}
 
-	return 1; 
+	return 0; 
 
 }
 
@@ -454,7 +470,7 @@ redNeuronal* redTrain(int tentrada, datos* data,
 	fecm=fopen("ecm.data", "w");
 	while((*fParada)(red)){
 		/*QUITAR ESO PARA LA ENTREGA*/
-		fallos=redTest(adapt, red,fsalida, fActualizacion);
+		/*fallos=redTest(adapt, red,fsalida, fActualizacion);
 		fprintf(f, "%2.4f\n", (double)fallos/(double)data->ndatos);
 		/**/
 		for(i=0, ecm=0; i<data->ndatos; i++){
@@ -462,7 +478,8 @@ redNeuronal* redTrain(int tentrada, datos* data,
 			ecm+=(*fPesos) (red, data->clase[i]);
 
 		}
-		fprintf(fecm, "%1.6f\n",ecm/data->ndatos );
+		ecmAhr=ecm/(data->ndatos*data->nclases);
+		fprintf(fecm, "%1.6f\n",ecm/(data->ndatos*data->nclases) );
 	}
 	fclose(fecm);
 	fclose(f);
@@ -475,31 +492,31 @@ double redTest(datos* data, redNeuronal* red,
 
  	int i=0, j=0;
  	double res=0;
- 	double aux=0, maxRed=-100;
+ 	double  maxRed=-100;
  	int maxD=0, maxR=0;
  	for(i=0; i<data->ndatos; i++){
  		(*fsalida) (red, (*fActualizacion), data->atributos[i]);
  		for(j=0, maxRed=-100; j<data->nclases; j++){
  			if(data->clase[i][j]==1)
  				maxD=j;
- 			if(maxRed<red->neuronas[j + 1 + red->entradas].salida){
- 				maxRed= red->neuronas[j + 1 + red->entradas].salida;
- 				maxR=j;
+ 			if(red->ocultas==0){
+ 				if(maxRed<red->neuronas[j + 1 + red->entradas].salida){
+	 				maxRed= red->neuronas[j + 1 + red->entradas].salida;
+	 				maxR=j;
+	 			}
+ 			}
+ 			else{
+ 				if(maxRed<red->neuronas[j + 2 + red->entradas+ red->ocultas].salida){
+	 				maxRed= red->neuronas[j + 2 + red->entradas +red->ocultas].salida;
+	 				maxR=j;
+	 			}	
  			}
 
 
- 			/*aux=(*fActualizacion)(&red->neuronas[j + 1 + red->entradas]) - (double)data->clase[i][j];
- 			res+=aux*aux;*/
- 			
- 			/*if((double)data->clase[i][j] != red->neuronas[j + 1 + red->entradas].salida){
- 				res++;
- 				break;
- 			}*/
  		}
  		if(maxR!=maxD)
  			res++;
  	}
- 	/*res= res/data->nclases;*/
  	return res;
 
 }
@@ -567,7 +584,10 @@ void printPesos(redNeuronal * red){
 
 	printf("salidas:\n");
 	for(i=0; i< red->salidas; i++){
-		n=red->neuronas[red->entradas+ red->ocultas +2 +i];
+		if(red->ocultas==0)
+			n=red->neuronas[red->entradas+1 +i];
+		else
+			n=red->neuronas[red->entradas+ red->ocultas +2 +i];
 		for(j=0; j<n.nentradas; j++){
 			printf("%1.4f ", n.pesos[j]);
 		}

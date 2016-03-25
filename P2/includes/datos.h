@@ -64,6 +64,7 @@ int printDatos(datos* data);
 int escribeDatos(datos* data, char* fichero); 
 
 datos* leerDatos(FILE* fin);
+
 int liberarLex();
 
 void bipolarizar(datos* data);

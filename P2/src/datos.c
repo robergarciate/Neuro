@@ -175,9 +175,9 @@ int escribeDatos(datos* data, char* fichero){
 	fprintf(f, ",Continuo\n");
 
 	for (i= 0; i < data->ndatos; ++i){
-		fprintf(f, "%1.1f",data->atributos[i][0] );
+		fprintf(f, "%1.4f",data->atributos[i][0] );
 		for(j=1; j< data->natributos; j++){
-			fprintf(f, ", %1.1f",data->atributos[i][j] );
+			fprintf(f, ", %1.4f",data->atributos[i][j] );
 		}
 
 		for(j=0, wr=0; j<data->nclases; j++){
@@ -326,8 +326,6 @@ void normalizarDatos(datos* d){
 		media=0.0;
 		varianza=0.0;
 		for(i=0; i<d->ndatos; i++){
-			if(j==0)
-				printf("%1.4f\n", media);
 			media+=d->atributos[i][j];
 		}
 		media/=d->ndatos;
