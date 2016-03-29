@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 
-file="base-de-datos-p1/problema-real4.txt" 
-
+file="bases-de-datos-p1/problema-real4.txt" 
+incr=2
 for i in `seq 1 10`;
 do
 	for j in `seq 1 5`;
 	do
-		aux= $(($(i)*2))
-		echo ./main -bp -fin $file -ocultas $aux
-		./main -bp -fin $file -ocultas $aux
+ 
+		echo ./main -bp -fin $file -ocultas $(($i * $incr)) -norm
+		./main -bp -fin $file -ocultas $(($i * $incr)) -norm
 
 	done
 done    
