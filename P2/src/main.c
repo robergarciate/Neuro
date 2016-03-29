@@ -12,6 +12,7 @@ int main(int argc, char** argv) {
     int fallos=0;
     double ptrain=0.0, ptest=0.0, tasa=0.0;
     redNeuronal* red=NULL;
+    FILE * ferr= fopen("err.data", "w");
 
 
     redNeuronal* (*fini)(int, int, int, double)=NULL;
@@ -44,7 +45,7 @@ int main(int argc, char** argv) {
 		{"interMed", no_argument, &interMed, 'o'},
         {"norm", no_argument, &norm, 'p'},
         {"bp", no_argument, &flagBP, 'r'},
-        {"nOcultas", required_argument, 0, 's'},
+        {"ocultas", required_argument, 0, 's'},
         {0,0,0,0}
     };
     while ((opt = getopt_long_only(argc, argv,"1:", options, &long_index )) != -1){
@@ -193,7 +194,7 @@ int main(int argc, char** argv) {
         train=iniDatos();
         test=iniDatos();
         particionado(data, train, test, ptest);
-        adapt=test;
+        adapt=train;
     }
     else if(ptrain ==1.0){
         train=data;
@@ -221,7 +222,8 @@ int main(int argc, char** argv) {
     else{
         fallos=redTest(test, red, fsalida, fActualizacion);
         printf("tasa de fallo: %3.2f %%\n", ((double)fallos/(double)test->ndatos) *100);
-    	printf("fallos:%d datos:%d\n",fallos, test->ndatos );	
+    	printf("fallos:%d datos:%d\n",fallos, test->ndatos );
+        fprintf(ferr, "%1.4f", (double)fallos/(double)test->ndatos);
     }
 /*
 	if(ptrain+ptest ==1.0){
@@ -404,7 +406,7 @@ int main(int argc, char** argv) {
     if(flagAdaline)
     	printf("tasa %1.4f train %1.4f test %1.4f tolerancia %1.16f etapas %d\n",
     			tasa, ptrain, ptest, maxTolerancia, maxEtapas);
-    if(flagPerceptron)
+    if(flagPerceptron | flagBP)
     	printf("tasa %1.4f train %1.4f  test %1.4f  etapas %d\n",
     			tasa, ptrain, ptest, maxEtapas);
 
@@ -416,6 +418,7 @@ int main(int argc, char** argv) {
         freeDatos(train);
         freeDatos(test);
     }
+    fclose(ferr);
     liberarLex();
     return 0;
 }

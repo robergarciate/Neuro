@@ -77,6 +77,8 @@ double actualizaNeurona(neurona* n){
 double actualizaNeuronaPerceptron(neurona* n){
 	int i=0;
 	double val=0.0;
+	if(n->entradas==0)
+		return n->salida;
 	for(i=0; i< n->nentradas; i++){
 		/*printf("\ti:%d %1.4f * %1.4f\n", i, n->pesos[i], *n->entradas[i]);
 		*/val+=n->pesos[i] * (*n->entradas[i]);
@@ -97,19 +99,21 @@ double actualizaNeuronaPerceptron(neurona* n){
 double actualizaNeuronaAdaline(neurona* n){
 	int i=0;
 	double val=0.0;
+	if(n->entradas==0)
+		return n->salida;
 	for(i=0; i< n->nentradas; i++){
 		val+=n->pesos[i] * (*n->entradas[i]);
 	}
-	if(val<0)
-		n->salida=-1;
-	else
-		n->salida=1;
+	n->salida=val;
 	return val;
 }
 
 double actualizaNeuronaSigmoidalBipolar(neurona* n){
 	int i=0;
 	double val=0.0;
+	if(n->nentradas==0){
+		return n->salida;	
+	}
 	for(i=0; i< n->nentradas; i++){
 		val+=n->pesos[i] * (*n->entradas[i]);
 	}

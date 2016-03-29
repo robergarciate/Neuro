@@ -36,12 +36,12 @@ main: lector datos redNeuronal obj/neurona.o src/main.c
 	@$(CC) $(CCF) $(CCE) main src/main.c obj/*.o -lm
 	@printf "${VERDE}creado ejecutable de perceptron y adaline${NC}\n"
 
-lector: $(FLTRM) $(FLTRX) $(FLTRL) datos flex
+lector: $(FLTRM) $(FLTRX) $(FLTRL) datos obj/lex.yy.c
 	@gcc  -c obj/lex.yy.c -o obj/lex.yy.o -lm
 	@gcc $(CCF) $(CCC) obj/lector.o $(FLTRM)
 	@printf "${AMARILLO}lector compilado${NC}\n"
-flex: obj/lex.yy.c
-	@flex -o obj/lex.yy.c $(FLTRX)
+obj/lex.yy.c:
+	flex -o obj/lex.yy.c $(FLTRX)
 
 datos: $(DTSC) $(DTSL)
 	@$(CC) $(CCF) $(CCC) $(DTSO) $(DTSC) -lm
