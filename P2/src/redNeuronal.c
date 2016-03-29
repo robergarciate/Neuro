@@ -248,11 +248,11 @@ double actualizaPesosRetropropagacion(redNeuronal* red, int* t){
 	int i = 0, j = 0, k=0;
 	double ecm=0, prediccion=0, esperado=0;
 	/*printf("delta salidas\n");*/
-	/*DELTAS DE SALIDA*/
-	for(i = 2+red->ocultas+red->entradas, j=0; i < 2+red->salidas+ red->ocultas+red->entradas; ++i, j++){
-		prediccion=red->neuronas[i].salida;
-		esperado=(double)t[j];
-		ecm+=pow(esperado - prediccion,2);
+	/*DELTAS DE SALIDA*/ 
+	for(i = 2 + red->ocultas + red->entradas, j = 0; i < 2 + red->salidas + red->ocultas + red->entradas; ++i, j++){
+		prediccion = red->neuronas[i].salida;
+		esperado = (double)t[j];
+		ecm += pow(esperado - prediccion,2);
 		delta = esperado - prediccion;
 		/*printf("delta %d -> %1.4f\n", i, delta);*/
 		delta *= 0.5 * (1 -prediccion);
@@ -265,7 +265,7 @@ double actualizaPesosRetropropagacion(redNeuronal* red, int* t){
 	}
 	/*printf("delta ocultas\n");*/
 	/*DELTAS DE OCULTA*/
-	for(k=0, i = 1+red->entradas; i <  1+red->entradas+red->ocultas; ++i, k++){
+	for(k=0, i = 1 + red->entradas; i <  1 + red->entradas + red->ocultas; ++i, k++){
 		delta = 0;
 		prediccion=red->neuronas[i].salida;
 		for(j = red->entradas + 2 + red->ocultas; j < red->salidas + red->entradas + 2 + red->ocultas; ++j){
