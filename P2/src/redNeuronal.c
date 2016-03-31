@@ -401,10 +401,10 @@ int paradaRetropropagacion2(redNeuronal* red){
 		etapa++;
 		return 1;
 	}
-	if (etapa==maxEtapas)
+	/*if (etapa==maxEtapas)
 		return 0;
-	etapa++;
-	if(absolute(ecmAhr -ecmAnt)>0.00000001){
+	*/etapa++;
+	if(absolute(ecmAhr -ecmAnt)>maxTolerancia){
 		if(etapa%100==0)
 			printf("etapa %d %1.8f ecm:%1.4f\n", etapa, absolute(ecmAnt - ecmAhr), ecmAhr);
 		ecmAnt=ecmAhr;
@@ -421,10 +421,10 @@ int paradaRetropropagacion(redNeuronal* red){
 		etapa++;
 		return 1;
 	}
-	if (etapa==maxEtapas)
+	/*if (etapa==maxEtapas)
 		return 0;
-	etapa++;
-	if(absolute(1.0-ecmAnt/ ecmAhr)>0.00000001){
+	*/etapa++;
+	if(absolute(1.0-ecmAnt/ ecmAhr)>maxTolerancia){
 		if(etapa%100==0)
 			printf("etapa %d %1.8f ecm:%1.4f\n", etapa, absolute(1.0-ecmAnt/ ecmAhr), ecmAhr);
 		ecmAnt=ecmAhr;

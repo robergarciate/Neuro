@@ -127,7 +127,7 @@ int main(int argc, char** argv) {
     	printf("etapas no especificadas se establece en %d\n",maxEtapas );
     }
     if(maxTolerancia==0.0){
-    	maxTolerancia =0.0000001*tasa;
+    	maxTolerancia =0.0000001;
     	printf("tolerancia no especificada se establece en %1.4f\n", maxTolerancia);
     }
     data = leerDatos(fin);
@@ -403,10 +403,10 @@ int main(int argc, char** argv) {
         free(fout);
     
 
-    if(flagAdaline)
+    if(flagAdaline| flagBP)
     	printf("tasa %1.4f train %1.4f test %1.4f tolerancia %1.16f etapas %d\n",
     			tasa, ptrain, ptest, maxTolerancia, maxEtapas);
-    if(flagPerceptron | flagBP)
+    if(flagPerceptron )
     	printf("tasa %1.4f train %1.4f  test %1.4f  etapas %d\n",
     			tasa, ptrain, ptest, maxEtapas);
 
