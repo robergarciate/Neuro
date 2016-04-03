@@ -96,6 +96,7 @@ int paradaAdaline(redNeuronal* red);
 
 
 int paradaRetropropagacion(redNeuronal* red);
+int paradaRetropropagacion2(redNeuronal* red);
 /**
 ***
 ***	Esta funcion devuelve la red ya entrenada
