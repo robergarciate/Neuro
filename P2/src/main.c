@@ -110,7 +110,7 @@ int main(int argc, char** argv) {
     if(fout==NULL)
         fout=stdout;
     if(tasa== 0.0){
-    	tasa=0.1;
+    	tasa=0.01;
 	   	printf("tasa de aprendizaje no especificada se estable ce en %1.4f\n", tasa);
     }
     if(ptrain==0.0){

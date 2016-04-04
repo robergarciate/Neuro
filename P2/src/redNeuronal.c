@@ -424,9 +424,9 @@ int paradaRetropropagacion(redNeuronal* red){
 	if (etapa==maxEtapas)
 		return 0;
 	etapa++;
-	if(absolute(1.0-ecmAnt/ ecmAhr)>maxTolerancia){
+	if(absolute(1.0 - ecmAhr/ecmAnt)>maxTolerancia){
 		if(etapa%100==0)
-			printf("etapa %d %1.8f ecm:%1.4f\n", etapa, absolute(1.0-ecmAnt/ ecmAhr), ecmAhr);
+			printf("etapa %d %1.8f ecm:%1.4f\n", etapa, absolute(1.0 - ecmAhr/ecmAnt), ecmAhr);
 		ecmAnt=ecmAhr;
 		return 1;
 	}
