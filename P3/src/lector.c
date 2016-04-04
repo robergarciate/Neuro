@@ -8,6 +8,60 @@ int liberarLex(){
     yytext=NULL;
     return 0;
 }
+
+datos* lectorAlfabetico(FILE * fin ){
+	datos* data;
+	int i=0, j=0, k=-1;
+	extern FILE* yyin;
+    extern FILE* yyout;
+    extern char* yytext;
+    int tok=0;
+    yyin=fin;
+    yyout=stdout;
+   	int nuemeroMagico;
+	if(yyin==NULL){
+		printf("Error al abrir el fichero\n"); 
+		return NULL;
+	}
+	/*LEEMOS TODOS LOS CARACTERES INECESARIOS HASTA ENCONTRAR UN NUMERO*/
+	while((tok=yylex())!=0){
+		switch(tok){
+			case TOK_DOUBLE:
+				if((j + i) % (data->nclases + data->natributos)==0){
+		    		i=0;
+		    		j=0;
+		    		k++;
+		    		reservarTupla(data);
+		    	}
+				data->atributos[k][i++]=atof(yytext);
+			break;
+			case TOK_INTEGER:
+				if((j + i) % (data->nclases + data->natributos)==0){
+		    		i=0;
+		    		j=0;
+		    		k++;
+		    		reservarTupla(data);
+		    	}
+				if(i<data->natributos)
+					data->atributos[k][i++]=atof(yytext);
+				
+				else
+					data->clase[k][j++]=atof(yytext);
+			break;
+			case TOK_CARACTER:
+			break;
+
+			case TOK_COMENTARIO:
+			break;
+		}
+	}
+	data=iniDatos();
+}
+
+
+
+
+
 datos* leerDatos(FILE* fin){
 	datos* data;
 	int i=0, j=0, k=-1;
