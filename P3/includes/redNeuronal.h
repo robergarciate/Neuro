@@ -74,12 +74,12 @@ int actualizaSalida(redNeuronal* red, double (*fActualizacion)(neurona*), double
 ***	Tener ojo con usar una actulizacion bipolar
 ***
 **/
-double actualizaPesosPerceptron(redNeuronal* red, int* t);
+double actualizaPesosPerceptron(redNeuronal* red, double* t);
 
-double actualizaPesosAdaline(redNeuronal* red, int* t);
+double actualizaPesosAdaline(redNeuronal* red, double* t);
 
 
-double actualizaPesosRetropropagacion(redNeuronal* red, int* t);
+double actualizaPesosRetropropagacion(redNeuronal* red, double* t);
 
 /**
 ***
@@ -108,7 +108,7 @@ redNeuronal* redTrain(int tentrada,datos* data,
 					redNeuronal* (*fini)(int, int, int, double),
 					int (*fsalida) (redNeuronal*, double (*fActualizacion)(neurona*), double*),
 					int (*fParada) (redNeuronal*),
-					double (*fPesos) (redNeuronal*, int*),
+					double (*fPesos) (redNeuronal*, double*),
 					double (*fActualizacion)(neurona*),					
 					int nentreada, int nsalida, int noculta, double tasa);
 /**1

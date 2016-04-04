@@ -186,7 +186,7 @@ int copiaRed(redNeuronal* redIn, redNeuronal* redOut){
 	return 0;
 }
 
-double actualizaPesosPerceptron(redNeuronal* red, int* t){
+double actualizaPesosPerceptron(redNeuronal* red, double* t){
 	int i=0, j=0;
 	double val=0;
 	if(red==NULL || t==NULL){
@@ -215,7 +215,7 @@ double actualizaPesosPerceptron(redNeuronal* red, int* t){
 }
 
 
-double actualizaPesosAdaline(redNeuronal* red, int* t){
+double actualizaPesosAdaline(redNeuronal* red, double* t){
 	int i=0, j=0;
 	double ecm=0, esperado=0, prediccion=0;
 	if(red==NULL || t==NULL){
@@ -243,7 +243,7 @@ double actualizaPesosAdaline(redNeuronal* red, int* t){
 
 
 
-double actualizaPesosRetropropagacion(redNeuronal* red, int* t){
+double actualizaPesosRetropropagacion(redNeuronal* red, double* t){
 	double delta = 0.0;
 	int i = 0, j = 0, k=0;
 	double ecm=0, prediccion=0, esperado=0;
@@ -468,7 +468,7 @@ redNeuronal* redTrain(int tentrada, datos* data,
 					redNeuronal* (*fini)(int, int, int, double),
 					int (*fsalida) (redNeuronal*, double (*fActualizacion)(neurona*), double*),
 					int (*fParada) (redNeuronal*),
-					double (*fPesos) (redNeuronal*, int*),
+					double (*fPesos) (redNeuronal*, double*),
 					double (*fActualizacion)(neurona*),
 					int nentreada, int nsalida, int noculta, double tasa){
 

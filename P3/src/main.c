@@ -18,7 +18,7 @@ int main(int argc, char** argv) {
     redNeuronal* (*fini)(int, int, int, double)=NULL;
     int (*fsalida) (redNeuronal*, double (*fActualizacion)(neurona*), double*)=NULL;
     int (*fParada) (redNeuronal*)=NULL;
-    double (*fPesos) (redNeuronal*, int*)=NULL;
+    double (*fPesos) (redNeuronal*, double*)=NULL;
     double (*fActualizacion)(neurona*)=NULL;
     int ocultas=0;
 

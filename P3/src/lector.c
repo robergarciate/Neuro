@@ -89,7 +89,7 @@ datos* leerDatos(FILE* fin){
 					data->atributos[k][i++]=atof(yytext);
 				
 				else
-					data->clase[k][j++]=atoi(yytext);
+					data->clase[k][j++]=atof(yytext);
 			break;
 			case TOK_CARACTER:
 			break;

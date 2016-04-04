@@ -62,13 +62,13 @@ int particionado(datos* data, datos* train, datos* test, double porcentaje){
 	train->nclases = data->nclases;
 	train->natributos = data->natributos;
 	train->atributos=malloc(sizeof(double*)*data->ndatos);
-	train->clase=malloc(sizeof(int*)*data->ndatos);
+	train->clase=malloc(sizeof(double*)*data->ndatos);
 
 
 	test->nclases = data->nclases;
 	test->natributos = data->natributos;
 	test->atributos=malloc(sizeof(double*)*data->ndatos);
-	test->clase=malloc(sizeof(int*)*data->ndatos);
+	test->clase=malloc(sizeof(double*)*data->ndatos);
 
 	for(i=0; i< data->ndatos; i++){
 		train->atributos[i]=NULL;
@@ -123,8 +123,8 @@ int reservarTupla(datos* data){
 		data->atributos[i][j]=0;
 	}
 
-	data->clase=realloc(data->clase, sizeof(int*)*(i+1));
-	data->clase[i]=malloc(sizeof(int)*k);
+	data->clase=realloc(data->clase, sizeof(double*)*(i+1));
+	data->clase[i]=malloc(sizeof(double)*k);
 
 	for(j=0; j<data->nclases; j++){
 		data->atributos[i][j]=0;
@@ -150,7 +150,7 @@ int printDatos(datos* data){
 		}
 
 		for(j=0; j<data->nclases; j++){
-			printf(" [%d]", data->clase[i][j]);
+			printf(" [%1.4f]", data->clase[i][j]);
 		}
 		printf("\n");
 	}
@@ -210,10 +210,10 @@ datos* interpolarSuma(datos* d){
 	res->nclases=d->nclases;
 	res->ndatos=d->ndatos;
 	res->atributos=malloc(sizeof(double*)*res->ndatos);
-	res->clase=malloc(sizeof(int*)*res->ndatos);
+	res->clase=malloc(sizeof(double*)*res->ndatos);
 	for(i=0; i<d->ndatos; i++){
 		res->atributos[i]=malloc(sizeof(double)*res->natributos);
-		res->clase[i]=malloc(sizeof(int)*res->nclases);
+		res->clase[i]=malloc(sizeof(double)*res->nclases);
 	}
 
 	for(i=0; i<d->ndatos; i++){
@@ -244,10 +244,10 @@ datos* interpolarProducto(datos* d){
 	res->nclases=d->nclases;
 	res->ndatos=d->ndatos;
 	res->atributos=malloc(sizeof(double*)*res->ndatos);
-	res->clase=malloc(sizeof(int*)*res->ndatos);
+	res->clase=malloc(sizeof(double*)*res->ndatos);
 	for(i=0; i<d->ndatos; i++){
 		res->atributos[i]=malloc(sizeof(double)*res->natributos);
-		res->clase[i]=malloc(sizeof(int)*res->nclases);
+		res->clase[i]=malloc(sizeof(double)*res->nclases);
 	}
 
 	for(i=0; i<d->ndatos; i++){
@@ -279,10 +279,10 @@ datos* interpolarMedia(datos* d){
 	res->nclases=d->nclases;
 	res->ndatos=d->ndatos;
 	res->atributos=malloc(sizeof(double*)*res->ndatos);
-	res->clase=malloc(sizeof(int*)*res->ndatos);
+	res->clase=malloc(sizeof(double*)*res->ndatos);
 	for(i=0; i<d->ndatos; i++){
 		res->atributos[i]=malloc(sizeof(double)*res->natributos);
-		res->clase[i]=malloc(sizeof(int)*res->nclases);
+		res->clase[i]=malloc(sizeof(double)*res->nclases);
 	}
 
 	for(i=0; i<d->ndatos; i++){

@@ -8,7 +8,7 @@ typedef struct {
 	int nclases;
 	int ndatos;
 	double** atributos;
-	int** clase;
+	double** clase;
 	
 }datos;
 

@@ -17,4 +17,7 @@ Descripci�n: Definici�n de tokens para el lenguaje ALFA
 /**/
 datos* leerDatos(FILE* fin);
 int lectorChusco(FILE * f);
+datos* lectorAlfabetico(FILE * fin );
+
+datos* lectorSerie(FILE * fin, int prev, int post);
 #endif
