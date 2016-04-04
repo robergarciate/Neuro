@@ -547,18 +547,41 @@ int clasificar(datos* data, redNeuronal* red,
 			int (*fsalida) (redNeuronal*, double (*fActualizacion)(neurona*), double*),
 			double (*fActualizacion)(neurona*), FILE* fout){
 
- 	int i=0, j=0, n=0, k=0;
+ 	int i=0, j=0, k=0;
  	char s[32]="";
+ 	double  maxRed=-100;
+ 	int maxR=0;
  	if(fout ==NULL || red==NULL || data==NULL)
  		return 1;
- 	n=red->entradas+1+red->salidas+red->ocultas;
- 	for(i=0; i<data->ndatos; i++){
- 		(*fsalida) (red, (*fActualizacion), data->atributos[i]);
- 		for(j= n- red->salidas, k=0; j<n; j++,k=0){
+ 
 
- 			sprintf(s, "%1.1f ", red->neuronas[j].salida);
+ 	for(i=0; i<data->ndatos; i++,maxRed=INT_MIN){
+ 		(*fsalida) (red, (*fActualizacion), data->atributos[i]);
+ 		for(j=0, maxRed=INT_MIN; j<data->nclases; j++){
+ 			if(red->ocultas==0){
+ 				if(maxRed<red->neuronas[j + 1 + red->entradas].salida){
+	 				maxRed= red->neuronas[j + 1 + red->entradas].salida;
+	 				maxR=j;
+	 			}
+ 			}
+ 			else{
+ 				/*printf("%1.4f ", red->neuronas[j + 2 + red->entradas+ red->ocultas].salida);
+ 				*/if(maxRed<red->neuronas[j + 2 + red->entradas+ red->ocultas].salida){
+	 				maxRed= red->neuronas[j + 2 + red->entradas +red->ocultas].salida;
+	 				maxR=j;
+	 			}
+ 			}
+
+ 		}
+ 		for(j= 0; j< data->nclases; j++){
+ 			if(j==maxR)
+ 				sprintf(s, "1.0 ");
+ 			else
+ 				sprintf(s, "-1.0 ");
+			k=0;
  			while(s[k]!='\0'){
- 				fwrite(&s[k++], 1,1, fout); 			
+ 				printf("%s\n", s);
+ 				fwrite(&s[k++], 1,1, fout);
  			}
  		}
  		s[0]='\n';

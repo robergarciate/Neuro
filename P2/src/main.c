@@ -182,9 +182,9 @@ int main(int argc, char** argv) {
         }
         fini=iniRedRetropropagacion;
         fsalida=actualizaSalida;
-        /*fParada=paradaRetropropagacion;*/
-        fParada=paradaRetropropagacion2;
-        fPesos=actualizaPesosRetropropagacion;
+        fParada=paradaRetropropagacion;
+        /*fParada=paradaRetropropagacion2;
+        */fPesos=actualizaPesosRetropropagacion;
         fActualizacion=actualizaNeuronaSigmoidalBipolar;
     }
     else{
