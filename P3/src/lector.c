@@ -152,4 +152,56 @@ datos* leerDatos(FILE* fin){
 		tok=yylex();
 	}
 	return data;
+}
+
+datos* lectorSerie(FILE * fin, int prev, int post){
+	datos* data;
+	int i=0, j=0, k=-1;
+	extern FILE* yyin;
+    extern FILE* yyout;
+    extern char* yytext;
+    int tok=0;	
+    yyin=fin;
+    yyout=stdout;
+
+	if(yyin==NULL){
+		printf("Error al abrir el fichero\n"); 
+		return NULL;
 	}
+
+	/**/
+
+	/*LEEMOS TODOS LOS CARACTERES INECESARIOS HASTA ENCONTRAR UN NUMERO*/
+	while((tok=yylex())==TOK_CARACTER){
+	}
+	data=iniDatos();
+	data->natributos=prev;
+	data->nclases=post;
+
+    /*LEEMOS LOS DATOS*/
+	while(tok!=0){
+
+	    /*LEEMOS TODOS LOS CARACTERES INECESARIOS HASTA ENCONTRAR UN NUMERO*/
+		while((tok=yylex())==TOK_CARACTER){
+		}
+
+		switch(tok){
+			case TOK_DOUBLE:
+				if(i % prev==0){
+		    		i++;
+		    		reservarTupla(data);
+		    	}
+				data->atributos[k][i++]=atof(yytext);
+			break;
+			case TOK_INTEGER:
+			break;
+			case TOK_CARACTER:
+			break;
+		
+		}
+		tok=yylex();
+
+	}
+
+
+}
