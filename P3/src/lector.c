@@ -10,52 +10,47 @@ int liberarLex(){
 }
 
 datos* lectorAlfabetico(FILE * fin ){
-	datos* data;
-	int i=0, j=0, k=-1;
+	datos* data=NULL;
+	int i=-1, j=0;
 	extern FILE* yyin;
     extern FILE* yyout;
     extern char* yytext;
     int tok=0;
     yyin=fin;
     yyout=stdout;
-   	int nuemeroMagico;
+   	int nuemeroMagico=35;
 	if(yyin==NULL){
 		printf("Error al abrir el fichero\n"); 
 		return NULL;
 	}
+	data=iniDatos();
+	data->nclases=nuemeroMagico;
+	data->natributos=nuemeroMagico;
 	/*LEEMOS TODOS LOS CARACTERES INECESARIOS HASTA ENCONTRAR UN NUMERO*/
 	while((tok=yylex())!=0){
+		j=0;
 		switch(tok){
 			case TOK_DOUBLE:
-				if((j + i) % (data->nclases + data->natributos)==0){
-		    		i=0;
-		    		j=0;
-		    		k++;
-		    		reservarTupla(data);
-		    	}
-				data->atributos[k][i++]=atof(yytext);
+				data->atributos[i][j]=atof(yytext);
+				data->clase[i][j++]=atof(yytext);
 			break;
 			case TOK_INTEGER:
-				if((j + i) % (data->nclases + data->natributos)==0){
-		    		i=0;
-		    		j=0;
-		    		k++;
-		    		reservarTupla(data);
-		    	}
-				if(i<data->natributos)
-					data->atributos[k][i++]=atof(yytext);
-				
-				else
-					data->clase[k][j++]=atof(yytext);
+				data->atributos[i][j]=atof(yytext);
+				data->clase[i][j++]=atof(yytext);
 			break;
 			case TOK_CARACTER:
+
 			break;
 
 			case TOK_COMENTARIO:
+				i++;
+				reservarTupla(data);
 			break;
 		}
 	}
-	data=iniDatos();
+	liberarLex();
+	printf("tok:%d %s linea:%d\n", tok, yytext, i);
+	return data;
 }
 
 

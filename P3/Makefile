@@ -40,7 +40,7 @@ lector: $(FLTRM) $(FLTRX) $(FLTRL) datos obj/lex.yy.c
 	@gcc  -c obj/lex.yy.c -o obj/lex.yy.o -lm
 	@gcc $(CCF) $(CCC) obj/lector.o $(FLTRM)
 	@printf "${AMARILLO}lector compilado${NC}\n"
-obj/lex.yy.c:
+obj/lex.yy.c: src/lector.c
 	flex -o obj/lex.yy.c $(FLTRX)
 
 datos: $(DTSC) $(DTSL)

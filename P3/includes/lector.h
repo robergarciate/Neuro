@@ -13,6 +13,7 @@ Descripci�n: Definici�n de tokens para el lenguaje ALFA
 #define TOK_DOUBLE				100
 #define TOK_INTEGER				101
 #define TOK_CARACTER			102
+#define TOK_COMENTARIO			103
 
 /**/
 datos* leerDatos(FILE* fin);
