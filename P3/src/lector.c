@@ -151,42 +151,59 @@ datos* leerDatos(FILE* fin){
 
 datos* lectorSerie(FILE * fin, int prev, int post){
 	datos* data;
-	int i=0, j=0, k=-1;
+	double* serie;
+	int i=0, j=0, k=0, l = 0;
 	extern FILE* yyin;
     extern FILE* yyout;
     extern char* yytext;
     int tok=0;	
     yyin=fin;
     yyout=stdout;
+    int total = prev + post;
 
 	if(yyin==NULL){
 		printf("Error al abrir el fichero\n"); 
 		return NULL;
 	}
 
-	/**/
-
-	/*LEEMOS TODOS LOS CARACTERES INECESARIOS HASTA ENCONTRAR UN NUMERO*/
-	while((tok=yylex())==TOK_CARACTER){
-	}
 	data=iniDatos();
 	data->natributos=prev;
 	data->nclases=post;
+	serie = malloc(sizeof(double) * total);
+
+	for(l = 0; l < total; l++){
+		switch(tok){
+			case TOK_DOUBLE:
+				serie[l] = atof(yytext);
+			break;
+		}
+		tok=yylex();
+	}
+	
+	for(i = 0; i < data->natributos; i++){
+		data->atributos[k][i] = serie[i];
+	}
+	for(i = 0; i < data->nclases; i++){
+		data->clase[k][i] = serie[i];
+	}
+
+	reservarTupla(data);
+	tok=yylex();
 
     /*LEEMOS LOS DATOS*/
 	while(tok!=0){
-
-	    /*LEEMOS TODOS LOS CARACTERES INECESARIOS HASTA ENCONTRAR UN NUMERO*/
-		while((tok=yylex())==TOK_CARACTER){
-		}
-
 		switch(tok){
 			case TOK_DOUBLE:
-				if(i % prev==0){
-		    		i++;
-		    		reservarTupla(data);
-		    	}
-				data->atributos[k][i++]=atof(yytext);
+				k++;
+				permutaArray(serie, total);
+				serie[total - 1] = atof(yytext);
+				for(i = 0; i < data->natributos; i++){
+					data->atributos[k][i] = serie[i];
+				}
+				for(i = 0; i < data->nclases; i++){
+					data->clase[k][i] = serie[i];
+				}
+				reservarTupla(data);
 			break;
 			case TOK_INTEGER:
 			break;
@@ -195,8 +212,22 @@ datos* lectorSerie(FILE * fin, int prev, int post){
 		
 		}
 		tok=yylex();
+	}
+}
 
+
+void permutaArray(double * array, int tam){
+	int i = 0;
+	double* aux;
+
+	aux = malloc(sizeof(double) * tam);
+
+	for(i = 0; i < tam; i++){
+		aux[i] = array[i];
 	}
 
+	for(i = 0; i < tam; i++){
+		array[i] = aux[(i + 1) % tam];
+	}
 
 }
