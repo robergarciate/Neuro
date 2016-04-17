@@ -33,7 +33,6 @@ void freeDatos(datos* data){
 
 	free(data->clase);
 	data->clase=NULL;
-	free(data);
 	data=NULL;
 
 }
@@ -144,15 +143,23 @@ int printDatos(datos* data){
 	printf("ndatos:%d\n",data->ndatos);
 	printf("tuplas\n");
 	for(i=0; i<data->ndatos; i++){
-
+		printf("atributos de %d", i);
 		for(j=0; j<data->natributos; j++){
+			if(j%5==0)
+				printf("\n");
+
 			printf(" [%1.4f]", data->atributos[i][j]);
 		}
 
+		printf("\n");
+
+		printf("\nclase de %d", i);
 		for(j=0; j<data->nclases; j++){
+			if(j%5==0)
+				printf("\n");
 			printf(" [%1.4f]", data->clase[i][j]);
 		}
-		printf("\n");
+		printf("\n\n");
 	}
 	return 0;
 }
@@ -339,4 +346,101 @@ void normalizarDatos(datos* d){
 		}
 
 	}
+}
+
+
+int * columnasRuidosas(int cols, int ruido){
+	int i=0,j=0, col=0;
+	int *cambiar;
+	if(ruido>cols){
+		ruido=cols;	
+	}
+	cambiar=malloc(sizeof(int)*ruido);
+	srand(time(NULL));
+	for(i=0; i < ruido; i++)
+		cambiar[i]=-1;
+
+	for(i=0; i < ruido; i++){
+		col=rand() % cols;
+		for(j=0; j < ruido; j++){
+
+			if(col==cambiar[j]){
+				j=-1;
+				col=rand() % cols;
+			}
+		}
+
+		cambiar[i]=col;
+	}
+	return cambiar;
+}
+
+int esRuidosas(int* cols, int col, int tam){
+	int i=0;
+
+	for(i=0; i< tam; i++){
+		if(cols[i]==col)
+			return 1;
+	}
+	return 0;
+}
+
+ void ruidoDatos(datos* d, int natributos, double ndatos){
+	int nruido=d->ndatos*ndatos;
+	int i=0, j=0;
+	int* cambiar= NULL;
+	int col;
+	srand(time(NULL));
+
+	if(nruido!=d->ndatos){
+		d->clase= (double**) realloc((void*)d->clase, sizeof(double*) * (nruido));
+		d->atributos= (double**) realloc((void*)d->atributos, sizeof(double*) * (nruido));
+	}
+	
+	if(natributos>d->natributos)
+		natributos= d->natributos;
+
+	cambiar= columnasRuidosas(d->natributos, natributos);
+	
+	if(nruido> d->ndatos){
+		for(i=0; i < nruido - d->ndatos; i++){
+			d->atributos[i + d->ndatos]= malloc(sizeof(double) * d->natributos);
+			d->clase[i +d->ndatos]= malloc(sizeof(double) * d->nclases);
+			for(j=0; j < d->natributos; j++){
+				if(esRuidosas(cambiar, j , natributos))
+					if(d->atributos[i][j]==0)
+						d->atributos[i + d->ndatos][j]= 1;
+					else
+						d->atributos[i + d->ndatos][j]= 0;
+				else
+					d->atributos[i + d->ndatos][j]= d->atributos[(i+nruido) % d->ndatos][j];
+
+			}
+
+			for(j=0; j < d->nclases; j++){
+
+				d->clase[i + d->ndatos][j]= d->clase[(i+nruido) % d->ndatos][j];
+			}
+		}
+	}
+	else{
+		for(i=0; i < nruido ; i++){
+			for(j=0; j < d->natributos; j++){
+
+				if(esRuidosas(cambiar, j , natributos)){
+					if(d->atributos[i][j]==0)
+						d->atributos[i][j]= 1;
+					else
+						d->atributos[i][j]= 0;
+
+				}
+			}
+
+		}
+	}
+
+	free(cambiar);
+	printf("%d %d\n", nruido, d->ndatos);
+	d->ndatos=nruido;
+	return d;
 }

@@ -16,19 +16,18 @@ datos* lectorAlfabetico(FILE * fin ){
     extern FILE* yyout;
     extern char* yytext;
     int tok=0;
+   	int nuemeroMagico=35;
     yyin=fin;
     yyout=stdout;
-   	int nuemeroMagico=35;
+	data=iniDatos();
+	data->nclases=nuemeroMagico;
+	data->natributos=nuemeroMagico;
 	if(yyin==NULL){
 		printf("Error al abrir el fichero\n"); 
 		return NULL;
 	}
-	data=iniDatos();
-	data->nclases=nuemeroMagico;
-	data->natributos=nuemeroMagico;
 	/*LEEMOS TODOS LOS CARACTERES INECESARIOS HASTA ENCONTRAR UN NUMERO*/
 	while((tok=yylex())!=0){
-		j=0;
 		switch(tok){
 			case TOK_DOUBLE:
 				data->atributos[i][j]=atof(yytext);
@@ -39,16 +38,18 @@ datos* lectorAlfabetico(FILE * fin ){
 				data->clase[i][j++]=atof(yytext);
 			break;
 			case TOK_CARACTER:
-
+				
 			break;
 
 			case TOK_COMENTARIO:
 				i++;
+				j=0;
 				reservarTupla(data);
 			break;
 		}
 	}
 	liberarLex();
+
 	printf("tok:%d %s linea:%d\n", tok, yytext, i);
 	return data;
 }
@@ -149,17 +150,35 @@ datos* leerDatos(FILE* fin){
 	return data;
 }
 
+
+void permutaArray(double * array, int tam){
+	int i = 0;
+	double* aux;
+
+	aux = malloc(sizeof(double) * tam);
+
+	for(i = 0; i < tam; i++){
+		aux[i] = array[i];
+	}
+
+	for(i = 0; i < tam; i++){
+		array[i] = aux[(i + 1) % tam];
+	}
+
+}
+
+
 datos* lectorSerie(FILE * fin, int prev, int post){
 	datos* data;
 	double* serie;
-	int i=0, j=0, k=0, l = 0;
+	int i=0, k=0, l = 0;
 	extern FILE* yyin;
     extern FILE* yyout;
     extern char* yytext;
     int tok=0;	
+    int total = prev + post;
     yyin=fin;
     yyout=stdout;
-    int total = prev + post;
 
 	if(yyin==NULL){
 		printf("Error al abrir el fichero\n"); 
@@ -213,21 +232,6 @@ datos* lectorSerie(FILE * fin, int prev, int post){
 		}
 		tok=yylex();
 	}
+	return data;
 }
 
-
-void permutaArray(double * array, int tam){
-	int i = 0;
-	double* aux;
-
-	aux = malloc(sizeof(double) * tam);
-
-	for(i = 0; i < tam; i++){
-		aux[i] = array[i];
-	}
-
-	for(i = 0; i < tam; i++){
-		array[i] = aux[(i + 1) % tam];
-	}
-
-}

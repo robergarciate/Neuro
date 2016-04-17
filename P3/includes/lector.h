@@ -21,4 +21,6 @@ int lectorChusco(FILE * f);
 datos* lectorAlfabetico(FILE * fin );
 
 datos* lectorSerie(FILE * fin, int prev, int post);
+void permutaArray(double * array, int tam);
+
 #endif

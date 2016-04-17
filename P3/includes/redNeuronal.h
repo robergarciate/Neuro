@@ -1,5 +1,5 @@
 #include "neurona.h"
-#include "datos.h"
+#include "lector.h"
 #include <math.h>
 #include <limits.h>
 

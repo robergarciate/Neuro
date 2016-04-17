@@ -77,3 +77,10 @@ datos* interpolarProducto(datos* d);
 datos* interpolarMedia(datos* d);
 
 void normalizarDatos(datos* d);
+
+void ruidoDatos(datos* d, int natributos, double ndatos);
+
+
+int * columnasRuidosas(int cols, int ruido);
+
+int esRuidosas(int* cols, int col, int tam);
