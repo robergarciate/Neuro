@@ -521,7 +521,7 @@ double redTest(datos* data, redNeuronal* red,
  			/*printf("%1.4f %d %1.4f\n", red->neuronas[j+pos].salida, salidas[j], data->clase[i][j]);
  			*/if(salidas[j]!=data->clase[i][j]){
  				res++;
- 				break;
+ 				/*break;*/
  			}
  		} 
  		/*for(j=0, maxRed=INT_MIN; j<data->nclases; j++){
@@ -547,7 +547,7 @@ double redTest(datos* data, redNeuronal* red,
  		*/
  	}
  	free(salidas);
- 	return res;
+ 	return res/red->salidas;
 
 }
 

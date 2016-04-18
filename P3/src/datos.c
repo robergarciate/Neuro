@@ -399,10 +399,12 @@ int esRuidosas(int* cols, int col, int tam){
 	if(natributos>d->natributos)
 		natributos= d->natributos;
 
-	cambiar= columnasRuidosas(d->natributos, natributos);
 	
 	if(nruido> d->ndatos){
 		for(i=0; i < nruido - d->ndatos; i++){
+
+			cambiar= columnasRuidosas(d->natributos, natributos);
+
 			d->atributos[i + d->ndatos]= malloc(sizeof(double) * d->natributos);
 			d->clase[i +d->ndatos]= malloc(sizeof(double) * d->nclases);
 			for(j=0; j < d->natributos; j++){
@@ -420,10 +422,14 @@ int esRuidosas(int* cols, int col, int tam){
 
 				d->clase[i + d->ndatos][j]= d->clase[(i+nruido) % d->ndatos][j];
 			}
+			free(cambiar);
+
 		}
 	}
 	else{
 		for(i=0; i < nruido ; i++){
+			cambiar= columnasRuidosas(d->natributos, natributos);
+			
 			for(j=0; j < d->natributos; j++){
 
 				if(esRuidosas(cambiar, j , natributos)){
@@ -434,11 +440,11 @@ int esRuidosas(int* cols, int col, int tam){
 
 				}
 			}
+			free(cambiar);	
 
 		}
 	}
 
-	free(cambiar);
 	printf("%d %d\n", nruido, d->ndatos);
 	d->ndatos=nruido;
 }

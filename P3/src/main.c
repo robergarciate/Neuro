@@ -9,7 +9,7 @@ int main(int argc, char** argv) {
 	FILE * fin=NULL,* fout= NULL,* fclasf=NULL;
     int long_index=0;
     char opt;
-    int fallos=0;
+    double fallos=0;
     double ptrain=0.0, ptest=0.0, tasa=0.0;
     redNeuronal* red=NULL;
     FILE * ferr= fopen("err.data", "w");
@@ -25,7 +25,7 @@ int main(int argc, char** argv) {
 
 
     datos* data=NULL,* train=NULL,* test=NULL;
-    static int flagPerceptron=0, flagAdaline=0, flagClasf, flagBP, falgAlf;
+    static int flagPerceptron=0, flagAdaline=0, flagClasf, flagBP, falgAlf, falgSerie;
     static int interSum=0, interPrd=0, interMed=0, norm=0;
     static struct option options[] = {
         {"fin",required_argument,0, 'a'},
@@ -47,6 +47,7 @@ int main(int argc, char** argv) {
         {"bp", no_argument, &flagBP, 'r'},
         {"ocultas", required_argument, 0, 's'},
         {"alf", no_argument, &falgAlf, 't'},
+        {"serie", no_argument, &falgSerie, 'u'},
         {0,0,0,0}
     };
     while ((opt = getopt_long_only(argc, argv,"1:", options, &long_index )) != -1){
@@ -137,10 +138,9 @@ int main(int argc, char** argv) {
     **/
     if(falgAlf)
         data= lectorAlfabetico(fin);
-    /** Codigo para el lecto de series
-    else if()
+    else if(falgSerie)
         data=lectorSerie(fin, prev, post);
-    */
+    
     else
         data = leerDatos(fin);
     
@@ -206,7 +206,10 @@ int main(int argc, char** argv) {
     if(ptrain+ptest ==1.0){
         train=iniDatos();
         test=iniDatos();
-        particionado(data, train, test, ptest);
+        if(falgSerie)
+            particionado2(data, train, test, ptest);
+        else
+            particionado(data, train, test, ptest);
         adapt=train;
     }
     else if(ptrain ==1.0){
@@ -220,6 +223,8 @@ int main(int argc, char** argv) {
     }
 
 
+    /*ruidoDatos(train, 5, 11.0);
+*/
     red=redTrain(0, train, fini, fsalida,
     	fParada, fPesos, fActualizacion,
         data->natributos, data->nclases, ocultas, tasa);
@@ -233,9 +238,10 @@ int main(int argc, char** argv) {
 		clasificar(test, red, fsalida, fActualizacion, fout);
     }
     else{
+        ruidoDatos(train, 5, 1.0);
         fallos=redTest(test, red, fsalida, fActualizacion);
         printf("tasa de fallo: %3.2f %%\n", ((double)fallos/(double)test->ndatos) *100);
-    	printf("fallos:%d datos:%d\n",fallos, test->ndatos );
+    	printf("fallos:%1.2f datos:%d\n",fallos, test->ndatos );
         fprintf(ferr, "%1.4f", (double)fallos/(double)test->ndatos);
     }
 
