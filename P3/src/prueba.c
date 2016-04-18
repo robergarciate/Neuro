@@ -6,7 +6,7 @@ double maxTolerancia=0.0;
 datos* adapt=NULL;
 int main(int argc, char** argv){
 	int i=0;
-	int* cols= columnasRuidosas(10, 3);
+	//int* cols= columnasRuidosas(10, 3);
 
 	
 	datos* data=NULL;
@@ -16,7 +16,7 @@ int main(int argc, char** argv){
 	data=lectorSerie(f, 2, 2);
 	//bipolarizar(data);
 	printf("cosa\n");
-	printDatos(data);
+	//printDatos(data);
 	freeDatos(data);
 	free(data);
 	fclose(f);

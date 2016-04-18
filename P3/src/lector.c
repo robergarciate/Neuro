@@ -164,6 +164,7 @@ void permutaArray(double * array, int tam){
 	for(i = 0; i < tam; i++){
 		array[i] = aux[(i + 1) % tam];
 	}
+	free(aux);
 
 }
 
@@ -198,7 +199,7 @@ datos* lectorSerie(FILE * fin, int prev, int post){
 		}
 		tok=yylex();
 	}
-	
+	reservarTupla(data);
 	for(i = 0; i < data->natributos; i++){
 		data->atributos[k][i] = serie[i];
 	}
@@ -206,13 +207,13 @@ datos* lectorSerie(FILE * fin, int prev, int post){
 		data->clase[k][i] = serie[i];
 	}
 
-	reservarTupla(data);
 	tok=yylex();
 
     /*LEEMOS LOS DATOS*/
 	while(tok!=0){
 		switch(tok){
 			case TOK_DOUBLE:
+				reservarTupla(data);
 				k++;
 				permutaArray(serie, total);
 				serie[total - 1] = atof(yytext);
@@ -222,7 +223,6 @@ datos* lectorSerie(FILE * fin, int prev, int post){
 				for(i = 0; i < data->nclases; i++){
 					data->clase[k][i] = serie[i];
 				}
-				reservarTupla(data);
 			break;
 			case TOK_INTEGER:
 			break;
@@ -232,6 +232,9 @@ datos* lectorSerie(FILE * fin, int prev, int post){
 		}
 		tok=yylex();
 	}
+	free(serie);
+	
+	liberarLex();
 	return data;
 }
 
