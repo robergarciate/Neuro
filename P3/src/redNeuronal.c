@@ -512,11 +512,19 @@ double redTest(datos* data, redNeuronal* red,
 
  	int i=0, j=0;
  	double res=0;
- 	double  maxRed=-100;
- 	int maxD=0, maxR=0;
- 	for(i=0; i<data->ndatos; i++,maxRed=INT_MIN){
+ 	int pos= 2 + red->salidas + red->ocultas;
+ 	int* salidas= malloc(sizeof(int) * red->salidas);
+ 	for(i=0; i<data->ndatos; i++){
  		(*fsalida) (red, (*fActualizacion), data->atributos[i]);
- 		for(j=0, maxRed=INT_MIN; j<data->nclases; j++){
+ 		salidasBipolares(salidas, red);
+ 		for(j=0; j < red->salidas; j++){
+ 			/*printf("%1.4f %d %1.4f\n", red->neuronas[j+pos].salida, salidas[j], data->clase[i][j]);
+ 			*/if(salidas[j]!=data->clase[i][j]){
+ 				res++;
+ 				break;
+ 			}
+ 		} 
+ 		/*for(j=0, maxRed=INT_MIN; j<data->nclases; j++){
 
  			if(data->clase[i][j]==1)
  				maxD=j;
@@ -527,8 +535,7 @@ double redTest(datos* data, redNeuronal* red,
 	 			}
  			}
  			else{
- 				/*printf("%1.4f ", red->neuronas[j + 2 + red->entradas+ red->ocultas].salida);
- 				*/if(maxRed<red->neuronas[j + 2 + red->entradas+ red->ocultas].salida){
+ 				if(maxRed<red->neuronas[j + 2 + red->entradas+ red->ocultas].salida){
 	 				maxRed= red->neuronas[j + 2 + red->entradas +red->ocultas].salida;
 	 				maxR=j;
 	 			}
@@ -537,11 +544,25 @@ double redTest(datos* data, redNeuronal* red,
  		}
  		if(maxR!=maxD)
  			res++;
+ 		*/
  	}
+ 	free(salidas);
  	return res;
 
 }
 
+void salidasBipolares(int* salida, redNeuronal* red){
+	int i=0, pos=2 + red->entradas + red->ocultas;
+
+	for(i=0; i < red->salidas ; i++){
+		if(red->neuronas[i+pos].salida<0)
+			salida[i] = -1;
+		else
+			salida[i] = 1;
+
+	}
+
+}
 
 int clasificar(datos* data, redNeuronal* red,
 			int (*fsalida) (redNeuronal*, double (*fActualizacion)(neurona*), double*),

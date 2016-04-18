@@ -389,7 +389,6 @@ int esRuidosas(int* cols, int col, int tam){
 	int nruido=d->ndatos*ndatos;
 	int i=0, j=0;
 	int* cambiar= NULL;
-	int col;
 	srand(time(NULL));
 
 	if(nruido!=d->ndatos){
@@ -442,5 +441,4 @@ int esRuidosas(int* cols, int col, int tam){
 	free(cambiar);
 	printf("%d %d\n", nruido, d->ndatos);
 	d->ndatos=nruido;
-	return d;
 }
