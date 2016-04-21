@@ -65,7 +65,6 @@ redNeuronal* iniRedPerceptron(int entrada, int oculta,int salida, double tasa){
 
 redNeuronal* iniRedRetropropagacion(int entrada, int oculta,int salida, double tasa){
 	double* pesos= NULL,** salidas= NULL;
-	double factorEscala = 0.0;
 	int i=0, j=0;
 	redNeuronal* red=NULL;
 	if( entrada==0 || salida==0 )
@@ -83,7 +82,6 @@ redNeuronal* iniRedRetropropagacion(int entrada, int oculta,int salida, double t
 	for(i =0; i< (1+entrada+salida); i++){
 		iniNeurona2( &(red->neuronas[i]));
 	}
-	factorEscala = 0.7 * pow(oculta, (1/entrada));
 
 	
 	/*INICIALIZACION NEURONAS DE ENTRADA*/
@@ -247,59 +245,47 @@ double actualizaPesosRetropropagacion(redNeuronal* red, double* t){
 	double delta = 0.0;
 	int i = 0, j = 0, k=0;
 	double ecm=0, prediccion=0, esperado=0;
-	/*printf("delta salidas\n");*/
 	/*DELTAS DE SALIDA*/ 
 	for(i = 2 + red->ocultas + red->entradas, j = 0; i < 2 + red->salidas + red->ocultas + red->entradas; ++i, j++){
 		prediccion = red->neuronas[i].salida;
 		esperado = (double)t[j];
 		ecm += pow(esperado - prediccion,2);
 		delta = esperado - prediccion;
-		/*printf("delta %d -> %1.4f\n", i, delta);*/
 		delta *= 0.5 * (1 -prediccion);
-		/*printf("delta %d -> %1.4f\n", i, delta);*/
 		
 		delta *= (1 + prediccion);
-		/*printf("delta %d -> %1.4f\n\n", i, delta);*/
 		
 		(&red->neuronas[i])->delta = delta;
 	}
-	/*printf("delta ocultas\n");*/
 	/*DELTAS DE OCULTA*/
 	for(k=0, i = 1 + red->entradas; i <  1 + red->entradas + red->ocultas; ++i, k++){
 		delta = 0;
 		prediccion=red->neuronas[i].salida;
 		for(j = red->entradas + 2 + red->ocultas; j < red->salidas + red->entradas + 2 + red->ocultas; ++j){
 			delta += red->neuronas[j].delta * red->neuronas[j].pesos[k];
-			/*printf("delta %d -> %1.4f %1.4f %d\n", j, red->neuronas[j].delta, red->neuronas[j].pesos[k], k);*/
 		}
 		delta *= 0.5 * (1 + prediccion);
-		/*printf("delta %d -> %1.4f\n", i, delta);*/
 
 		delta *= (1 - prediccion);
-		/*printf("delta %d -> %1.4f\n\n", i, delta);*/
 
 		(&red->neuronas[i])->delta = delta;
 
 	}
-	/*printf("\nactualizacion salidas:");
 	/*PESOS DE SALIDA*/
 	for(i = 2+red->entradas+red->ocultas; i < 2+red->entradas+red->ocultas+red->salidas; ++i){
 		for(j = 0; j < red->neuronas[i].nentradas; ++j){
 			(&red->neuronas[i ])->pesos[j] += red->tasa *
 											red->neuronas[i].delta *
 											(*red->neuronas[i].entradas[j]);
-			/*printf("pesos salidas-> %1.4f\n", (&red->neuronas[i])->pesos[j]);*/
 			
 		}
 	}
-	/*printf("\nactualizacion ocultas:");
 	/*PESOS DE OCULTA*/
 	for(i = 1+red->entradas; i < 1+red->entradas+red->ocultas; ++i){
 		for(j = 0; j < red->neuronas[i].nentradas; ++j){
 			(&red->neuronas[i])->pesos[j] += red->tasa *
 											red->neuronas[i].delta *
 											(*red->neuronas[i].entradas[j]);
-			/*printf("pesos ocultas-> %1.4f\n", (&red->neuronas[i])->pesos[j]);*/
 			
 			
 		}
@@ -308,6 +294,57 @@ double actualizaPesosRetropropagacion(redNeuronal* red, double* t){
 
 }
 
+
+
+double actualizaPesosRetropropagacion2(redNeuronal* red, double* t){
+	double delta = 0.0;
+	int i = 0, j = 0, k=0;
+	double ecm=0, prediccion=0, esperado=0;
+	/*DELTAS DE SALIDA*/ 
+	for(i = 2 + red->ocultas + red->entradas, j = 0; i < 2 + red->salidas + red->ocultas + red->entradas; ++i, j++){
+		prediccion = red->neuronas[i].salida;
+		esperado = (double)t[j];
+		ecm += pow(esperado - prediccion,2);
+		delta = esperado - prediccion;
+		
+		(&red->neuronas[i])->delta = delta;
+	}
+	/*DELTAS DE OCULTA*/
+	for(k=0, i = 1 + red->entradas; i <  1 + red->entradas + red->ocultas; ++i, k++){
+		delta = 0;
+		prediccion=red->neuronas[i].salida;
+		for(j = red->entradas + 2 + red->ocultas; j < red->salidas + red->entradas + 2 + red->ocultas; ++j){
+			delta += red->neuronas[j].delta * red->neuronas[j].pesos[k];
+		}
+		delta *= 0.5 * (1 + prediccion);
+
+		delta *= (1 - prediccion);
+
+		(&red->neuronas[i])->delta = delta;
+
+	}
+	/*PESOS DE SALIDA*/
+	for(i = 2+red->entradas+red->ocultas; i < 2+red->entradas+red->ocultas+red->salidas; ++i){
+		for(j = 0; j < red->neuronas[i].nentradas; ++j){
+			(&red->neuronas[i ])->pesos[j] += red->tasa *
+											red->neuronas[i].delta *
+											(*red->neuronas[i].entradas[j]);
+			
+		}
+	}
+	/*PESOS DE OCULTA*/
+	for(i = 1+red->entradas; i < 1+red->entradas+red->ocultas; ++i){
+		for(j = 0; j < red->neuronas[i].nentradas; ++j){
+			(&red->neuronas[i])->pesos[j] += red->tasa *
+											red->neuronas[i].delta *
+											(*red->neuronas[i].entradas[j]);
+			
+			
+		}
+	}
+	return ecm;
+
+}
 
 
 
@@ -464,6 +501,39 @@ int actualizaSalida(redNeuronal* red, double (*fActualizacion)(neurona*), double
 
 }
 
+
+
+
+int actualizaSalida2(redNeuronal* red, double (*fActualizacion)(neurona*), double* entrada){
+
+	int i = 0;
+
+	if ((red == NULL) || (fActualizacion == NULL) || (entrada == NULL)){
+		return 1;
+	}
+	/*printf("actualiza neuronas de entrada\n");
+	*/for(i = 0 ; i < red->entradas ; i++)
+		actualizaNeuronaEntrada(&(red->neuronas[i]), entrada[i]);
+
+	/*printf("actualiza neuronas de salida\n");
+*/
+
+	if(red->ocultas > 0){
+		for(i = red->entradas+1 ; i < (red->entradas + red->ocultas + red->salidas +2); i++){
+			(*fActualizacion)(&(red->neuronas[i]));
+		}
+	}
+	else{
+		for(i = red->entradas+1 ; i < (red->entradas + red->salidas)+1 ; i++){
+			if (i < red->entradas +1)
+				(*fActualizacion)(&(red->neuronas[i]));
+			else
+				actualizaNeuronaSigmoidalBipolarSalida(&(red->neuronas[i]));
+		}
+
+	}
+	return 0;
+}
 redNeuronal* redTrain(int tentrada, datos* data,
 					redNeuronal* (*fini)(int, int, int, double),
 					int (*fsalida) (redNeuronal*, double (*fActualizacion)(neurona*), double*),
@@ -512,7 +582,6 @@ double redTest(datos* data, redNeuronal* red,
 
  	int i=0, j=0;
  	double res=0;
- 	int pos= 2 + red->salidas + red->ocultas;
  	int* salidas= malloc(sizeof(int) * red->salidas);
  	for(i=0; i<data->ndatos; i++){
  		(*fsalida) (red, (*fActualizacion), data->atributos[i]);
@@ -524,27 +593,6 @@ double redTest(datos* data, redNeuronal* red,
  				/*break;*/
  			}
  		} 
- 		/*for(j=0, maxRed=INT_MIN; j<data->nclases; j++){
-
- 			if(data->clase[i][j]==1)
- 				maxD=j;
- 			if(red->ocultas==0){
- 				if(maxRed<red->neuronas[j + 1 + red->entradas].salida){
-	 				maxRed= red->neuronas[j + 1 + red->entradas].salida;
-	 				maxR=j;
-	 			}
- 			}
- 			else{
- 				if(maxRed<red->neuronas[j + 2 + red->entradas+ red->ocultas].salida){
-	 				maxRed= red->neuronas[j + 2 + red->entradas +red->ocultas].salida;
-	 				maxR=j;
-	 			}
- 			}
-
- 		}
- 		if(maxR!=maxD)
- 			res++;
- 		*/
  	}
  	free(salidas);
  	return res/red->salidas;

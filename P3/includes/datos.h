@@ -33,7 +33,7 @@ void freeDatos(datos* data);
 void liberaEspacioLibre(datos* data);
 /**
 ***	Dados unos datos los divide en particion
-***	de entrenamiento y de clasificacion
+***	de entrenamiento y de clasificacion aletoria
 ***	
 ***	Entradas:
 ***		data-> los datos de entrada
@@ -46,6 +46,23 @@ void liberaEspacioLibre(datos* data);
 ***	
 **/
 int particionado(datos* data, datos* train, datos* test, double porcentaje);
+
+
+/**
+***	Dados unos datos los divide en particion
+***	de entrenamiento y de clasificacion 
+***	
+***	Entradas:
+***		data-> los datos de entrada
+***		train-> datos donde devolveremos train
+***		test-> datos donde devolveremos test
+***		porcentaje-> cantidad de datos que iran a train
+***	
+***	Devuelve:
+***		error, exito y esas cosas
+***	
+**/
+int particionado2(datos* data, datos* train, datos* test, double porcentaje);
 
 /**
 ***	Reserva una tupla mas para los datos
@@ -60,6 +77,7 @@ int particionado(datos* data, datos* train, datos* test, double porcentaje);
 int reservarTupla(datos* data);
 
 int printDatos(datos* data);
+
 
 int escribeDatos(datos* data, char* fichero); 
 

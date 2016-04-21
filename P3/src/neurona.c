@@ -121,6 +121,19 @@ double actualizaNeuronaSigmoidalBipolar(neurona* n){
 	n->salida = val;
 	return val; 
 }
+double actualizaNeuronaSigmoidalBipolarSalida(neurona* n){
+	int i=0;
+	double val=0.0;
+	if(n->nentradas==0){
+		return n->salida;	
+	}
+	for(i=0; i< n->nentradas; i++){
+		val+=n->pesos[i] * (*n->entradas[i]);
+	}
+	n->salida = val;
+	return val; 
+}
+
 
 double actualizaNeuronaEntrada(neurona* n, double valor){
 	n->salida=valor;

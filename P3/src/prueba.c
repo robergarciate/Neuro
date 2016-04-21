@@ -10,14 +10,23 @@ int main(int argc, char** argv){
 
 	
 	datos* data=NULL;
+	datos* train=NULL;
+	datos* test=NULL;
 	FILE *f= fopen(argv[1], "r");
 	printf("cosa\n");
 
-	data=lectorSerie(f, 2, 2);
+	data=lectorSerie(f, 20, 2);
 	//bipolarizar(data);
-	printf("cosa\n");
-	//printDatos(data);
+	train = iniDatos();
+	test = iniDatos();
+	printf("%d\n", particionado2(data, train, test, 0.5));
+	
+//	printDatos(test);
 	freeDatos(data);
+	freeDatos(test);
+	freeDatos(train);
 	free(data);
+	free(test);
+	free(train);
 	fclose(f);
 }

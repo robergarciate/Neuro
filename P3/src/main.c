@@ -20,7 +20,7 @@ int main(int argc, char** argv) {
     int (*fParada) (redNeuronal*)=NULL;
     double (*fPesos) (redNeuronal*, double*)=NULL;
     double (*fActualizacion)(neurona*)=NULL;
-    int ocultas=0;
+    int ocultas=0, na=0, ns=0;
 
 
 
@@ -48,6 +48,9 @@ int main(int argc, char** argv) {
         {"ocultas", required_argument, 0, 's'},
         {"alf", no_argument, &falgAlf, 't'},
         {"serie", no_argument, &falgSerie, 'u'},
+        {"na", required_argument, 0, 'v'},
+        {"ns", required_argument, 0, 'w'},
+
         {0,0,0,0}
     };
     while ((opt = getopt_long_only(argc, argv,"1:", options, &long_index )) != -1){
@@ -83,13 +86,30 @@ int main(int argc, char** argv) {
             case 's':
                 ocultas=atoi(optarg);
             break;
+            case 'v':
+                na=atoi(optarg);
+                if(na<0){
+                    printf("%d no es un tamaño valido para na, debe ser mayor que 0\n", na);
+                    return 1;
+                }
+            break;
+            case 'w':
+                
+                ns=atoi(optarg);
+                if(ns<0){
+                    printf("%d no es un tamaño valido para ns, debe ser mayor que 0\n", na);
+                    return 1;
+                }
+            break;
+            
             case'?':
                 printf("ERROR1: parametro no reconocido\n"
                 	"se esperaba:\n"
-			        "./perceptron-adaline {-fin file }  {-a | -p | -bp -nOcultas num}"
-			    	" {-train num} {-test num} {-tasa num} {-etapas num}" 
-			    	"[-clasificar -fclasf file [-fout file]] [-norm]"
-			    	"[-tolerancia num] [-iniAleat] [-interPrd | -interSum | -interMed]\n");
+                    "./main {-fin file } [-alf] [-serie -na numero -ns numero]"
+                    "{-a | -p | -bp -ocultas num}"
+                    " {-train num} {-test num} {-tasa num} {-etapas num}" 
+                    "[-clasificar -fclasf file [-fout file]] [-norm]"
+                    "[-tolerancia num] [-iniAleat] [-interPrd | -interSum | -interMed]\n");
                 return 0;
             break;
  
@@ -101,10 +121,11 @@ int main(int argc, char** argv) {
       || (flagPerceptron!=0 && flagAdaline!=0)
       || (interPrd!=0 && interSum!=0 && interMed!=0) || (flagClasf!=0 && fclasf==NULL) ){
         printf("se esperaba:\n"
-        "./perceptron-adaline {-fin file }  {-a | -p}"
-    	" {-train num} {-test num} {-tasa num} {-etapas num}" 
-    	"[-clasificar -fclasf file [-fout file]]"
-    	"[-tolerancia num] [-iniAleat] [-interPrd | -interSum | -interMed]\n");
+                    "./main {-fin file } [-alf] [-serie -na numero -ns numero]"
+                    "{-a | -p | -bp -ocultas num}"
+                    " {-train num} {-test num} {-tasa num} {-etapas num}" 
+                    "[-clasificar -fclasf file [-fout file]] [-norm]"
+                    "[-tolerancia num] [-iniAleat] [-interPrd | -interSum | -interMed]\n");
         return 0; 
 
     }
@@ -139,7 +160,7 @@ int main(int argc, char** argv) {
     if(falgAlf)
         data= lectorAlfabetico(fin);
     else if(falgSerie)
-        data=lectorSerie(fin, prev, post);
+        data=lectorSerie(fin, na, ns);
     
     else
         data = leerDatos(fin);
@@ -206,7 +227,7 @@ int main(int argc, char** argv) {
     if(ptrain+ptest ==1.0){
         train=iniDatos();
         test=iniDatos();
-        if(falgSerie)
+       if(falgSerie)
             particionado2(data, train, test, ptest);
         else
             particionado(data, train, test, ptest);

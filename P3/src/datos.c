@@ -50,6 +50,7 @@ void liberaEspacioLibre(datos* data){
 	}
 }
 
+
 int particionado(datos* data, datos* train, datos* test, double porcentaje){
 	int i = 0, j=0, k=0, l=0;
 	double r;
@@ -107,6 +108,64 @@ int particionado(datos* data, datos* train, datos* test, double porcentaje){
 	}
 	return 0;
 }
+
+
+
+int particionado2(datos* data, datos* train, datos* test, double porcentaje){
+	int ntrain= data->ndatos - data->ndatos * porcentaje;
+	int i=0, j=0, k=0;
+
+	if(!(porcentaje>0 && porcentaje<1)){
+
+		return 1;
+	}
+	train->ndatos = ntrain;
+	train->nclases = data->nclases;
+	train->natributos = data->natributos;
+	train->atributos = malloc(sizeof(double*)*ntrain);
+	train->clase = malloc(sizeof(double*)*ntrain);
+
+	test->ndatos = data->ndatos - ntrain;
+	test->nclases = data->nclases;
+	test->natributos = data->natributos;
+	test->atributos=malloc(sizeof(double*) * test->ndatos);
+	test->clase=malloc(sizeof(double*) * test->ndatos);
+
+	for(i=0; i < data->ndatos; i++){
+		if(i>=ntrain){
+			test->atributos[k] = malloc(sizeof(double) * test->natributos);
+			test->clase[k] = malloc(sizeof(double) * test->nclases);
+		}
+		else{
+			train->atributos[i] = malloc(sizeof(double) * train->natributos);
+			train->clase[i] = malloc(sizeof(double) * train->nclases);
+		}
+
+		for(j=0; j < data->natributos; j++){
+			
+			if(i < ntrain)
+				train->atributos[i][j] = data->atributos[i][j];
+			else
+				test->atributos[k][j] = data->atributos[i][j];
+			
+		}
+		for(j=0; j < data->nclases; j++){
+
+			if(i < ntrain)
+				train->clase[i][j] = data->clase[i][j];
+			else
+				test->clase[k][j] = data->clase[i][j];
+
+		}
+
+		if(i>=ntrain){
+			k++;
+		}
+	}
+
+	return 0;
+}
+
 
 int reservarTupla(datos* data){
 	int i=0, j=0, k=0;

@@ -69,6 +69,9 @@ int copiaRed(redNeuronal* redIn, redNeuronal* redOut);
 **/
 int actualizaSalida(redNeuronal* red, double (*fActualizacion)(neurona*), double* entrada);
 
+
+int actualizaSalida2(redNeuronal* red, double (*fActualizacion)(neurona*), double* entrada);
+
 /**
 ***
 ***	Tener ojo con usar una actulizacion bipolar
