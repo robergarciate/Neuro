@@ -676,7 +676,8 @@ int clasificarSerie(datos* data, redNeuronal* red,
  	for(i=0; i<data->ndatos; i++){
  		(*fsalida) (red, (*fActualizacion), data->atributos[i]);
  		for(j=0; j<data->nclases; j++){
- 			printf("%1.4f\n", red->neuronas[j + 2 + red->entradas + red->salidas].salida);
+ 			fprintf(fout, "%1.4f %1.4f ", red->neuronas[j + 2 + red->entradas + red->salidas].salida,
+ 			data->clase[i][j]);
  
  		}
  		fprintf(fout, "\n");
