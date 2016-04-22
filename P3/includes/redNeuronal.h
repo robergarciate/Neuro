@@ -84,6 +84,8 @@ double actualizaPesosAdaline(redNeuronal* red, double* t);
 
 double actualizaPesosRetropropagacion(redNeuronal* red, double* t);
 
+double actualizaPesosRetropropagacion2(redNeuronal* red, double* t);
+
 /**
 ***
 ***	Funciona con 2 cosas
@@ -99,7 +101,6 @@ int paradaAdaline(redNeuronal* red);
 
 
 int paradaRetropropagacion(redNeuronal* red);
-int paradaRetropropagacion2(redNeuronal* red);
 /**
 ***
 ***	Esta funcion devuelve la red ya entrenada
@@ -128,9 +129,21 @@ double redTest(datos* data, redNeuronal* red,
 int clasificar(datos* data, redNeuronal* red,
 			int (*fsalida) (redNeuronal*, double (*fActualizacion)(neurona*), double*),
 			double (*fActualizacion)(neurona*), FILE* fout);
+
+
+
+int clasificarSerie(datos* data, redNeuronal* red,
+			int (*fsalida) (redNeuronal*, double (*fActualizacion)(neurona*), double*),
+			double (*fActualizacion)(neurona*), FILE* fout);
+
+
+int clasificarSerieRetroalimentado(datos* data, redNeuronal* red,
+			int (*fsalida) (redNeuronal*, double (*fActualizacion)(neurona*), double*),
+			double (*fActualizacion)(neurona*), FILE* fout);
 					
 
 void printSalidas(redNeuronal* red);
+
 
 void printPesos(redNeuronal * red);
 

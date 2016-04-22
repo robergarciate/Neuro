@@ -78,6 +78,7 @@ int reservarTupla(datos* data);
 
 int printDatos(datos* data);
 
+void printClases(FILE* fout, datos* data);
 
 int escribeDatos(datos* data, char* fichero); 
 

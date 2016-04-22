@@ -25,7 +25,7 @@ int main(int argc, char** argv) {
 
 
     datos* data=NULL,* train=NULL,* test=NULL;
-    static int flagPerceptron=0, flagAdaline=0, flagClasf, flagBP, falgAlf, falgSerie;
+    static int flagPerceptron=0, flagAdaline=0, flagClasf, flagBP, flagAlf, flagSerie;
     static int interSum=0, interPrd=0, interMed=0, norm=0;
     static struct option options[] = {
         {"fin",required_argument,0, 'a'},
@@ -46,8 +46,8 @@ int main(int argc, char** argv) {
         {"norm", no_argument, &norm, 'p'},
         {"bp", no_argument, &flagBP, 'r'},
         {"ocultas", required_argument, 0, 's'},
-        {"alf", no_argument, &falgAlf, 't'},
-        {"serie", no_argument, &falgSerie, 'u'},
+        {"alf", no_argument, &flagAlf, 't'},
+        {"serie", no_argument, &flagSerie, 'u'},
         {"na", required_argument, 0, 'v'},
         {"ns", required_argument, 0, 'w'},
 
@@ -119,7 +119,7 @@ int main(int argc, char** argv) {
     if(fin==NULL || ptrain>1 || ptest>1 
       || (flagPerceptron==0 && flagAdaline==0 && flagBP==0)
       || (flagPerceptron!=0 && flagAdaline!=0)
-      || (interPrd!=0 && interSum!=0 && interMed!=0) || (flagClasf!=0 && fclasf==NULL) ){
+      || (interPrd!=0 && interSum!=0 && interMed!=0) ){
         printf("se esperaba:\n"
                     "./main {-fin file } [-alf] [-serie -na numero -ns numero]"
                     "{-a | -p | -bp -ocultas num}"
@@ -157,9 +157,9 @@ int main(int argc, char** argv) {
     /**
     * Leemos los datos segun el tipo que sean
     **/
-    if(falgAlf)
+    if(flagAlf)
         data= lectorAlfabetico(fin);
-    else if(falgSerie)
+    else if(flagSerie)
         data=lectorSerie(fin, na, ns);
     
     else
@@ -214,10 +214,17 @@ int main(int argc, char** argv) {
            ocultas=data->natributos*2;
         }
         fini=iniRedRetropropagacion;
-        fsalida=actualizaSalida;
+        if(flagSerie!=0){
+            fPesos=actualizaPesosRetropropagacion2;
+            fsalida=actualizaSalida2;
+        }
+        else{
+            fPesos=actualizaPesosRetropropagacion;
+            fsalida=actualizaSalida;
+        }
         fParada=paradaRetropropagacion;
         /*fParada=paradaRetropropagacion2;
-        */fPesos=actualizaPesosRetropropagacion;
+        */
         fActualizacion=actualizaNeuronaSigmoidalBipolar;
     }
     else{
@@ -227,7 +234,7 @@ int main(int argc, char** argv) {
     if(ptrain+ptest ==1.0){
         train=iniDatos();
         test=iniDatos();
-       if(falgSerie)
+       if(flagSerie)
             particionado2(data, train, test, ptest);
         else
             particionado(data, train, test, ptest);
@@ -256,7 +263,12 @@ int main(int argc, char** argv) {
     printPesos(red);
 
     if(flagClasf!=0){
-		clasificar(test, red, fsalida, fActualizacion, fout);
+        if(flagSerie){
+            clasificarSerie(test, red, fsalida, fActualizacion, fout);
+        }
+
+        else
+		  clasificar(test, red, fsalida, fActualizacion, fout);
     }
     else{
         ruidoDatos(train, 5, 1.0);

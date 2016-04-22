@@ -37,7 +37,7 @@ double actualizaNeuronaEntrada(neurona* n, double valor);
 
 double actualizaNeuronaSigmoidalBipolar(neurona* n);
 
-double actualizaNeuronaSigmoidalBipolarSalida(neurona* n);
+double actualizaNeuronaLineal(neurona* n);
 
 void entradasNeurona(neurona* n, double ** entradas);
 

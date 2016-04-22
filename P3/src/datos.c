@@ -507,3 +507,18 @@ int esRuidosas(int* cols, int col, int tam){
 	printf("%d %d\n", nruido, d->ndatos);
 	d->ndatos=nruido;
 }
+
+
+
+
+void printClases(FILE* fout, datos* data){
+
+	int i=0;
+	int j=0;
+	for(i = 0; i < data->ndatos; i++){
+		for(j = 0; j < data->nclases; j++){
+			fprintf(fout, "%1.4f ", data->clase[i][j]);
+		}		
+		fprintf(fout, "\n");
+	}
+}

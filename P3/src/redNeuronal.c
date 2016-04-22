@@ -520,15 +520,18 @@ int actualizaSalida2(redNeuronal* red, double (*fActualizacion)(neurona*), doubl
 
 	if(red->ocultas > 0){
 		for(i = red->entradas+1 ; i < (red->entradas + red->ocultas + red->salidas +2); i++){
-			(*fActualizacion)(&(red->neuronas[i]));
+			if (i < red->entradas + red->ocultas + 2){
+				(*fActualizacion)(&(red->neuronas[i]));
+			}
+			else{
+				actualizaNeuronaLineal(&(red->neuronas[i]));
+				printf("%1.4f\n", red->neuronas[i].salida); 
+			}
 		}
 	}
 	else{
 		for(i = red->entradas+1 ; i < (red->entradas + red->salidas)+1 ; i++){
-			if (i < red->entradas +1)
-				(*fActualizacion)(&(red->neuronas[i]));
-			else
-				actualizaNeuronaSigmoidalBipolarSalida(&(red->neuronas[i]));
+			(*fActualizacion)(&(red->neuronas[i]));
 		}
 
 	}
@@ -660,7 +663,61 @@ int clasificar(datos* data, redNeuronal* red,
  	return 0;
 
 }
-					
+
+int clasificarSerie(datos* data, redNeuronal* red,
+			int (*fsalida) (redNeuronal*, double (*fActualizacion)(neurona*), double*),
+			double (*fActualizacion)(neurona*), FILE* fout){
+
+ 	int i=0, j=0;
+ 	if(fout ==NULL || red==NULL || data==NULL)
+ 		return 1;
+ 
+
+ 	for(i=0; i<data->ndatos; i++){
+ 		(*fsalida) (red, (*fActualizacion), data->atributos[i]);
+ 		for(j=0; j<data->nclases; j++){
+ 			printf("%1.4f\n", red->neuronas[j + 2 + red->entradas + red->salidas].salida);
+ 
+ 		}
+ 		fprintf(fout, "\n");
+ 	}
+
+ 	return 0;
+
+}
+int clasificarSerieRetroalimentado(datos* data, redNeuronal* red,
+			int (*fsalida) (redNeuronal*, double (*fActualizacion)(neurona*), double*),
+			double (*fActualizacion)(neurona*), FILE* fout){
+
+ 	int i=0, j=0;
+ 	double* t = NULL;
+ 	/*Por ahora esto es numero magico*/
+ 	int iteraciones = 400;
+ 	if(fout ==NULL || red==NULL || data==NULL){
+ 		printf("fallo\n");
+ 		return 1;
+ 	}
+ 
+ 	t = malloc(sizeof(double) * data->natributos);
+ 	for(i=0; i< data->natributos; i++){
+ 		t[i] = data->atributos[0][1];
+ 	}
+ 	for(i=0; i<iteraciones; i++){
+ 		(*fsalida) (red, (*fActualizacion), t);
+ 		for(j=0; j< data->nclases; j++){
+ 			fprintf(fout, "%1.4f ", red->neuronas[j + 2 + red->entradas + red->salidas].salida);
+ 
+ 		}
+ 		fprintf(fout, "\n");
+ 		for(j=0; j < data->natributos -1; j++){
+ 			t[j]=t[j+1];
+ 		}
+ 		t[j] = red->neuronas[j + 2 + red->entradas + red->salidas].salida;
+ 	}
+ 	free(t);
+ 	return 0;
+
+}					
 
 
 
@@ -677,6 +734,7 @@ void printSalidas(redNeuronal* red){
 	}
 	printf("\n");
 }
+
 
 
 void printPesos(redNeuronal * red){

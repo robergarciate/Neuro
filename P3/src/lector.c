@@ -48,9 +48,7 @@ datos* lectorAlfabetico(FILE * fin ){
 			break;
 		}
 	}
-	liberarLex();
 
-	printf("tok:%d %s linea:%d\n", tok, yytext, i);
 	return data;
 }
 
@@ -234,7 +232,6 @@ datos* lectorSerie(FILE * fin, int prev, int post){
 	}
 	free(serie);
 	
-	liberarLex();
 	return data;
 }
 
