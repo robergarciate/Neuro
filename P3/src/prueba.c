@@ -22,7 +22,8 @@ int main(int argc, char** argv){
 	test = iniDatos();
 	printf("%d\n", particionado2(data, train, test, 0.5));
 	
-	printClases(fout, test);
+	printDatos(train);
+	printDatos(test);
 	freeDatos(data);
 	freeDatos(test);
 	freeDatos(train);

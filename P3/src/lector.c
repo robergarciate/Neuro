@@ -219,7 +219,7 @@ datos* lectorSerie(FILE * fin, int prev, int post){
 					data->atributos[k][i] = serie[i];
 				}
 				for(i = 0; i < data->nclases; i++){
-					data->clase[k][i] = serie[i];
+					data->clase[k][i] = serie[i+prev];
 				}
 			break;
 			case TOK_INTEGER:
