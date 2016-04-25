@@ -702,11 +702,15 @@ int clasificarSerieRetroalimentado(datos* data, redNeuronal* red,
  	}
  
  	t = malloc(sizeof(double) * data->natributos);
- 	for(i=0; i< data->natributos; i++){
+ 	for(i = 0; i < data->natributos; i++){
  		t[i] = data->atributos[0][1];
  	}
+
  	for(i=0; i<iteraciones; i++){
  		(*fsalida) (red, (*fActualizacion), t);
+ 		for(j=0; j < data->natributos; j++){
+ 			fprintf(fout, "%1.4f ", t[j]);
+ 		}
  		for(j=0; j< data->nclases; j++){
  			fprintf(fout, "%1.4f ", red->neuronas[j + 2 + red->entradas + red->ocultas].salida);
  

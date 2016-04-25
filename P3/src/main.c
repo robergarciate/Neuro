@@ -61,6 +61,7 @@ int main(int argc, char** argv) {
 
             case 'b':
                 fout=fopen (optarg, "w");
+                printf("%s\n", optarg);
             break;
             case 'e':
                 ptrain=atof(optarg);
@@ -200,7 +201,7 @@ int main(int argc, char** argv) {
         normalizarDatos(data);
     }
 
-    bipolarizar(data);
+    /*bipolarizar(data);*/
 
     if(flagPerceptron){
     	printf("Perceptron\n");
@@ -275,6 +276,7 @@ int main(int argc, char** argv) {
     if(flagClasf!=0){
         printf("se calsifica\n");
         if(flagSerie){
+
             clasificarSerieRetroalimentado(test, red, fsalida, fActualizacion, fout);
         }
 
@@ -300,7 +302,7 @@ int main(int argc, char** argv) {
     	fclose(fclasf);
 
     if(fout!=stdout)
-        free(fout);
+        fclose(fout);
     
 
     if(flagAdaline| flagBP)
