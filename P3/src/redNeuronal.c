@@ -525,7 +525,6 @@ int actualizaSalida2(redNeuronal* red, double (*fActualizacion)(neurona*), doubl
 			}
 			else{
 				actualizaNeuronaLineal(&(red->neuronas[i]));
-				printf("%1.4f\n", red->neuronas[i].salida); 
 			}
 		}
 	}
@@ -550,6 +549,9 @@ redNeuronal* redTrain(int tentrada, datos* data,
 	FILE * f=NULL,* fecm=NULL;
 	double ecm=0;
 	if(data==NULL || nentreada==0 || nsalida==0){
+		printf("algo raro aha pasado\n");
+		printf("%d\n", nentreada);
+		printf("%d\n", nsalida);
 		return NULL;
 	}
 	red =(*fini)(nentreada, noculta, nsalida, tasa);
@@ -676,7 +678,7 @@ int clasificarSerie(datos* data, redNeuronal* red,
  	for(i=0; i<data->ndatos; i++){
  		(*fsalida) (red, (*fActualizacion), data->atributos[i]);
  		for(j=0; j<data->nclases; j++){
- 			fprintf(fout, "%1.4f %1.4f ", red->neuronas[j + 2 + red->entradas + red->salidas].salida,
+ 			fprintf(fout, "%1.4f %1.4f ", red->neuronas[j + 2 + red->entradas + red->ocultas].salida,
  			data->clase[i][j]);
  
  		}
@@ -706,7 +708,7 @@ int clasificarSerieRetroalimentado(datos* data, redNeuronal* red,
  	for(i=0; i<iteraciones; i++){
  		(*fsalida) (red, (*fActualizacion), t);
  		for(j=0; j< data->nclases; j++){
- 			fprintf(fout, "%1.4f ", red->neuronas[j + 2 + red->entradas + red->salidas].salida);
+ 			fprintf(fout, "%1.4f ", red->neuronas[j + 2 + red->entradas + red->ocultas].salida);
  
  		}
  		fprintf(fout, "\n");

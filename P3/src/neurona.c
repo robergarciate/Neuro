@@ -130,7 +130,6 @@ double actualizaNeuronaLineal(neurona* n){
 	for(i=0; i< n->nentradas; i++){
 		val+=n->pesos[i] * (*n->entradas[i]);
 	}
-	printf("%1.4f\n", val);
 	n->salida = val;
 	return val; 
 }

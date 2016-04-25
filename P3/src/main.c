@@ -25,7 +25,7 @@ int main(int argc, char** argv) {
 
 
     datos* data=NULL,* train=NULL,* test=NULL;
-    static int flagPerceptron=0, flagAdaline=0, flagClasf, flagBP, flagAlf, flagSerie;
+    static int flagPerceptron=0, flagAdaline=0, flagClasf=0, flagBP=0, flagAlf=0, flagSerie=0;
     static int interSum=0, interPrd=0, interMed=0, norm=0;
     static struct option options[] = {
         {"fin",required_argument,0, 'a'},
@@ -151,7 +151,16 @@ int main(int argc, char** argv) {
     }
     if(maxTolerancia==0.0){
     	maxTolerancia =0.0000001;
-    	printf("tolerancia no especificada se establece en %1.4f\n", maxTolerancia);
+    	printf("tolerancia no especificada se establece en %1.8f\n", maxTolerancia);
+    }
+    if(flagSerie!=0 && na==0){
+        na=20;
+        printf("na no especificado se establece en %d\n", na);
+    }
+
+    if(flagSerie!=0 && ns==0){
+        ns=1;
+        printf("ns no especificado se establece en %d\n", ns);
     }
 
     /**
@@ -159,8 +168,9 @@ int main(int argc, char** argv) {
     **/
     if(flagAlf)
         data= lectorAlfabetico(fin);
-    else if(flagSerie)
+    else if(flagSerie){
         data=lectorSerie(fin, na, ns);
+    }
     
     else
         data = leerDatos(fin);
@@ -256,15 +266,16 @@ int main(int argc, char** argv) {
     red=redTrain(0, train, fini, fsalida,
     	fParada, fPesos, fActualizacion,
         data->natributos, data->nclases, ocultas, tasa);
+
     printf("red entrenada\n");
 
 
 
-    printPesos(red);
 
     if(flagClasf!=0){
+        printf("se calsifica\n");
         if(flagSerie){
-            clasificarSerie(test, red, fsalida, fActualizacion, fout);
+            clasificarSerieRetroalimentado(test, red, fsalida, fActualizacion, fout);
         }
 
         else
