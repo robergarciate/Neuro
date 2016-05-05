@@ -215,7 +215,7 @@ double actualizaPesosPerceptron(redNeuronal* red, double* t){
 
 double actualizaPesosAdaline(redNeuronal* red, double* t){
 	int i=0, j=0;
-	double ecm=0, esperado=0, prediccion=0;
+	double esperado=0, prediccion=0;
 	if(red==NULL || t==NULL){
 		return 1;
 	}
@@ -592,15 +592,14 @@ double redTest(datos* data, redNeuronal* red,
  		(*fsalida) (red, (*fActualizacion), data->atributos[i]);
  		salidasBipolares(salidas, red);
  		for(j=0; j < red->salidas; j++){
- 			/*printf("%1.4f %d %1.4f\n", red->neuronas[j+pos].salida, salidas[j], data->clase[i][j]);
- 			*/if(salidas[j]!=data->clase[i][j]){
+ 			if(salidas[j]!=data->clase[i][j]){
  				res++;
  				/*break;*/
  			}
  		} 
  	}
  	free(salidas);
- 	return res/red->salidas;
+ 	return res;
 
 }
 

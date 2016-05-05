@@ -10,11 +10,13 @@ Retropropagacion, Perceptron y Adaline:
 	{-fin file } [-alf] [-serie -na numero -ns numero]
                     {-a | -p | -bp -ocultas num}
                     {-train num} {-test num} {-tasa num} {-etapas num} 
-                    [-clasificar -fclasf file [-fout file]] [-norm]
+                    [-clasificar -fclasf file [-fout file]] [-norm] [-bip]
                     [-tolerancia num] [-iniAleat] [-interPrd | -interSum | -interMed]
 	-a: utiliza una red neuronan de adaline.
 		
 	-alf: utiliza un lector alfabetico
+
+	-bip: hace que los datos sean bipolares
 
 	-bp: utiliza una red neuronal backpropagation.
 

@@ -508,7 +508,32 @@ int esRuidosas(int* cols, int col, int tam){
 	d->ndatos=nruido;
 }
 
+datos* copiarDatos(datos* din){
+	datos* dout = iniDatos();
+	int i = 0, j = 0;
+	dout->ndatos = din->ndatos;
+	dout->natributos = din->natributos;
+	dout->nclases = din->nclases;
 
+	dout->atributos = malloc(sizeof(double*) * dout->ndatos);
+
+	dout->clase = malloc(sizeof(double*) * dout->ndatos);
+
+	for( i=0 ; i < dout->ndatos; i++){
+		dout->atributos[i] = malloc(sizeof(double) * dout->natributos);
+		for( j=0 ; i < dout->natributos; j++){
+			dout->atributos[i][j] = din->atributos[i][j]; 
+		}
+
+		dout->clase[i] = malloc(sizeof(double) * dout->nclases);
+
+		for( j=0 ; i < dout->nclases; j++){
+
+			dout->clase[i][j] = din->clase[i][j]; 
+		}
+	}
+	return dout;
+}
 
 
 void printClases(FILE* fout, datos* data){

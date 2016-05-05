@@ -10,7 +10,7 @@ int main(int argc, char** argv) {
     int long_index=0;
     char opt;
     double fallos=0;
-    double ptrain=0.0, ptest=0.0, tasa=0.0;
+    double ptrain=0.0, ptest=0.0, tasa=0.0, ruidoTrainN=0, ruidoTestN=0;
     redNeuronal* red=NULL;
     FILE * ferr= fopen("err.data", "w");
 
@@ -20,12 +20,12 @@ int main(int argc, char** argv) {
     int (*fParada) (redNeuronal*)=NULL;
     double (*fPesos) (redNeuronal*, double*)=NULL;
     double (*fActualizacion)(neurona*)=NULL;
-    int ocultas=0, na=0, ns=0;
+    int ocultas=0, na=0, ns=0, ruidoTrainP=0, ruidoTestP=0;
 
 
 
     datos* data=NULL,* train=NULL,* test=NULL;
-    static int flagPerceptron=0, flagAdaline=0, flagClasf=0, flagBP=0, flagAlf=0, flagSerie=0;
+    static int flagPerceptron=0, flagAdaline=0, flagClasf=0, flagBP=0, flagAlf=0, flagSerie=0, flagBip=0;
     static int interSum=0, interPrd=0, interMed=0, norm=0;
     static struct option options[] = {
         {"fin",required_argument,0, 'a'},
@@ -50,6 +50,11 @@ int main(int argc, char** argv) {
         {"serie", no_argument, &flagSerie, 'u'},
         {"na", required_argument, 0, 'v'},
         {"ns", required_argument, 0, 'w'},
+        {"bip", no_argument, &flagBip, 'x'},
+        {"ruidoTrainP", required_argument, 0, 'y'},
+        {"ruidoTrainN", required_argument, 0, 'z'},
+        {"ruidoTestP", required_argument, 0, '1'},
+        {"ruidoTestN", required_argument, 0, '2'},
 
         {0,0,0,0}
     };
@@ -102,14 +107,31 @@ int main(int argc, char** argv) {
                     return 1;
                 }
             break;
-            
+
+            case 'y':
+                ruidoTrainP=atoi(optarg);
+            break;
+
+            case 'z':
+                ruidoTrainN=atof(optarg);
+            break;
+
+
+            case '1':
+                ruidoTestP=atoi(optarg);
+            break;
+
+            case '2':
+                ruidoTestN=atof(optarg);
+            break;
+
             case'?':
                 printf("ERROR1: parametro no reconocido\n"
                 	"se esperaba:\n"
                     "./main {-fin file } [-alf] [-serie -na numero -ns numero]"
                     "{-a | -p | -bp -ocultas num}"
-                    " {-train num} {-test num} {-tasa num} {-etapas num}" 
-                    "[-clasificar -fclasf file [-fout file]] [-norm]"
+                    " {-train num} {-test num} {-tasa num} {-etapas num} [-ruidoTrainP num -ruidoTrainN num]" 
+                    "[-ruidoTestP num -ruidoTestN num] [-clasificar -fclasf file [-fout file]] [-norm] [-bip] "
                     "[-tolerancia num] [-iniAleat] [-interPrd | -interSum | -interMed]\n");
                 return 0;
             break;
@@ -124,8 +146,8 @@ int main(int argc, char** argv) {
         printf("se esperaba:\n"
                     "./main {-fin file } [-alf] [-serie -na numero -ns numero]"
                     "{-a | -p | -bp -ocultas num}"
-                    " {-train num} {-test num} {-tasa num} {-etapas num}" 
-                    "[-clasificar -fclasf file [-fout file]] [-norm]"
+                    " {-train num} {-test num} {-tasa num} {-etapas num} [-ruidoTrainP num -ruidoTrainN num]" 
+                    "[-ruidoTestP num -ruidoTestN num] [-clasificar -fclasf file [-fout file]] [-norm] [-bip] "
                     "[-tolerancia num] [-iniAleat] [-interPrd | -interSum | -interMed]\n");
         return 0; 
 
@@ -167,8 +189,9 @@ int main(int argc, char** argv) {
     /**
     * Leemos los datos segun el tipo que sean
     **/
-    if(flagAlf)
+    if(flagAlf){
         data= lectorAlfabetico(fin);
+    }
     else if(flagSerie){
         data=lectorSerie(fin, na, ns);
     }
@@ -201,7 +224,8 @@ int main(int argc, char** argv) {
         normalizarDatos(data);
     }
 
-    /*bipolarizar(data);*/
+    if(flagBip!=0)
+        bipolarizar(data);
 
     if(flagPerceptron){
     	printf("Perceptron\n");
@@ -251,6 +275,7 @@ int main(int argc, char** argv) {
             particionado(data, train, test, ptest);
         adapt=train;
     }
+
     else if(ptrain ==1.0){
         train=data;
         test=data;
@@ -261,9 +286,19 @@ int main(int argc, char** argv) {
         return 1;
     }
 
+    if(ruidoTrainP!= 0 && ruidoTrainN != 0){
+        if(train == test)
+            test=copiarDatos(train);
+        ruidoDatos(train, ruidoTrainP, ruidoTrainN + 1);
+    }
 
-    /*ruidoDatos(train, 5, 11.0);
-*/
+    else if(ruidoTrainP == 0 && ruidoTrainN == 0);
+    else{
+        printf("ERR: El ruido especificado no es valido\n");
+        return 1;
+    }
+
+
     red=redTrain(0, train, fini, fsalida,
     	fParada, fPesos, fActualizacion,
         data->natributos, data->nclases, ocultas, tasa);
@@ -284,9 +319,19 @@ int main(int argc, char** argv) {
 		  clasificar(test, red, fsalida, fActualizacion, fout);
     }
     else{
-        ruidoDatos(train, 5, 1.0);
+        printf("se hace test\n");
+        
+        if(ruidoTestP!= 0 && ruidoTestN != 0){
+            ruidoDatos(test, ruidoTestP, ruidoTestN + 1);
+        }
+
+        else if(ruidoTestP == 0 && ruidoTestN == 0);
+        else{
+            printf("ERR: El ruido especificado no es valido\n");
+            return 1;
+        }
         fallos=redTest(test, red, fsalida, fActualizacion);
-        printf("tasa de fallo: %3.2f %%\n", ((double)fallos/(double)test->ndatos) *100);
+        printf("tasa de fallo: %3.2f %%\n", ((double)fallos/(double)test->ndatos));
     	printf("fallos:%1.2f datos:%d\n",fallos, test->ndatos );
         fprintf(ferr, "%1.4f", (double)fallos/(double)test->ndatos);
     }
@@ -313,8 +358,9 @@ int main(int argc, char** argv) {
     			tasa, ptrain, ptest, maxEtapas);
 
     fclose(fin);
-    if(ptrain ==1.0)
+    if(train == test){
         freeDatos(data);
+    }
     else{
         freeDatos(data);
         freeDatos(train);
