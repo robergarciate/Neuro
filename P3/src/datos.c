@@ -455,7 +455,7 @@ int esRuidosas(int* cols, int col, int tam){
 		d->atributos= (double**) realloc((void*)d->atributos, sizeof(double*) * (nruido));
 	}
 	
-	if(natributos>d->natributos)
+	if(natributos > d->natributos)
 		natributos= d->natributos;
 
 	

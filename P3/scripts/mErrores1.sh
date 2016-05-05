@@ -5,18 +5,17 @@ file="bases-de-datos-p1/problema_real1.txt"
 mkdir errores
 rm errores/errorMedioP1-tasa.data
 
-for i in `seq 0.001 0.05 0.5`;
+ruido="35"
+neuronas="16"
+err=0.0
+for i in `seq 1 20`;
 do
-	err=0.0
-	for j in `seq 1 10`;
-	do
  
-		echo ./main -bp -fin $file -ocultas 12 -norm -tasa $i -tolerancia 0.0000001 -etapas 1000
-		./main -bp -fin $file -ocultas 12 -norm -tasa $i -tolerancia 0.0000001 -etapas 1000 > dump1.txt
-		cp err.data err1.data
-		val=$(<err1.data)
-		./main2 $err  $val > err1.data
-		err=$(<err1.data)
-	done
-	echo $err $i $j>> errores/errorMedioP1-tasa.data
+	#echo ./main -bp -fin bases-de-datos-p1/alfabeto_dat.txt -alf -train 1.0 -test 1.0 -etapas 1000 -bip -ocultas $neuronas -ruidoTestP $ruido -ruidoTestN 10.0
+	./main -bp -fin bases-de-datos-p1/alfabeto_dat.txt -alf -train 1.0 -test 1.0 -etapas 1000 -bip -ocultas $neuronas -ruidoTestP  $ruido -ruidoTestN 10.0 > dump1.txt
+	
+	val=$(<err.data)
+	./main2 $err  $val > err1.data
+	err=$(<err1.data)
+	echo $err $val
 done    

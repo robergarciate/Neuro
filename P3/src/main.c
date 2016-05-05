@@ -299,6 +299,7 @@ int main(int argc, char** argv) {
     }
 
 
+    
     red=redTrain(0, train, fini, fsalida,
     	fParada, fPesos, fActualizacion,
         data->natributos, data->nclases, ocultas, tasa);
