@@ -2,7 +2,7 @@
 
 int maxEtapas =0, aleat=0;
 double maxTolerancia=0.0;
-
+int nf=0;
 datos* adapt=NULL;
 
 int main(int argc, char** argv) {
@@ -55,6 +55,7 @@ int main(int argc, char** argv) {
         {"ruidoTrainN", required_argument, 0, 'z'},
         {"ruidoTestP", required_argument, 0, '1'},
         {"ruidoTestN", required_argument, 0, '2'},
+        {"nf", required_argument, 0, '3'},
 
         {0,0,0,0}
     };
@@ -124,11 +125,13 @@ int main(int argc, char** argv) {
             case '2':
                 ruidoTestN=atof(optarg);
             break;
-
+			case '3':
+                nf=atoi(optarg);
+            break;
             case'?':
                 printf("ERROR1: parametro no reconocido\n"
                 	"se esperaba:\n"
-                    "./main {-fin file } [-alf] [-serie -na numero -ns numero]"
+                    "./main {-fin file } [-alf] [-serie -na numero -ns numero -nf numero]"
                     "{-a | -p | -bp -ocultas num}"
                     " {-train num} {-test num} {-tasa num} {-etapas num} [-ruidoTrainP num -ruidoTrainN num]" 
                     "[-ruidoTestP num -ruidoTestN num] [-clasificar -fclasf file [-fout file]] [-norm] [-bip] "
@@ -144,7 +147,7 @@ int main(int argc, char** argv) {
       || (flagPerceptron!=0 && flagAdaline!=0)
       || (interPrd!=0 && interSum!=0 && interMed!=0) ){
         printf("se esperaba:\n"
-                    "./main {-fin file } [-alf] [-serie -na numero -ns numero]"
+                    "./main {-fin file } [-alf] [-serie -na numero -ns numero -nf numero]"
                     "{-a | -p | -bp -ocultas num}"
                     " {-train num} {-test num} {-tasa num} {-etapas num} [-ruidoTrainP num -ruidoTrainN num]" 
                     "[-ruidoTestP num -ruidoTestN num] [-clasificar -fclasf file [-fout file]] [-norm] [-bip] "
@@ -314,7 +317,7 @@ int main(int argc, char** argv) {
         printf("se calsifica\n");
         if(flagSerie){
 
-            clasificarSerie(test, red, fsalida, fActualizacion, fout);
+            clasificarSerieRetroalimentado(test, red, fsalida, fActualizacion, fout);
         }
 
         else

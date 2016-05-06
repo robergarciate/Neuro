@@ -676,8 +676,8 @@ int clasificarSerie(datos* data, redNeuronal* red,
  	for(i=0; i<data->ndatos; i++){
  		(*fsalida) (red, (*fActualizacion), data->atributos[i]);
  		for(j=0; j<data->nclases; j++){
- 			fprintf(fout, "%1.4f %1.4f ", red->neuronas[j + 2 + red->entradas + red->ocultas].salida,
- 			data->clase[i][j]);
+ 			fprintf(fout, "%1.4f %1.4f %1.4f ", red->neuronas[j + 2 + red->entradas + red->ocultas].salida, 
+ 			data->atributos[i][data->natributos-1], data->clase[i][j]);
  
  		}
  		fprintf(fout, "\n");
@@ -693,7 +693,7 @@ int clasificarSerieRetroalimentado(datos* data, redNeuronal* red,
  	int i=0, j=0;
  	double* t = NULL;
  	/*Por ahora esto es numero magico*/
- 	int iteraciones = 400;
+ 	int iteraciones = nf;
  	if(fout ==NULL || red==NULL || data==NULL){
  		printf("fallo\n");
  		return 1;
@@ -713,7 +713,7 @@ int clasificarSerieRetroalimentado(datos* data, redNeuronal* red,
  			fprintf(fout, "%1.4f ", red->neuronas[j + 2 + red->entradas + red->ocultas].salida);
  
  		}
- 		fprintf(fout, "\n");
+ 		fprintf(fout, "%1.4f\n", data->clase[i][0]);
  		for(j = 0; j < data->natributos; j++){
  			t[j]=t[j+1];
  		}

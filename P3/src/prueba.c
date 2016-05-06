@@ -4,6 +4,7 @@
 int maxEtapas =0, aleat=0;;
 double maxTolerancia=0.0;
 datos* adapt=NULL;
+int nf=0;
 int main(int argc, char** argv){
 	int i=0;
 	//int* cols= columnasRuidosas(10, 3);
