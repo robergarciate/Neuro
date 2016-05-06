@@ -314,7 +314,7 @@ int main(int argc, char** argv) {
         printf("se calsifica\n");
         if(flagSerie){
 
-            clasificarSerieRetroalimentado(test, red, fsalida, fActualizacion, fout);
+            clasificarSerie(test, red, fsalida, fActualizacion, fout);
         }
 
         else

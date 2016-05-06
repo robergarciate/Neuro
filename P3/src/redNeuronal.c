@@ -673,7 +673,6 @@ int clasificarSerie(datos* data, redNeuronal* red,
  	if(fout ==NULL || red==NULL || data==NULL)
  		return 1;
  
-
  	for(i=0; i<data->ndatos; i++){
  		(*fsalida) (red, (*fActualizacion), data->atributos[i]);
  		for(j=0; j<data->nclases; j++){
