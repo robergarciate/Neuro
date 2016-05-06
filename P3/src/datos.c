@@ -519,15 +519,16 @@ datos* copiarDatos(datos* din){
 
 	dout->clase = malloc(sizeof(double*) * dout->ndatos);
 
+
 	for( i=0 ; i < dout->ndatos; i++){
 		dout->atributos[i] = malloc(sizeof(double) * dout->natributos);
-		for( j=0 ; i < dout->natributos; j++){
+		for( j=0 ; j < dout->natributos; j++){
 			dout->atributos[i][j] = din->atributos[i][j]; 
 		}
 
 		dout->clase[i] = malloc(sizeof(double) * dout->nclases);
 
-		for( j=0 ; i < dout->nclases; j++){
+		for( j=0 ; j < dout->nclases; j++){
 
 			dout->clase[i][j] = din->clase[i][j]; 
 		}

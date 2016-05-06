@@ -297,7 +297,8 @@ int main(int argc, char** argv) {
         printf("ERR: El ruido especificado no es valido\n");
         return 1;
     }
-
+    
+	
 
     
     red=redTrain(0, train, fini, fsalida,
@@ -360,9 +361,19 @@ int main(int argc, char** argv) {
 
     fclose(fin);
     if(train == test){
-        freeDatos(data);
+        freeDatos(train);
+        free(train);
     }
+    else if(data == test){
+		freeDatos(data);
+        free(data);
+	}
+    else if(data == train){
+		freeDatos(data);
+        free(data);
+	}
     else{
+		printf("cosa\n");
         freeDatos(data);
         freeDatos(train);
         freeDatos(test);
